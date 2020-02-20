@@ -44,3 +44,7 @@ probes:
     initialDelaySeconds: 5
     periodSeconds: 60
     port: 8001
+
+configMaps:
+    name: IdentityUrl
+    key: internalurls__identity

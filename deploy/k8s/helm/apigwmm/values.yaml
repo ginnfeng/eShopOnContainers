@@ -27,6 +27,7 @@ tolerations: []
 
 affinity: {}
 
+# env defines the environment variables that will be declared in the pod
 env: {}
 
 envoy:
@@ -44,7 +45,3 @@ probes:
     periodSeconds: 60
     port: 8001
 
-# env defines the environment variables that will be declared in the pod
-configMaps:
-    name: IdentityUrl
-    key: internalurls__identity

@@ -59,7 +59,7 @@ static_resources:
   clusters:
   - name: marketing
     connect_timeout: 0.25s
-    type: strict_dns
+    type: logical_dns
     lb_policy: round_robin
     hosts:
     - socket_address:
@@ -67,7 +67,7 @@ static_resources:
         port_value: 80
   - name: locations
     connect_timeout: 0.25s
-    type: strict_dns
+    type: logical_dns
     lb_policy: round_robin
     hosts:
     - socket_address:

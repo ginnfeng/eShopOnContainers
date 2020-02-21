@@ -99,7 +99,7 @@ static_resources:
   clusters:
   - name: shoppingagg
     connect_timeout: 0.25s
-    type: logical_dns
+    type: strict_dns
     lb_policy: round_robin
     hosts:
     - socket_address:
@@ -107,7 +107,7 @@ static_resources:
         port_value: 80
   - name: catalog
     connect_timeout: 0.25s
-    type: logical_dns
+    type: strict_dns
     lb_policy: round_robin
     hosts:
     - socket_address:
@@ -115,7 +115,7 @@ static_resources:
         port_value: 80
   - name: basket
     connect_timeout: 0.25s
-    type: logical_dns
+    type: strict_dns
     lb_policy: round_robin
     hosts:
     - socket_address:
@@ -123,7 +123,7 @@ static_resources:
         port_value: 80
   - name: ordering
     connect_timeout: 0.25s
-    type: logical_dns
+    type: strict_dns
     lb_policy: round_robin
     hosts:
     - socket_address:
@@ -131,7 +131,7 @@ static_resources:
         port_value: 80
   - name: signalr-hub
     connect_timeout: 0.25s
-    type: logical_dns
+    type: strict_dns
     lb_policy: round_robin
     hosts:
     - socket_address:

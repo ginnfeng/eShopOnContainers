@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hellomq-service
+  labels:
+    app: hellomq-service
+spec:
+  type: NodePort  
+  ports:           # other during autodiscover phase for cluster creation.
+   - name: http    # A ClusterIP will prevent resolving dns requests for other pods
+     protocol: TCP # under the same service.
+     port: 15672
+     targetPort: 15672
+   - name: amqp
+     protocol: TCP
+     port: 5672
+     targetPort: 5672
+  selector:
+    app: hellomq-deployment
+---
+   
+        
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hellomq-deployment
+  labels:
+    app: hellomq-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: hellomq
+      labels:
+        app: hellomq-deployment
+    spec:
+      containers:
+      - name: hellomq
+        image: rabbitmq:management
+        imagePullPolicy: IfNotPresent
+        ports:
+          - name: http
+            protocol: TCP
+            containerPort: 15672
+          - name: amqp
+            protocol: TCP
+            containerPort: 5672
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: hellomq-deployment

@@ -1,12 +1,35 @@
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: rabbitmq-admin-ingress
+  annotations: {
+    'kubernetes.io/ingress.class': nginx
+    ,'nginx.ingress.kubernetes.io/rewrite-target': /  # https://github.com/helm/charts/issues/10751
+
+  }
+spec:
+  rules:
+  - host: localhost
+    http:
+      paths:
+      - path: /mqadmin # http://localhost/mqadmin/
+        backend:
+          serviceName: rabbitmq-admin-service
+          servicePort: 8081
+
+---    
 kind: Service
 apiVersion: v1
 metadata:
-  name: rabbitmq-admin
+  name: rabbitmq-admin-service
 spec:
   type: NodePort
   selector:
     app: rabbitmq
   ports:
-    - port: 15672
-      nodePort: 31672
-      name: rabbitmq-port
+    - port: 8081      
+      targetPort: 15672      
+      name: http
+
+        

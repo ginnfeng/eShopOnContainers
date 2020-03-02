@@ -27,7 +27,6 @@ tolerations: []
 
 affinity: {}
 
-# env defines the environment variables that will be declared in the pod
 env: {}
 
 envoy:
@@ -44,4 +43,3 @@ probes:
     initialDelaySeconds: 5
     periodSeconds: 60
     port: 8001
-

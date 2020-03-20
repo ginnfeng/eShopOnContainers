@@ -1,4 +1,4 @@
-kubectl create -f rabbitmq-admin.yaml
+kubectl create -f rabbitmq-ingress.yaml
 kubectl describe svc rabbitmq-admin-service
 kubectl describe ing rabbitmq-admin-ingress
 

@@ -1,0 +1,12 @@
+<UTest id="UTool.Test.Test_Demo">
+  <TestCase>
+    <T1>0</T1>
+    <T3>"測試"
+""</T3>
+    <T2>
+    </T2>
+    <T4>""</T4>
+    <T5>"123"
+"56789"</T5>
+  </TestCase>
+</UTest>

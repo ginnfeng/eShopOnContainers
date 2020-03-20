@@ -9,7 +9,7 @@ spec:
   ports:           # other during autodiscover phase for cluster creation.
    - name: http    # A ClusterIP will prevent resolving dns requests for other pods
      protocol: TCP # under the same service.
-     port: 81
+     port: 8081
      targetPort: 80
    
   selector:

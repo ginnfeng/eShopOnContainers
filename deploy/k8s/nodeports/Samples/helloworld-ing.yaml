@@ -13,4 +13,4 @@ spec:
       - path: /helloworld
         backend:
           serviceName: helloworld-service
-          servicePort: 81
+          servicePort: 8081

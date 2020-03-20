@@ -66,6 +66,9 @@ namespace UTool.Test
         [UMethod]
         public void T_Config()
         {// TODO: Add Testing logic here
+            //https://www.jerriepelser.com/tutorials/airport-explorer/basic/working-with-configuration/
+            //https://dotnettutorials.net/lesson/asp-net-core-appsettings-json-file/
+            //https://docs.microsoft.com/zh-tw/aspnet/core/fundamentals/environments?view=aspnetcore-3.1
             var cfg = serviceProvider.GetService<IConfiguration>();
             print(cfg["EventBusConnection"]);
             print(cfg.GetValue<bool>("AzureServiceBusEnabled"));

@@ -1,4 +1,5 @@
-﻿using EventBus.Domain;
+﻿using Common.Contract;
+using EventBus.Domain;
 using MediatR;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -17,47 +18,47 @@ using System.Threading.Tasks;
 /// </summary>
 namespace EventBus.RabbitMQ
 {
-    
     public sealed class RabbitMQBus : IEventBus
     {
-        private readonly IMediator mediator;
+        private IMediator mediator;
         private readonly Dictionary<string, List<Type>> handlers;
         private readonly List<Type> eventTypes;
         private readonly IServiceScopeFactory serviceScopeFactory;
+        private readonly IServiceProvider serviceProvider;
         public RabbitMQBus()
         {
-           
         }
-        public RabbitMQBus(IMediator mediator, IServiceScopeFactory serviceScopeFactory)
-        {
-            
-            this.mediator = mediator;
+        public RabbitMQBus(IServiceProvider serviceProvider)
+        {            
             this.handlers = new Dictionary<string, List<Type>>();
             this.eventTypes = new List<Type>();
-            this.serviceScopeFactory = serviceScopeFactory;
+            this.serviceProvider = serviceProvider;
+            this.serviceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
         }
-        public Task SendCommand<T>(T command) where T : Command
+        public Task SendCommand<T>(T command) where T : IEvent
         {
+            mediator ??= serviceProvider.GetService<IMediator>();
             return mediator.Send(command);
         }
-
-        public void Publish<T>(T @event) where T : Event
+        public void PublishEvent<T>(T theEevent) 
+            where T : IEvent            
         {
+            if (theEevent == null) throw new NullReferenceException();
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var conn = factory.CreateConnection())
             using (var channel = conn.CreateModel())
             {
-                var enentName = @event.GetType().Name;
+                var enentName = theEevent.GetType().Name;
                 channel.QueueDeclare(enentName, false, false, false, null);
-                var message = JsonConvert.SerializeObject(@event);
+                var message = JsonConvert.SerializeObject(theEevent);
                 var body = Encoding.UTF8.GetBytes(message);
                 channel.BasicPublish("", enentName, null, body);
 
             }
         }
 
-        public void Subscribe<T, TH>()
-            where T : Event
+        public void SubscribeEvent<T, TH>()
+            where T : IEvent            
             where TH : IEventHandler<T>
         {
             var eventName = typeof(T).Name;
@@ -72,7 +73,8 @@ namespace EventBus.RabbitMQ
             StartBasicConsume<T>();
         }
 
-        private void StartBasicConsume<T>() where T : Event
+        private void StartBasicConsume<T>() 
+            where T : IEvent            
         {
             var factory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };
             var conn = factory.CreateConnection();
@@ -102,6 +104,7 @@ namespace EventBus.RabbitMQ
         {
             if (handlers.ContainsKey(eventName))
             {
+                
                 using (var scope = serviceScopeFactory.CreateScope())
                 {
                     var subscriptions = handlers[eventName];

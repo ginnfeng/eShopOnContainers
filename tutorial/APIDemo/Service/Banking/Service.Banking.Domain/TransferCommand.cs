@@ -3,7 +3,7 @@ using System;
 
 namespace Service.Banking.Domain
 {
-    public class TransferCommand : Command
+    public class TransferCommand : CmdBase
     {
         public int From { get; protected set; }
         public int To { get; protected set; }

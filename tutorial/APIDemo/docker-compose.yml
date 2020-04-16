@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  service.ordering.api:
+    image: ${DOCKER_REGISTRY-}serviceorderingapi
+    build:
+      context: .
+      dockerfile: Service/Ordering/Service.Ordering.Api/Dockerfile
+  rabbitmq:
+    image: rabbitmq:3-management-alpine

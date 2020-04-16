@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 namespace EventBus.Domain
 {
     public interface IEventHandler<in TEvent> : IEventHandler
-        where TEvent : Event
+        where TEvent : IEvent
     {
-        Task Handle(TEvent @event);
+        Task Handle(TEvent theEvent);
     }
 
     public interface IEventHandler

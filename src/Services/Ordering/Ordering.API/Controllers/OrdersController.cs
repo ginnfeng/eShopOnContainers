@@ -133,7 +133,6 @@ namespace Microsoft.eShopOnContainers.Services.Ordering.API.Controllers
         public async Task<ActionResult<IEnumerable<CardType>>> GetCardTypesAsync()
         {
             var cardTypes = await _orderQueries.GetCardTypesAsync();
-
             return Ok(cardTypes);
         }
 

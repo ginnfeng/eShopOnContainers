@@ -4,5 +4,7 @@
     </T_ServiceCollection>
     <T_Config>
     </T_Config>
+    <T_MediatorR>
+    </T_MediatorR>
   </TestCase>
 </UTest>

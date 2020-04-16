@@ -3,6 +3,7 @@
 // Description: SampleClasses.cs  
 // Revisions  :            		
 // **************************************************************************** 
+
 using EventBus.Domain;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -48,8 +49,8 @@ namespace UTool.Test
     }
 
 
-
-    public class SampleCommand : IRequest<bool>
+    //***************************MediatR****************************************
+    public class SampleCommand : IRequest<bool>, INotification
     {
         public enum CmdType
         {
@@ -89,8 +90,34 @@ namespace UTool.Test
             return Task.FromResult(true);
         }
     }
+    public class SampleNotificationHandler1 : INotificationHandler<SampleCommand>
+    {// INotificationHandler notification to n handlers. don't return value.
+        private readonly ILogger<SampleCommandHandler> logger;
+        public SampleNotificationHandler1(ILoggerFactory loggerFactory)
+        {
+            this.logger = loggerFactory.CreateLogger<SampleCommandHandler>();
+        }
+        Task INotificationHandler<SampleCommand>.Handle(SampleCommand cmd, CancellationToken cancellationToken)
+        {
+            logger.LogInformation($"SampleNotificationHandler1 Content={cmd.Content}");
+            return Task.CompletedTask;
+        }
+    }
+    public class SampleNotificationHandler2 : INotificationHandler<SampleCommand>
+    {// INotificationHandler notification to n handlers. don't return value.
+        private readonly ILogger<SampleCommandHandler> logger;
+        public SampleNotificationHandler2(ILoggerFactory loggerFactory)
+        {
+            this.logger = loggerFactory.CreateLogger<SampleCommandHandler>();
+        }
+        Task INotificationHandler<SampleCommand>.Handle(SampleCommand cmd, CancellationToken cancellationToken)
+        {
+            logger.LogInformation($"SampleNotificationHandler2 Content={cmd.Content}");
+            return Task.CompletedTask;
+        }
+    }
 
-   
+
 
     public class ClientInfo
     {

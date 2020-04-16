@@ -38,9 +38,14 @@ namespace UTool.Test
             //LOGGING 
             //https://stackoverflow.com/questions/50849251/net-core-di-logger-on-console-app-not-logging-to-console
             //https://docs.microsoft.com/zh-tw/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1
+            
             serviceCollection.AddLogging(builder => builder.AddConsole().AddDebug().AddFilter(level => level >= LogLevel.Debug));
             serviceCollection.AddTransient<IRequestHandler<SampleCommand, bool>, SampleCommandHandler>();
-            serviceCollection.AddMediatR(typeof(Test_DI));
+            serviceCollection.AddTransient<INotificationHandler<SampleCommand>, SampleNotificationHandler1>();
+            serviceCollection.AddTransient<INotificationHandler<SampleCommand>, SampleNotificationHandler2>();
+            serviceCollection.AddMediatR(typeof(IMediator));
+            //serviceCollection.AddMediatR(typeof(Test_DI)); //以此可自動註冊所有Handler class
+
             serviceCollection.AddSingleton<IConfiguration>(
                 sp =>
                 {
@@ -57,11 +62,11 @@ namespace UTool.Test
         }
         [UMethod]
         public void T_MediatorR()
-        {// TODO: Add Testing logic here
-
+        {// TODO: Add Testing logic here            
             var cmd = new SampleCommand() { Id = SampleCommand.CmdType.Add, Content = "******" };
             var mediator = serviceProvider.GetService<IMediator>();
             mediator.Send(cmd);
+            mediator.Publish(cmd);
         }
         [UMethod]
         public void T_Config()

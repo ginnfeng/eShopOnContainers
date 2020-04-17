@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Common.Support.Thread;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Service.Ordering.ApiImp;
 using Service.Ordering.Contract;
 using Service.Ordering.Contract.Entity;
-using Service.Ordering.ImpApi;
+using Service.Ordering.Contract.Service;
+
 
 namespace Service.Ordering.Api.Controllers
 {
@@ -32,7 +34,7 @@ namespace Service.Ordering.Api.Controllers
             Order order = await wrapper.AsyncCall(itSvc => itSvc.QueryOrder(orderId));
             return Ok(order);
         }
-        private IOrderingService svc = new OrderingService();
+        private IOrderingService svc;//= new OrderingService();
         //// GET: api/Ordering
         //[HttpGet]
         //public IEnumerable<string> Get()

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -6,8 +6,12 @@
 
   <ItemGroup>
     <Folder Include="EventHandler\" />
-    <Folder Include="Command\" />
-    <Folder Include="CommandHandler\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.Domain\EventBus.Domain.csproj" />
+    <ProjectReference Include="..\..\Banking\Service.Banking.Contract\Service.Banking.Contract.csproj" />
+    <ProjectReference Include="..\Service.Ordering.Contract\Service.Ordering.Contract.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,8 +3,8 @@
     <Assembly>C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\bin\Debug\netcoreapp3.1\UTool.dll</Assembly>
   </Assemblys>
   <Window>
-    <Window_Width>918</Window_Width>
-    <Window_Height>566</Window_Height>
+    <Window_Width>1245</Window_Width>
+    <Window_Height>784</Window_Height>
   </Window>
   <Cache>
     <UTool.Test.Test_Demo src="c:\ProgOpen\Demo\APIDemo\UTool\Test\Test_Demo.cs" />
@@ -14,6 +14,7 @@
     <UTool.Test.Test_DI_ServiceScope src="C:\ProgOpen\Demo\APIDemo\UTool\Test\Test_DI_ServiceScope.cs" />
     <UTool.Test.Test_DI src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_DI.cs" />
     <UTool.Test.Test_Await src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_Await.cs" />
+    <UTool.Test.Test_IoC src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_IoC.cs" />
   </Cache>
   <CacheDir>
     <F_344>d:\Dev\UTool\UTool\Test</F_344>

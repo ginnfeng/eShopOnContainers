@@ -5,12 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Event\" />
     <Folder Include="Service\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Common\Common.Contract\Common.Contract.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.Domain\EventBus.Domain.csproj" />
+    <ProjectReference Include="..\..\Ordering\Service.Ordering.Contract\Service.Ordering.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Event\IssueOrderEvent.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

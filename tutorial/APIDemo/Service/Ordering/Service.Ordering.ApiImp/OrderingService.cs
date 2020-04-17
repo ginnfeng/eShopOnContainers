@@ -5,6 +5,8 @@
 // **************************************************************************** 
 
 using EventBus.Domain;
+
+using Service.Ordering.Contract.Command;
 using Service.Ordering.Contract.Entity;
 using Service.Ordering.Contract.Service;
 using System;
@@ -23,12 +25,13 @@ namespace Service.Ordering.ApiImp
         }
         public void IssueOrder(Order order)
         {
-            throw new NotImplementedException();
+            bus.SendCmd(new IssueOrderCmd(order));
         }
 
         public Order QueryOrder(string orderId)
         {
-            return new Order() { OrderId="919783"};
+            var task= bus.SendCmd(new QueryOrderCmd(orderId));            
+            return task.Result;
         }
     }
 }

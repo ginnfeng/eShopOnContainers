@@ -4,13 +4,12 @@
 // Revisions  :            		
 // **************************************************************************** 
 
-using EventBus.Domain;
+
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
-using Microsoft.Extensions.Options;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

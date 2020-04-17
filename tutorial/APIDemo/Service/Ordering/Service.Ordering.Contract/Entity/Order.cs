@@ -15,6 +15,6 @@ namespace Service.Ordering.Contract.Entity
         public string OrderId { get; set; }
         public string CustomerId { get; set; }        
         public string ShipAddress { get; set; }
-        public OrderDetail Detaik { get; set; }
+        public OrderDetail Detail { get; set; }
     }
 }

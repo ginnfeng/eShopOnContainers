@@ -35,10 +35,21 @@ namespace EventBus.RabbitMQ
             this.serviceProvider = serviceProvider;
             this.serviceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
         }
-        public Task SendCommand<T>(T command) where T : IEvent
+        
+        public Task SendCmd<TD>(CmdBase<TD> command)
         {
             mediator ??= serviceProvider.GetService<IMediator>();
             return mediator.Send(command);
+        }
+        public Task<TRlt> SendCmd<TD, TRlt>(CmdBase<TD, TRlt> command)
+        {
+            mediator ??= serviceProvider.GetService<IMediator>();
+            return mediator.Send<TRlt> (command);
+        }
+        public Task PublishCmd<T>(T command) where T : IEvent
+        {
+            mediator ??= serviceProvider.GetService<IMediator>();
+            return mediator.Publish(command);
         }
         public void PublishEvent<T>(T theEevent) 
             where T : IEvent            

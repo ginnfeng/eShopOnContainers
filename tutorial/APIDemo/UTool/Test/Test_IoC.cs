@@ -3,7 +3,10 @@
 // Description: Test_EventBus.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using EventBus.Domain;
 using Microsoft.Extensions.DependencyInjection;
+using Service.Banking.Application.EventHandler;
+using Service.Banking.Contract.Event;
 using Service.Ordering.Contract.Entity;
 using Service.Ordering.Contract.Service;
 using System;
@@ -29,13 +32,15 @@ namespace UTool.Test
             SP=serviceCollection.BuildServiceProvider();
         }
         public IServiceProvider SP { get; private set; }
+        static long orderIdNum = 1000;
         [UMethod]
-        public void T_IssueOrder(string orderId,string adr)
+        public void T_IssueOrder(string customerId, string adr)
         {// TODO: Add Testing logic here
-            var order = new Order() {OrderId= orderId, ShipAddress=adr };
+            var order = new Order() {OrderId= $"{orderIdNum++}",CustomerId= customerId, ShipAddress=adr };
             var svc=SP.GetService<IOrderingService>();
             svc.IssueOrder(order);
         }
+        
         [UMethod]
         public void T_QueryOrder(string orderId)
         {// TODO: Add Testing logic here
@@ -43,5 +48,13 @@ namespace UTool.Test
             var order = svc.QueryOrder(orderId);
             print($"CustId={order.CustomerId} ShipAddres={order.ShipAddress}");
         }
+
+        [UMethod]
+        public void T_IssueOrderEventHandler()
+        {// TODO: Add Testing logic here
+            var bus = SP.GetService<IEventBus>();
+            bus.SubscribeEvent<IssueOrderEvent,IssueOrderEventHandler>();
+        }
+
     }
 }

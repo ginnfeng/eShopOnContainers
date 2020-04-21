@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>TryCatchLog</Title>
+      <Shortcut>TryCatchLog</Shortcut>
+      <Description>
+      </Description>
+      <Author>
+      </Author>
+    </Header>
+    <Snippet>
+      <Code Language="csharp"><![CDATA[try
+{
+}
+catch (Exception error)
+{
+	LogAgent.Logger.Flush(error);
+	throw;
+}       ]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -22,7 +22,9 @@ namespace Service.Banking.Application.EventHandler
         }
         public Task Handle(IssueOrderEvent theEvent)
         {
-            throw new NotImplementedException();
+            var order = theEvent.DataContract;
+            TheLogger.LogInformation($"OrderId={order.OrderId} ShipAddres={order.ShipAddress}");
+            return Task.CompletedTask;
         }
     }
 }

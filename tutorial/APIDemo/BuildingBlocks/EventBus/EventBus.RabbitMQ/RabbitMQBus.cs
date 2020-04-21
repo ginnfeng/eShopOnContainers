@@ -3,6 +3,7 @@ using EventBus.Domain;
 using MediatR;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -25,15 +26,17 @@ namespace EventBus.RabbitMQ
         private readonly List<Type> eventTypes;
         private readonly IServiceScopeFactory serviceScopeFactory;
         private readonly IServiceProvider serviceProvider;
-        public RabbitMQBus()
-        {
-        }
+        private readonly ILogger logger;
+
         public RabbitMQBus(IServiceProvider serviceProvider)
         {            
             this.handlers = new Dictionary<string, List<Type>>();
             this.eventTypes = new List<Type>();
             this.serviceProvider = serviceProvider;
             this.serviceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
+            ILoggerFactory loggerFactory= serviceProvider.GetService<ILoggerFactory>();
+            if(loggerFactory!=null)
+                logger=loggerFactory.CreateLogger<RabbitMQBus>();
         }
         
         public Task SendCmd<TD>(CmdBase<TD> command)
@@ -77,9 +80,10 @@ namespace EventBus.RabbitMQ
             if (!eventTypes.Contains(typeof(T)))
                 eventTypes.Add(typeof(T));
             if (!handlers.ContainsKey(eventName))
-                handlers[eventName] = new List<Type>();
+                handlers[eventName] = new List<Type>(); 
+            
             if (handlers[eventName].Any(it => it.GetType() == handlerType))
-                throw new ArgumentException($"Handler Type {handlerType.Name} already is registered fo '{eventName}", nameof(handlerType));
+                throw new NullReferenceException($"Handler Type {handlerType.Name} already is registered fo '{eventName}");
             handlers[eventName].Add(handlerType);
             StartBasicConsume<T>();
         }
@@ -107,26 +111,26 @@ namespace EventBus.RabbitMQ
             }
             catch (Exception err)
             {
-
-                throw err;
+                if (logger != null)
+                    logger.LogError(err.Message);
+                throw;
             }
         }
         private async Task ProcessEvent(string eventName, string message)
         {
             if (handlers.ContainsKey(eventName))
             {
-                
                 using (var scope = serviceScopeFactory.CreateScope())
                 {
                     var subscriptions = handlers[eventName];
                     foreach (var subscription in subscriptions)
                     {
-                        var handler = scope.ServiceProvider.GetService(subscription);
-                        if (handler == null) continue;
                         var eventType = eventTypes.SingleOrDefault(t => t.Name == eventName);
-                        var @event = JsonConvert.DeserializeObject(message, eventType);
-                        var conreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
-                        await (Task)conreteType.GetMethod("Handle").Invoke(handler, new object[] { @event });
+                        var handlerType = typeof(IEventHandler<>).MakeGenericType(eventType);
+                        var handler = scope.ServiceProvider.GetService(handlerType);
+                        if (handler == null) continue;                        
+                        var eventObj = JsonConvert.DeserializeObject(message, eventType);
+                        await ((Task)handlerType.GetMethod("Handle").Invoke(handler, new object[] { eventObj })).ConfigureAwait(false);
                     }
                 }
             }

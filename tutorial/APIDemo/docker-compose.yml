@@ -6,5 +6,19 @@ services:
     build:
       context: .
       dockerfile: Service/Ordering/Service.Ordering.Api/Dockerfile
+    container_name: ordering-api
   rabbitmq:
     image: rabbitmq:3-management-alpine
+  service.banking.api:
+    image: ${DOCKER_REGISTRY-}servicebankingapi
+    build:
+      context: .
+      dockerfile: Service/Banking/Service.Banking.Api/Dockerfile
+    container_name: banking-api
+
+  apigw.ocelot:
+    image: ${DOCKER_REGISTRY-}apigwocelot
+    build:
+      context: .
+      dockerfile: BuildingBlocks/ApiGw/ApiGw.Ocelot/Dockerfile
+

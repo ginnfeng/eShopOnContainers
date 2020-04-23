@@ -12,7 +12,7 @@ using Service.Ordering.Contract.Entity;
 namespace Service.Ordering.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class WeatherForecastController : ControllerBase//, IOrderingService
     {
         private static readonly string[] Summaries = new[]

@@ -41,15 +41,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoC", "IoC", "{A98F8F1C-D04
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoC.DI", "BuildingBlocks\IoC\IoC.DI\IoC.DI.csproj", "{58A27032-851E-4AFC-B4D5-0597010B6FC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Banking.Contract", "Service\Banking\Service.Banking.Contract\Service.Banking.Contract.csproj", "{57A22BD2-9D41-4A72-95E5-A50B1410DD57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Banking.Contract", "Service\Banking\Service.Banking.Contract\Service.Banking.Contract.csproj", "{57A22BD2-9D41-4A72-95E5-A50B1410DD57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Ordering.ApiImp", "Service\Ordering\Service.Ordering.ApiImp\Service.Ordering.ApiImp.csproj", "{4715B9BD-7EA6-459E-B9AC-7F06E372E8DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Ordering.ApiImp", "Service\Ordering\Service.Ordering.ApiImp\Service.Ordering.ApiImp.csproj", "{4715B9BD-7EA6-459E-B9AC-7F06E372E8DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Banking.ApiImp", "Service\Banking\Service.Banking.ApiImp\Service.Banking.ApiImp.csproj", "{7881FD25-A99F-4CFE-9221-5C4D2DDC619F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Banking.ApiImp", "Service\Banking\Service.Banking.ApiImp\Service.Banking.ApiImp.csproj", "{7881FD25-A99F-4CFE-9221-5C4D2DDC619F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Banking.Application", "Service\Banking\Service.Banking.Application\Service.Banking.Application.csproj", "{3B8FA087-4597-408C-A021-AA2C9EEBF770}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Banking.Application", "Service\Banking\Service.Banking.Application\Service.Banking.Application.csproj", "{3B8FA087-4597-408C-A021-AA2C9EEBF770}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Banking.Api", "Service\Banking\Service.Banking.Api\Service.Banking.Api.csproj", "{6AB05332-617F-43ED-8800-78954A3BB742}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service.Banking.Api", "Service\Banking\Service.Banking.Api\Service.Banking.Api.csproj", "{6AB05332-617F-43ED-8800-78954A3BB742}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APiGw", "APiGw", "{DD4C4D3E-27F4-43E3-BB18-87BBD8D730B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGw.Ocelot", "BuildingBlocks\ApiGw\ApiGw.Ocelot\ApiGw.Ocelot.csproj", "{0ED772A3-B776-4A04-BB98-A152FF99D890}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +121,10 @@ Global
 		{6AB05332-617F-43ED-8800-78954A3BB742}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AB05332-617F-43ED-8800-78954A3BB742}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AB05332-617F-43ED-8800-78954A3BB742}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ED772A3-B776-4A04-BB98-A152FF99D890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ED772A3-B776-4A04-BB98-A152FF99D890}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ED772A3-B776-4A04-BB98-A152FF99D890}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ED772A3-B776-4A04-BB98-A152FF99D890}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +148,8 @@ Global
 		{7881FD25-A99F-4CFE-9221-5C4D2DDC619F} = {CC9F3FE3-2AAB-4E3B-BE25-0008A894EE7F}
 		{3B8FA087-4597-408C-A021-AA2C9EEBF770} = {CC9F3FE3-2AAB-4E3B-BE25-0008A894EE7F}
 		{6AB05332-617F-43ED-8800-78954A3BB742} = {CC9F3FE3-2AAB-4E3B-BE25-0008A894EE7F}
+		{DD4C4D3E-27F4-43E3-BB18-87BBD8D730B1} = {BA9A950D-0BC0-4F88-BC88-40D0B6D0FA93}
+		{0ED772A3-B776-4A04-BB98-A152FF99D890} = {DD4C4D3E-27F4-43E3-BB18-87BBD8D730B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EB5E539E-49D5-4A7A-8F44-2B31DAED129C}

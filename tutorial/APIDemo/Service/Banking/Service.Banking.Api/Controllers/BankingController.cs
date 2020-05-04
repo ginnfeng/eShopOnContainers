@@ -15,7 +15,7 @@ namespace Service.Banking.Api.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "Hello", "Banking API" };
         }
 
         // GET: api/Banking/5
@@ -43,4 +43,5 @@ namespace Service.Banking.Api.Controllers
         {
         }
     }
+        
 }

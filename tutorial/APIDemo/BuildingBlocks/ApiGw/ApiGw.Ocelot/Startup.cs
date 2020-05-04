@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,7 +28,7 @@ namespace ApiGw.Ocelot
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            //app.UseHttpsRedirection(); 此會強迫http redirect to https
             app.UseRouting();
             app.UseOcelot().Wait();
             app.UseEndpoints(endpoints =>

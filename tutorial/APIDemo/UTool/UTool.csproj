@@ -30,20 +30,10 @@
     <ProjectReference Include="..\BuildingBlocks\EventBus\EventBus.RabbitMQ\EventBus.RabbitMQ.csproj" />
     <ProjectReference Include="..\BuildingBlocks\IoC\IoC.DI\IoC.DI.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="MSHTML.dll">
-      <Guid>3050f1c5-98b5-11cf-bb82-00aa00bdce0b</Guid>
-      <VersionMajor>4</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Lcid>0</Lcid>
-      <Isolated>false</Isolated>
-    </COMReference>
-  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Interop.MSHTML">
-      <HintPath>bin\Debug\netcoreapp3.1\Interop.MSHTML.dll</HintPath>
+      <HintPath>..\SystemSetting\TDll\Interop.MSHTML.dll</HintPath>
     </Reference>
     <Reference Include="UTDll">
       <HintPath>..\SystemSetting\TDll\UTDll.dll</HintPath>

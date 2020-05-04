@@ -29,7 +29,7 @@ namespace UTool
 						s=t.ToString();
 					}
 				}
-			UTest.startup(Language.CSharp);
+			try { UTest.startup(Language.CSharp); } catch { };
 			//Application.Run(new UTForm());
 		}
 		

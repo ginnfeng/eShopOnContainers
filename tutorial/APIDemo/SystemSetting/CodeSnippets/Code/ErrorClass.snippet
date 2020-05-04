@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <HelpUrl>
+      </HelpUrl>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Keywords />
+      <Title>Error</Title>
+      <Shortcut>ErrorCalss</Shortcut>
+      <Description>Error class</Description>
+      <Author>Feng</Author>
+    </Header>
+    <Snippet>
+      <References>
+        <Reference>
+          <Assembly>Support.ErrorHandling</Assembly>
+        </Reference>
+      </References>
+      <Imports />
+      <Declarations>
+        <Literal Editable="true">
+          <ID>MyError</ID>
+          <ToolTip>
+          </ToolTip>
+          <Default>MyError</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[[Serializable]
+public class $MyError$: ErrorInfoBase
+{
+	public $MyError$()
+    	{
+    	}
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

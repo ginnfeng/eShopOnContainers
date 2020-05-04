@@ -1,0 +1,6 @@
+<UTest id="UTool.Test.Test_Demo2">
+  <TestCase>
+    <testMyClass1>
+    </testMyClass1>
+  </TestCase>
+</UTest>

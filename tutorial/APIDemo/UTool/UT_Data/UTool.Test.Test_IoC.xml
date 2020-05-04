@@ -1,0 +1,10 @@
+<UTest id="UTool.Test.Test_IoC">
+  <TestCase>
+    <T_QueryOrder>"1299"</T_QueryOrder>
+    <T_IssueOrder>"5678","Taiwan Taipei"</T_IssueOrder>
+    <T_method>
+    </T_method>
+    <T_IssueOrderEventHandler>
+    </T_IssueOrderEventHandler>
+  </TestCase>
+</UTest>

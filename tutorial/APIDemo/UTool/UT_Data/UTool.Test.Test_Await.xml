@@ -1,0 +1,8 @@
+<UTest id="UTool.Test.Test_Await">
+  <TestCase>
+    <T_AwaitSimple0>
+    </T_AwaitSimple0>
+    <T_UI>
+    </T_UI>
+  </TestCase>
+</UTest>

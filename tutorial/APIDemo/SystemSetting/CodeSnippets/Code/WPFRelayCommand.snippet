@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>WPFRelayCommand</Title>
+      <Shortcut>WPFRelayCommand</Shortcut>
+      <Description>
+      </Description>
+      <Author>
+      </Author>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>cmdName</ID>
+          <ToolTip>
+          </ToolTip>
+          <Default>MyCommand</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[#region $cmdName$
+        
+        RelayCommand relay$cmdName$= null;
+        
+        public ICommand $cmdName$
+        {
+            get
+            {
+                if (relay$cmdName$ == null)
+                    relay$cmdName$ = new RelayCommand(param => this.On$cmdName$(param));
+                return relay$cmdName$;
+            }
+        }
+        
+        private object On$cmdName$(object param)
+        {
+            return null;
+        }
+        #endregion]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

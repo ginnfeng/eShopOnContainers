@@ -1,0 +1,29 @@
+{
+  "ReRoutes": [
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service.banking.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/b/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "service.ordering.api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/api/o/{everything}",
+      "UpstreamHttpMethod": [ "POST", "PUT", "GET" ]
+    }
+  ],
+  "GlobalConfiguration": { }
+}

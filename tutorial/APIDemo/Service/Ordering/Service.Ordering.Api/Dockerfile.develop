@@ -1,0 +1,25 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+ARG BUILD_CONFIGURATION=Debug
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=http://+:80
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+EXPOSE 80
+
+WORKDIR /src
+COPY ["BuildingBlocks/Common/Common.Contract/Common.Contract.csproj", "BuildingBlocks/Common/Common.Contract/"]
+COPY ["BuildingBlocks/Common/Common.Support/Common.Support.csproj", "BuildingBlocks/Common/Common.Support/"]
+COPY ["BuildingBlocks/EventBus/EventBus.Domain/EventBus.Domain.csproj", "BuildingBlocks/EventBus/EventBus.Domain/"]
+COPY ["Service/Banking/Service.Banking.Contract/Service.Banking.Contract.csproj", "Service/Banking/Service.Banking.Contract/"]
+COPY ["Service/Ordering/Service.Ordering.Api/Service.Ordering.Api.csproj", "Service/Ordering/Service.Ordering.Api/"]
+COPY ["Service/Ordering/Service.Ordering.ApiImp/Service.Ordering.ApiImp.csproj", "Service/Ordering/Service.Ordering.ApiImp/"]
+COPY ["Service/Ordering/Service.Ordering.Application/Service.Ordering.Application.csproj", "Service/Ordering/Service.Ordering.Application/"]
+COPY ["Service/Ordering/Service.Ordering.Contract/Service.Ordering.Contract.csproj", "Service/Ordering/Service.Ordering.Contract/"]
+
+RUN dotnet restore "Service/Ordering/Service.Ordering.Api/Service.Ordering.Api.csproj"
+COPY . .
+WORKDIR "/src/Service/Ordering/Service.Ordering.Api"
+RUN dotnet build --no-restore "Service.Ordering.Api.csproj" -c $BUILD_CONFIGURATION
+
+RUN echo "exec dotnet run --no-build --no-launch-profile -c $BUILD_CONFIGURATION --" > /entrypoint.sh
+
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]

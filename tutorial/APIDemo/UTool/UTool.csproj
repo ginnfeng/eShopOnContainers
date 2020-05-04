@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="App.ico" />
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App.ico" />
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="MediatR" Version="8.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks\EventBus\EventBus.Domain\EventBus.Domain.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\EventBus\EventBus.RabbitMQ\EventBus.RabbitMQ.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\IoC\IoC.DI\IoC.DI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Interop.MSHTML">
+      <HintPath>bin\Debug\netcoreapp3.1\Interop.MSHTML.dll</HintPath>
+    </Reference>
+    <Reference Include="UTDll">
+      <HintPath>bin\Debug\netcoreapp3.1\UTDll.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

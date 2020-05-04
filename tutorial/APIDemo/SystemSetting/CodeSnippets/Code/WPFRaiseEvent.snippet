@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>WPFRaiseEvent</Title>
+      <Shortcut>WPFRaiseEvent</Shortcut>
+      <Description>
+      </Description>
+      <Author>Feng</Author>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>PropertyType</ID>
+          <ToolTip>
+          </ToolTip>
+          <Default>propertyType</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ElementClass</ID>
+          <ToolTip>
+          </ToolTip>
+          <Default>ElementClass</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ChangedEvent</ID>
+          <ToolTip>
+          </ToolTip>
+          <Default>Changed</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ChangedEventArg</ID>
+          <ToolTip>
+          </ToolTip>
+          <Default>ChangedEvent</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[RoutedPropertyChangedEventArgs<$PropertyType$> args =new RoutedPropertyChangedEventArgs<$PropertyType$>(oldValue, newValue);
+args.RoutedEvent = $ElementClass$.$ChangedEvent$;
+this.RaiseEvent(args);]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

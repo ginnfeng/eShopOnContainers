@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <HelpUrl>
+      </HelpUrl>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Keywords />
+      <Title>Attribute</Title>
+      <Shortcut>AttributeCalss</Shortcut>
+      <Description>Attribute class</Description>
+      <Author>Feng</Author>
+    </Header>
+    <Snippet>
+      <References>
+        <Reference>
+          <Assembly>Support.ErrorHandling</Assembly>
+        </Reference>
+      </References>
+      <Imports />
+      <Declarations>
+        <Literal Editable="true">
+          <ID>ClassName</ID>
+          <ToolTip>
+          </ToolTip>
+          <Default>My</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[[AttributeUsage(AttributeTargets.Method | AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
+public sealed class $ClassName$Attribute: System.Attribute
+{
+	public $ClassName$Attribute()
+        	{
+        	}
+}]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

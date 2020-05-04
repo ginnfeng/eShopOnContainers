@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <HelpUrl>
+      </HelpUrl>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Keywords />
+      <Title>INotifyPropertyChanged Imp</Title>
+      <Shortcut>INotifyPropertyChangedImp</Shortcut>
+      <Description>INotifyPropertyChanged Imp</Description>
+      <Author>Feng</Author>
+    </Header>
+    <Snippet>
+      <References>
+        <Reference>
+          <Assembly>Support.ErrorHandling</Assembly>
+        </Reference>
+      </References>
+      <Imports />
+      <Declarations>
+      </Declarations>
+      <Code Language="csharp" Delimiter="$"><![CDATA[#region INotifyPropertyChanged Members
+        [field:NonSerialized]
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion
+
+        public void OnPropertyChanged(string propertyName)
+        {         
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

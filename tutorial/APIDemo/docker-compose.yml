@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+  service.ordering.api:
+    image: ${DOCKER_REGISTRY-}serviceorderingapi
+    build:
+      context: .
+      dockerfile: Service/Ordering/Service.Ordering.Api/Dockerfile
+    container_name: service.ordering.api # 
+    networks:
+      - mynetwork
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+
+  service.banking.api:
+    image: ${DOCKER_REGISTRY-}servicebankingapi
+    build:
+      context: .
+      dockerfile: Service/Banking/Service.Banking.Api/Dockerfile
+    container_name: service.banking.api
+    networks:
+      - mynetwork
+
+  apigw.ocelot:
+    image: ${DOCKER_REGISTRY-}apigwocelot
+    build:
+      context: .
+      dockerfile: BuildingBlocks/ApiGw/ApiGw.Ocelot/Dockerfile
+
+networks:
+  mynetwork:
+      external:
+          name: extnetwork

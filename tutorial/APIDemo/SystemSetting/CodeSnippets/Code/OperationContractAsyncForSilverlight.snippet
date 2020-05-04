@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <HelpUrl>
+      </HelpUrl>
+      <Title>OperationContractAsyncForSilverlight</Title>
+      <Shortcut>OperContractAsync_Silverlight</Shortcut>
+      <Description>
+      </Description>
+      <Author>bill</Author>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>Method</ID>
+          <ToolTip>Method</ToolTip>
+          <Default>Method</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[#if SILVERLIGHT
+       [OperationContract(AsyncPattern=true)]
+        IAsyncResult Begin$Method$(RequestInfo requestInfo, AsyncCallback callback, object asyncState);
+        ServiceContractRoutingInfo End$Method$(IAsyncResult result);
+#endif]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

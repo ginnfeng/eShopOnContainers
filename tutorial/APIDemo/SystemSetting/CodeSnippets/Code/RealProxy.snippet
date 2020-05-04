@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+      <Title>RealProxy</Title>
+      <Author>bill</Author>
+      <Description>
+      </Description>
+      <HelpUrl>
+      </HelpUrl>
+      <Shortcut>RealProxy</Shortcut>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>Entity</ID>
+          <ToolTip>EntityProxy</ToolTip>
+          <Default>Entity</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[    using Support.Net.Proxy;
+    using System.Reflection;
+    
+    public class $Entity$Proxy<TEntity>
+    {
+        public $Entity$Proxy()
+        {
+            realProxy.GetPropertyEvent += GetPropertyValue;
+            realProxy.SetPropertyEvent += SetPropertyValue;           
+        }
+       
+         public TEntity Entity
+        {
+            get { return realProxy.Entity; }
+        }
+        
+        private void SetPropertyValue(MethodInfo methodInfo, string propertyName, object value)
+        {            
+        }
+
+        private object GetPropertyValue(MethodInfo methodInfo, string propertyName)
+        {
+            return null;
+        }
+        
+        private RealProxy<TEntity> realProxy = new RealProxy<TEntity>();
+    }]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

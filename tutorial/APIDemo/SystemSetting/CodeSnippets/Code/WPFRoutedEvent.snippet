@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>WPFRoutedEvent</Title>
+      <Shortcut>WPFRoutedEvent</Shortcut>
+      <Description>
+      </Description>
+      <Author>Feng</Author>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal Editable="true">
+          <ID>PropertyType</ID>
+          <ToolTip>
+          </ToolTip>
+          <Default>propertyType</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ElementClass</ID>
+          <ToolTip>
+          </ToolTip>
+          <Default>ElementClass</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ChangedEvent</ID>
+          <ToolTip>
+          </ToolTip>
+          <Default>Changed</Default>
+          <Function>
+          </Function>
+        </Literal>
+        <Literal Editable="true">
+          <ID>ChangedEventArg</ID>
+          <ToolTip>
+          </ToolTip>
+          <Default>ChangedEvent</Default>
+          <Function>
+          </Function>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp"><![CDATA[static $ElementClass$()
+		{	
+			$ChangedEvent$Event = EventManager.RegisterRoutedEvent(
+                      	"$ChangedEvent$", RoutingStrategy.Bubble,
+                      	typeof(RoutedPropertyChangedEventHandler<$PropertyType$>), typeof($ElementClass$));
+       	}
+
+		public event RoutedPropertyChangedEventHandler<$PropertyType$> $ChangedEvent$
+		{
+			add { AddHandler($ChangedEvent$Event, value); }
+       		remove { RemoveHandler($ChangedEvent$Event, value); }
+		}		
+        
+		public static readonly RoutedEvent $ChangedEvent$Event;
+ ]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

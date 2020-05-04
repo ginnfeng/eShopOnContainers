@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>a19bfe36-3822-4043-bc81-1f7f2cd786f9</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\Common\Common.Support\Support.Net.Core.csproj" />
+    <ProjectReference Include="..\Service.Ordering.ApiImp\Service.Ordering.ApiImp.csproj" />
+    <ProjectReference Include="..\Service.Ordering.Contract\Service.Ordering.Contract.csproj" />
+  </ItemGroup>
+
+
+</Project>

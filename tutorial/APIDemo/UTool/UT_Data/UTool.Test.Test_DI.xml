@@ -1,0 +1,10 @@
+<UTest id="UTool.Test.Test_DI">
+  <TestCase>
+    <T_ServiceCollection>
+    </T_ServiceCollection>
+    <T_Config>
+    </T_Config>
+    <T_MediatorR>
+    </T_MediatorR>
+  </TestCase>
+</UTest>

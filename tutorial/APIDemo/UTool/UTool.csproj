@@ -36,7 +36,7 @@
       <HintPath>bin\Debug\netcoreapp3.1\Interop.MSHTML.dll</HintPath>
     </Reference>
     <Reference Include="UTDll">
-      <HintPath>bin\Debug\netcoreapp3.1\UTDll.dll</HintPath>
+      <HintPath>..\SystemSetting\TDll\UTDll.dll</HintPath>
     </Reference>
   </ItemGroup>
 

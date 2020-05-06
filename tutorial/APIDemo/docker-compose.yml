@@ -12,6 +12,8 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
+    networks:
+      - mynetwork
 
   service.banking.api:
     image: ${DOCKER_REGISTRY-}servicebankingapi
@@ -27,7 +29,8 @@ services:
     build:
       context: .
       dockerfile: BuildingBlocks/ApiGw/ApiGw.Ocelot/Dockerfile
-
+    networks:
+      - mynetwork
 networks:
   mynetwork:
       external:

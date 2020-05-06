@@ -25,9 +25,8 @@ namespace Service.Ordering.Api.Controllers
             await wrapper.AsyncCall(itSvc => itSvc.IssueOrder(order));
             return Ok();
         }
-        [HttpGet]
-        
-        //[Route("QueryOrder")]
+        [HttpGet]        
+        [Route("QueryOrder")]
         public async Task<ActionResult<Order>> QueryOrder(string orderId)
         {
             //Order order = new Order();

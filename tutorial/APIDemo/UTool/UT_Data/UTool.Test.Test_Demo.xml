@@ -8,5 +8,7 @@
     <T4>""</T4>
     <T5>"123"
 "56789"</T5>
+    <T_StrLength>"abc","edf"
+"1345","67890"</T_StrLength>
   </TestCase>
 </UTest>

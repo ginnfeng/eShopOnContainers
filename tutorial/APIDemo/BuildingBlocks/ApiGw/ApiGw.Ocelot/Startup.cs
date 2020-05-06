@@ -28,7 +28,7 @@ namespace ApiGw.Ocelot
             {
                 app.UseDeveloperExceptionPage();
             }
-            //app.UseHttpsRedirection(); 此會強迫http redirect to https
+            //app.UseHttpsRedirection(); //此會強迫http redirect to https
             app.UseRouting();
             app.UseOcelot().Wait();
             app.UseEndpoints(endpoints =>

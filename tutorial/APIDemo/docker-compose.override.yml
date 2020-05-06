@@ -3,8 +3,7 @@ version: '3.4'
 services:
   service.ordering.api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      
+      - ASPNETCORE_ENVIRONMENT=Development      
     ports:
       - "80"
       - "443"

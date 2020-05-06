@@ -18,18 +18,16 @@ namespace UTool.Test
 			//
 		}
 		[UMethod]
-		public void T1(int inp)
-		{			
-			int i=100;
-			string s=i.ToString();
-			print("value",i);
-			assert(i==inp);
+		public void T_StrLength(string inp1, string inp2)
+		{
+			printf("inp1={0} inp2={1}", inp1, inp2);
+			assert(inp1.Length == inp2.Length);
 			Thread.Sleep(1000);
+			print("*******Test End*************");
 		}
 		[UMethod]
 		public void T2()
-		{		
-			
+		{
 			messageBox("hello");
 			Exception e=new Exception("ERROR!");
 			throw e;
@@ -50,6 +48,14 @@ namespace UTool.Test
 		public void T5(string s)
 		{
 			this.assert(s.Length > 3);
+
 		}
+
+	
 	}
+
+
+	
 }
+
+

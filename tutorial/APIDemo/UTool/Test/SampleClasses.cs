@@ -14,7 +14,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -158,5 +160,26 @@ namespace UTool.Test
         {
             return _configuration.GetSection(key).Value;
         }
+    }
+
+
+    //************************************************************
+    public class IpLogParser
+    {
+        public IpLogParser()
+        {
+        }
+        public List<IPAddress> Parse(string log)   //, Action<Match> act = null)
+        {
+            var iplist=new List<IPAddress>();            
+            var matchs=regex.Matches(log);
+            foreach (Match match in matchs)
+            {
+                iplist.Add(IPAddress.Parse(match.Groups[0].ToString()));
+            }
+            return iplist;
+        }
+        //(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
+        static readonly Regex regex = new Regex("(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})");
     }
 }

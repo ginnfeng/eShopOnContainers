@@ -25,6 +25,16 @@ namespace UTool.Test
 			Thread.Sleep(1000);
 			print("*******Test End*************");
 		}
+
+		[UMethod]
+		public void T_IpLogParser(string ipLog)
+		{// TODO: Add Testing logic here
+			var ipParser = new IpLogParser();
+			var ipList = ipParser.Parse(ipLog);
+			ipList.ForEach(ip=>print(ip.ToString()));
+			
+		}
+
 		[UMethod]
 		public void T2()
 		{

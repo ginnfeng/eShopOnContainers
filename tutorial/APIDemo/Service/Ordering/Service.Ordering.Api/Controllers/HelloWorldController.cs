@@ -29,8 +29,8 @@ namespace Service.Ordering.Api.Controllers
         //[HttpGet]
         //[Route("Hello")]
         //[ApiConfig(typeof(IHelloWorldService), "Hello")]   
-        [HttpConfig(typeof(IHelloWorldService), "Hello")]
-        [RouteConfig(typeof(IHelloWorldService), "Hello")]
+        [HttpConfig(typeof(IHelloWorldService), "Hello")]//1
+        [RouteConfig(typeof(IHelloWorldService), "Hello")]//2
         public IEnumerable<HelloWeather> Hello()
         {
             return svc.Hello();

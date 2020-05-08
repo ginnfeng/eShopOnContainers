@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-
+using Common.Policy;
+using Microsoft.OpenApi;
 
 namespace Service.Ordering.Api
 {
@@ -22,18 +23,15 @@ namespace Service.Ordering.Api
         {
             Configuration = configuration;
         }
-
+        readonly string apiVersion ="v1";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            // Register the Swagger generator, defining 1 or more Swagger documents
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Service.Ordering.Api", Version = "v1" });
-            });
+            // ****STD***Register the Swagger generator, defining 1 or more Swagger documents            
+            services.AddChtSwagger(apiVersion,"Ordering API example");            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,19 +44,8 @@ namespace Service.Ordering.Api
 
             app.UseHttpsRedirection();
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ordering API V1");
-                c.RoutePrefix = "swagger";// is default
-                //swagger UI=> http://localhost:<port>/swagger
-                //swagger Doc=> http://localhost:<port>/swagger/v1/swagger.json
-            });
-
+            // ****STD*** Enable middleware to serve generated Swagger as a JSON endpoint.           
+            app.UseChtSwagger(apiVersion);
 
             app.UseRouting();
 
@@ -68,7 +55,6 @@ namespace Service.Ordering.Api
             {
                 endpoints.MapControllers();
             });
-
             
         }
     }

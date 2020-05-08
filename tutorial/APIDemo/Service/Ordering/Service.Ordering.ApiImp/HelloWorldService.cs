@@ -23,7 +23,11 @@ namespace Service.Ordering.ApiImp
         public HelloWorldService()
         {           
         }
-        IEnumerable<HelloWeather> IHelloWorldService.Hello()
+        public string Hello(string id)
+        {
+            return $"Hello {id}";           
+        }
+        public IEnumerable<HelloWeather> DefaultGet()
         {
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new HelloWeather
@@ -33,6 +37,6 @@ namespace Service.Ordering.ApiImp
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
-        }
+        }        
     }
 }

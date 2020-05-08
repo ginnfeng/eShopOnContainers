@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using UTDll;
 using System.Xml;
+using System.Text.RegularExpressions;
 
 namespace UTool.Test
 {

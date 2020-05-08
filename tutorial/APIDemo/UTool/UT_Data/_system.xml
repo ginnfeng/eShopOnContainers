@@ -11,7 +11,7 @@
     <UTool.Test.Test_Demo2 src="C:\ProgOpen\Samples\.NetCore\UTool\Test\Test_Demo2.cs" />
     <UTool.Test_Demo3 src="c:\ProgOpen\Demo\APIDemo\UTool\Test\Test_Demo3.cs" />
     <UTool.Test.Test_Crypto src="c:\ProgOpen\Demo\UToolShare\UTool\Test\Test_Crypto.cs" />
-    <UTool.Test.Test_DI_ServiceScope src="C:\ProgOpen\Demo\APIDemo\UTool\Test\Test_DI_ServiceScope.cs" />
+    <UTool.Test.Test_DI_ServiceScope src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_DI_ServiceScope.cs" />
     <UTool.Test.Test_DI src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_DI.cs" />
     <UTool.Test.Test_Await src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_Await.cs" />
     <UTool.Test.Test_IoC src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_IoC.cs" />

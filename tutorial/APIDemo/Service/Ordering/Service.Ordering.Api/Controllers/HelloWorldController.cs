@@ -13,7 +13,7 @@ using Service.Ordering.Contract.Servic;
 namespace Service.Ordering.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiSpec(typeof(IHelloWorldService))]
     //[ApiConfig(typeof(IHelloWorldService))]
     public class HelloWorldController : ControllerBase, IHelloWorldService
     {
@@ -28,13 +28,17 @@ namespace Service.Ordering.Api.Controllers
 
         //[HttpGet]
         //[Route("Hello")]
-        //[ApiConfig(typeof(IHelloWorldService), "Hello")]   
-        [HttpConfig(typeof(IHelloWorldService), "Hello")]//1
-        [RouteConfig(typeof(IHelloWorldService), "Hello")]//2
-        public IEnumerable<HelloWeather> Hello()
+        [ApiSpec(typeof(IHelloWorldService), "DefaultGet")]        
+        public IEnumerable<HelloWeather> DefaultGet()
         {
-            return svc.Hello();
+            return svc.DefaultGet();
         }
+        [ApiSpec(typeof(IHelloWorldService), "Hello")]
+        public string Hello(string id)
+        {
+            return svc.Hello(id);
+        }
+
 
         IHelloWorldService svc = new HelloWorldService();
     }

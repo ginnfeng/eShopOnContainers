@@ -12,11 +12,13 @@ using System.Text;
 
 namespace Service.Ordering.Contract.Servic
 {
-    [RouteConfig("api/[controller]")]
+    [ApiSpec("api/[controller]")]
     public interface IHelloWorldService
     {
-        [HttpGet]
-        [Route("Hello")]
-        IEnumerable<HelloWeather> Hello();
+        [ApiSpec(HTTP.GET, "hello/{id}")]
+        string Hello(string id);
+
+        [ApiSpec(HTTP.GET)]
+        IEnumerable<HelloWeather> DefaultGet();
     }
 }

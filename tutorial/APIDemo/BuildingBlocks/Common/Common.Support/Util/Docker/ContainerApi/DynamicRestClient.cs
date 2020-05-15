@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace Support.Open.Docker.ContainerApi
+namespace Support.Open.RestSharp
 {
     public class DynamicRestClient : RestClient
     {

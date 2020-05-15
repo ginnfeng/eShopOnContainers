@@ -8,12 +8,12 @@ services:
       dockerfile: Service/Ordering/Service.Ordering.Api/Dockerfile
     container_name: service.ordering.api # 
     networks:
-      - mynetwork
+      - dev_network
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
     networks:
-      - mynetwork
+      - dev_network
 
   service.banking.api:
     image: ${DOCKER_REGISTRY-}servicebankingapi
@@ -22,7 +22,7 @@ services:
       dockerfile: Service/Banking/Service.Banking.Api/Dockerfile
     container_name: service.banking.api
     networks:
-      - mynetwork
+      - dev_network
 
   apigw.ocelot:
     image: ${DOCKER_REGISTRY-}apigwocelot
@@ -30,8 +30,10 @@ services:
       context: .
       dockerfile: BuildingBlocks/ApiGw/ApiGw.Ocelot/Dockerfile
     networks:
-      - mynetwork
+      - dev_network
+
 networks:
-  mynetwork:
-      external:
-          name: extnetwork
+  dev_network:
+      driver: bridge
+      #external:
+      #    name: extnetwork #*** Manually create  using `docker network create extnetwork` first. ***#

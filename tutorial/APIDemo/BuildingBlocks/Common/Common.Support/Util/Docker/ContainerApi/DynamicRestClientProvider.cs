@@ -14,7 +14,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Support.Open.Docker.ContainerApi
+namespace Support.Open.RestSharp
 {
     public class WebProxyServerEntity
     {

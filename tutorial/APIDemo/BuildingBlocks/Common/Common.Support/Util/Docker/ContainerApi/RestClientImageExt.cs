@@ -10,7 +10,7 @@ using Support.Open.RestSharp;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
-namespace Support.Open.Docker.ContainerApi
+namespace Support.Open.RestSharp
 {
     static public partial class RestClientExt
     {

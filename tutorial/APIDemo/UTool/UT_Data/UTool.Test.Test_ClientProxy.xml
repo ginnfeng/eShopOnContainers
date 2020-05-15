@@ -1,0 +1,6 @@
+<UTest id="UTool.Test.Test_ClientProxy">
+  <TestCase>
+    <T_ParseSwaggerJson>44363</T_ParseSwaggerJson>
+    <T_HttpSpecFactory>"https://localhost:44363/swagger/v1/swagger.json"</T_HttpSpecFactory>
+  </TestCase>
+</UTest>

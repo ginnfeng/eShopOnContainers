@@ -44,7 +44,7 @@ namespace Common.Policy
             app.UseSwagger();
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
-            var swaggerRoutePrefix = "api/swagger";
+            var swaggerRoutePrefix = "swagger";
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint($"/swagger/{version}/swagger.json", $"{svcName} API {version}");

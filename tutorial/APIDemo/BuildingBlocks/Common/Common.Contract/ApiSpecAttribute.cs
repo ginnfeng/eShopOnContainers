@@ -25,11 +25,11 @@ namespace Common.Contract
     {
         public ApiSpecAttribute(Type fromInterfaceType)
         {
-            CopyFrom(fromInterfaceType);
+            CopyFrom(TakeFrom(fromInterfaceType));
         }
         public ApiSpecAttribute(Type fromInterfaceType, string methodName)
         {
-            CopyFrom(fromInterfaceType, methodName);
+            CopyFrom(TakeFrom(fromInterfaceType, methodName));
         }
         public ApiSpecAttribute(string template)
             //: this(new string[] { "GET" }, template)
@@ -65,29 +65,24 @@ namespace Common.Contract
         public string Name { get; private set; }
         private void CopyFrom(ApiSpecAttribute baseAttri)
         {
+            if (baseAttri == null) return;
             HttpMethods = baseAttri.HttpMethods;
             Template = baseAttri.Template;
             Order = baseAttri.Order;
             Name = baseAttri.Name;
         }
-        private void CopyFrom(Type interfaceType)
+        public static ApiSpecAttribute TakeFrom(Type interfaceType)
         {
             var attris = interfaceType.GetCustomAttributes(typeof(ApiSpecAttribute), true);
-            if (attris.Length > 0)
-            {
-                CopyFrom((ApiSpecAttribute)attris[0]);
-            }
-               
+            return  (attris.Length > 0)? (ApiSpecAttribute)attris[0]:null;
+           
         }
-        
-        private void CopyFrom(Type interfaceType, string methodName)
+
+        public static ApiSpecAttribute TakeFrom(Type interfaceType, string methodName)
         {
             var method = interfaceType.GetMethod(methodName);
             var attris = method.GetCustomAttributes(typeof(ApiSpecAttribute), true);
-            if (attris.Length > 0) {                 
-                CopyFrom((ApiSpecAttribute)attris[0]);
-            }
-           
+            return (attris.Length > 0) ? (ApiSpecAttribute)attris[0] : null;
         }
         
     }

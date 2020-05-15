@@ -19,7 +19,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Support.Open.Docker.ContainerApi
+namespace Support.Open.RestSharp
 {
     //****   TaskCompletionSource   http://stackoverflow.com/questions/15434983/waiting-for-executeasync-result
     //http://ianobermiller.com/blog/2012/07/23/restsharp-extensions-returning-tasks/

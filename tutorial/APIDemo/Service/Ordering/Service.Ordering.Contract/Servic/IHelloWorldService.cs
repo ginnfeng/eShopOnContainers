@@ -15,7 +15,7 @@ namespace Service.Ordering.Contract.Servic
     [ApiSpec("api/[controller]")]
     public interface IHelloWorldService
     {
-        [ApiSpec(HTTP.GET, "hello/{id}")]
+        [ApiSpec(HTTP.POST, "hello/{id}")]
         string Hello(string id);
 
         [ApiSpec(HTTP.GET)]

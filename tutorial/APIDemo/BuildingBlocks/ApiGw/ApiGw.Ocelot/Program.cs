@@ -19,7 +19,8 @@ namespace ApiGw.Ocelot
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>            
             Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(ic => ic.AddJsonFile(Path.Combine("configuration","configuration.json")))
+                //.ConfigureAppConfiguration(ic => ic.AddJsonFile(Path.Combine("configuration","configuration.json")))
+                .ConfigureAppConfiguration(ic => ic.AddJsonFile(Path.Combine("configuration", "ocelot.json")))
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

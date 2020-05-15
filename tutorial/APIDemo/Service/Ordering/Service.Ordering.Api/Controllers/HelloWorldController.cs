@@ -15,7 +15,7 @@ namespace Service.Ordering.Api.Controllers
     [ApiController]
     [ApiSpec(typeof(IHelloWorldService))]
     //[ApiConfig(typeof(IHelloWorldService))]
-    public class HelloWorldController : ControllerBase, IHelloWorldService
+    public class HelloWorldController : ControllerBase//, IHelloWorldService
     {
        
         private readonly ILogger<HelloWorldController> _logger;
@@ -34,7 +34,7 @@ namespace Service.Ordering.Api.Controllers
             return svc.DefaultGet();
         }
         [ApiSpec(typeof(IHelloWorldService), "Hello")]
-        public string Hello(string id)
+        public string Hello(string id,[FromBody]string id2, [FromQuery]string id3, [FromForm]string id4, [FromHeader]string id5)
         {
             return svc.Hello(id);
         }

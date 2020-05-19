@@ -23,39 +23,46 @@ namespace Common.Contract
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Constructor)]
     public class ApiSpecAttribute : Attribute, IActionHttpMethodProvider, IRouteTemplateProvider
     {
-        public ApiSpecAttribute(Type fromInterfaceType)
-        {
-            CopyFrom(TakeFrom(fromInterfaceType));
-        }
-        public ApiSpecAttribute(Type fromInterfaceType, string methodName)
-        {
-            CopyFrom(TakeFrom(fromInterfaceType, methodName));
-        }
-        public ApiSpecAttribute(string template)
-            //: this(new string[] { "GET" }, template)
+        /// <summary>
+        /// For Service Interface only
+        /// </summary>
+        public ApiSpecAttribute(string template) 
+        //: this(new string[] { "GET" }, template)
         {
             HttpMethods = new string[] { };
             Template = template;
         }
-        public ApiSpecAttribute(HTTP httpMethod, string template="")
-            :this(new string[] { httpMethod.ToString() }, template)
-        {            
-        }
-        public ApiSpecAttribute(IEnumerable<HTTP> httpMethods, string template = "")
-        {            
-            IEnumerable<string> methods = new string[httpMethods.Count()];
-            foreach (var method in httpMethods)
-            {
-                methods.Append(method.ToString());
-            }
-            HttpMethods = methods;
-            Template = template;
-        }
-        public ApiSpecAttribute(IEnumerable<string> httpMethods, string template = "")
+        /// <summary>
+        /// For Controller class
+        /// </summary>
+        public ApiSpecAttribute(Type fromInterfaceType)//For Controller
         {
-            HttpMethods = httpMethods;
-            Template = template;
+            CopyFrom(TakeFrom(fromInterfaceType));
+            HttpMethods = new string[] { };
         }
+        /// <summary>
+        /// For Controller Method
+        /// </summary>
+        public ApiSpecAttribute(HTTP httpMethod, Type fromInterfaceType, string methodName)
+            : this(new HTTP[] { httpMethod }, fromInterfaceType, methodName)
+        {
+            
+        }
+        /// <summary>
+        /// For Controller Method
+        /// </summary>
+        public ApiSpecAttribute(IEnumerable<HTTP> httpMethods,Type fromInterfaceType, string methodName)
+        {
+            CopyFrom(TakeFrom(fromInterfaceType, methodName));
+            var methods = new string[httpMethods.Count()];
+            for (int i = 0; i < httpMethods.Count(); i++)
+            {
+                methods[i] = httpMethods.ElementAt(i).ToString();
+            }            
+            HttpMethods = methods;            
+        }
+        
+        
         public IEnumerable<string> HttpMethods { get; private set; }
 
         public string Template { get; private set; }
@@ -66,10 +73,10 @@ namespace Common.Contract
         private void CopyFrom(ApiSpecAttribute baseAttri)
         {
             if (baseAttri == null) return;
-            HttpMethods = baseAttri.HttpMethods;
             Template = baseAttri.Template;
-            Order = baseAttri.Order;
-            Name = baseAttri.Name;
+            //HttpMethods = baseAttri.HttpMethods;            
+            //Order = baseAttri.Order;
+            //Name = baseAttri.Name;
         }
         public static ApiSpecAttribute TakeFrom(Type interfaceType)
         {

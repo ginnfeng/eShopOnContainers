@@ -12,7 +12,7 @@ namespace ApiGw.ClientProxy
 {
     public interface ISwaggerDocStore
     {
-        bool TrySpec<TServiceInterface>(out HttpMethodSpec sepc);
+        bool TryGetValue(Uri endpoint, string tag, out List<HttpMethodSpec> httpMethodSpecList);
         void RegisterSwaggerDoc(Uri endpoint);
     }
 }

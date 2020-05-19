@@ -37,6 +37,18 @@ namespace Service.Ordering.ApiImp
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
-        }        
+        }
+
+        public HelloWeather Hello(string id1, int id2, DateTime id3, HelloInput inp)
+        {
+            var rng = new Random();
+            return new HelloWeather()
+            {
+                Date = inp.Date,
+                UserName = inp.UserName,
+                TemperatureC = rng.Next(-20, 55),
+                Summary = $"id1={id1} id2={id2}  id3={id3} "
+            };
+        }
     }
 }

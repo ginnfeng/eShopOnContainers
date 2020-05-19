@@ -146,7 +146,7 @@ namespace Support.Open.RestSharp
             */
         }
 
-        static private T ToEntity<T>(DynamicRestRequest<T> request, IRestResponse response)
+        static public T ToEntity<T>(DynamicRestRequest<T> request, IRestResponse response)
         {
             Exception err;
             if (!request.IgnoreException && TryCheckException(response, out err))

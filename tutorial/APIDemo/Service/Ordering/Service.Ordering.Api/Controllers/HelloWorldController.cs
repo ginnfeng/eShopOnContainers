@@ -14,8 +14,9 @@ namespace Service.Ordering.Api.Controllers
 {
     [ApiController]
     [ApiSpec(typeof(IHelloWorldService))]
-    //[ApiConfig(typeof(IHelloWorldService))]
-    public class HelloWorldController : ControllerBase//, IHelloWorldService
+    
+    //[Route("api/[controller]")]
+    public class HelloWorldController : ControllerBase, IHelloWorldService
     {
        
         private readonly ILogger<HelloWorldController> _logger;
@@ -26,17 +27,19 @@ namespace Service.Ordering.Api.Controllers
         }
 
 
-        //[HttpGet]
-        //[Route("Hello")]
-        [ApiSpec(typeof(IHelloWorldService), "DefaultGet")]        
+        //[HttpGet]        
+        [ApiSpec(HTTP.GET,typeof(IHelloWorldService), "DefaultGet")]        
         public IEnumerable<HelloWeather> DefaultGet()
         {
             return svc.DefaultGet();
         }
-        [ApiSpec(typeof(IHelloWorldService), "Hello")]
-        public string Hello(string id,[FromBody]string id2, [FromQuery]string id3, [FromForm]string id4, [FromHeader]string id5)
+        //[HttpPost]
+        //[Route("Hello")]
+        [ApiSpec(HTTP.POST,typeof(IHelloWorldService), "Hello")]
+        
+        public HelloWeather Hello(string id1,[FromQuery]int id2, [FromHeader]DateTime id3, [FromBody]HelloInput inp)
         {
-            return svc.Hello(id);
+            return svc.Hello(id1,id2,id3,inp);
         }
 
 

@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ApiGw.ClientProxy
 {
@@ -30,55 +31,44 @@ namespace ApiGw.ClientProxy
         }
         public HttpSpecFactory()
         {
-            BuildServiceInterfaceSpec();
+            swaggerDocStore = SwaggerDocStore.Instance;            
         }
-        public bool TryGetHttpMethodSpec(MethodInfo methodInfo, out HttpMethodSpec sepc)
+        public bool TryGet(MethodInfo methodInfo, out HttpMethodSpec sepc)
         {
-            return swaggerSpecDic.TryGetValue(methodInfo.Name,out sepc);
+           return serviceInterfaceMethodSpecDic.TryGetValue(methodInfo.Name,out sepc);
         }
-        public void RegisterSwaggerDoc(Uri endpoint)
+        public void RegisterSwaggerDoc(Uri endpoint,bool forceReregister=false)
         {
-            swaggerSpecDic ??= new Dictionary<string, HttpMethodSpec>();
-            swaggerSpecDic.Clear();
-            RestClient client = new RestClient($"{endpoint.Scheme}://{endpoint.IdnHost}:{endpoint.Port}");
-            var req = client.TakeRequest<JObject>(endpoint.LocalPath);
-            var content = client.Execute(req);
-            var httpMethodSpecList = new List<HttpMethodSpec>();
-            foreach (JProperty prop in content["paths"])
+            if (forceReregister) serviceInterfaceMethodSpecDic = null;
+            if (serviceInterfaceMethodSpecDic == null)
             {
-                var methodSpec=new HttpMethodSpec() { Path = prop.Name };
-                httpMethodSpecList.Add(methodSpec);
-                foreach (JProperty method in prop.Values())
-                {                   
-                    var tags = method.Value["tags"] as JArray;
-                    if (tags != null && tags.Count > 0)
-                        methodSpec.Tag=tags.First.Value<string>();
-                    var parameters = method.Value["parameters"];
-                    var parameterSpecArray = (parameters != null) ? parameters.Value<JArray>() : null;
-                    if (parameterSpecArray != null)
-                    {
-                        methodSpec.ParameterSpecs.AddRange(parameterSpecArray.ToObject<List<HttpMethodParameterSpec>>());                        
-                    }
-                    if (method.Exists(it => it["requestBody"] != null))
-                        methodSpec.ParameterSpecs.Add(new HttpMethodParameterSpec() { _in="body"});
+                swaggerDocStore.RegisterSwaggerDoc(endpoint);
+                Type type = typeof(TServiceInterface);
+                serviceInterfaceMethodSpecDic= new Dictionary<string, HttpMethodSpec>();
+                serviceInterfaceMethodSpecDic.Clear();
+                serviceInterfaceSpec = ApiSpecAttribute.TakeFrom(type);
+                var matchs=regex.Matches(serviceInterfaceSpec.Template);
+                var controllerName = (matchs.Count >= 2) ? matchs[1].Groups[0].Value.ToString() : matchs[0].Groups[0].Value.ToString();
+                List <HttpMethodSpec> httpMethodSpecList;
+                if (!swaggerDocStore.TryGetValue(endpoint, controllerName, out httpMethodSpecList))
+                    throw new KeyNotFoundException("RegisterSwaggerDoc");
+                var methodInfos = type.GetMethods();
+                foreach (var methodInfo in methodInfos)
+                {
                     
+                    var apiSpec = ApiSpecAttribute.TakeFrom(type, methodInfo.Name);
+                    var path =string.IsNullOrEmpty( apiSpec.Template)? $"/{serviceInterfaceSpec.Template}":$"/{serviceInterfaceSpec.Template}/{apiSpec.Template}";
+                    var matchedMethodSpec=httpMethodSpecList.Find(spec=> spec.Path.Equals(path));
+                    if(matchedMethodSpec==null)
+                        throw new KeyNotFoundException("RegisterSwaggerDoc");
+                    serviceInterfaceMethodSpecDic[methodInfo.Name] = matchedMethodSpec;
                 }
             }
         }
-        private void BuildServiceInterfaceSpec()
-        {
-            Type type = typeof(TServiceInterface);
-            serviceInterfaceMethodSpecDic ??= new Dictionary<string, ApiSpecAttribute>();
-            serviceInterfaceMethodSpecDic.Clear();
-            serviceInterfaceSpec=ApiSpecAttribute.TakeFrom(type);
-            var methodInfos=type.GetMethods();
-            foreach (var methodInfo in methodInfos)
-            {
-                serviceInterfaceMethodSpecDic[methodInfo.Name] =ApiSpecAttribute.TakeFrom(type, methodInfo.Name);
-            }
-        }
-        private Dictionary<string, HttpMethodSpec> swaggerSpecDic;
-        private Dictionary<string, ApiSpecAttribute> serviceInterfaceMethodSpecDic;
+        private Dictionary<string, HttpMethodSpec> serviceInterfaceMethodSpecDic;
+        //private Dictionary<string, ApiSpecAttribute> serviceInterfaceMethodSpecDic;
         ApiSpecAttribute serviceInterfaceSpec;
+        ISwaggerDocStore swaggerDocStore;
+        readonly Regex regex = new Regex("([^/]{1,})");
     }
 }

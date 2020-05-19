@@ -6,12 +6,14 @@
 using ApiGw.ClientProxy;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using Service.Ordering.Contract.Entity;
 using Service.Ordering.Contract.Servic;
 using Service.Ordering.Contract.Service;
 using Support.Net.Util;
 using Support.Open.RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 using System.Text;
 using UTDll;
 namespace UTool.Test
@@ -51,6 +53,20 @@ namespace UTool.Test
         {
             HttpSpecFactory<IHelloWorldService>.Instance.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
         }
+        [UMethod]
+        public void T_ClientProxy(string apiUrl,string swaggerDocUrl)
+        {
+            var proxy = new ClientProxy<IHelloWorldService>(new Uri(apiUrl));
+            proxy.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
+            string id1 = "id1";
+            int id2 = 99;
+            DateTime id3 = DateTime.Today;
+            var id4 = new HelloInput() {UserName="Lee",Date= DateTime.Today };
+            var rlt=proxy.Api.Hello(id1,id2,id3,id4);
+            print($"User={rlt.UserName}\nDate={rlt.Date}\n{rlt.Summary}");
+        }
+
+        
         [UMethod]
         public void T_ParseSwaggerJson(int port)
         {// TODO: Add Testing logic here

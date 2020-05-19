@@ -9,8 +9,14 @@ using System.Text;
 
 namespace Service.Ordering.Contract.Entity
 {
+    public class HelloInput
+    {
+        public String UserName { get; set; }
+        public DateTime Date { get; set; }
+    }
     public class HelloWeather
     {
+        public String UserName { get; set; }
         public DateTime Date { get; set; }
 
         public int TemperatureC { get; set; }

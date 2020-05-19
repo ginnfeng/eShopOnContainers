@@ -3,6 +3,7 @@
 // Description: HttpMethodSpec.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,6 +25,7 @@ namespace ApiGw.ClientProxy
     public class HttpMethodParameterSpec
     {
         public string name { get; set; }
+        [JsonProperty("in")]
         public string _in { get; set; }
         public bool required { get; set; }
         public SchemaSpec schema { get; set; }
@@ -33,6 +35,8 @@ namespace ApiGw.ClientProxy
     {
         public string type { get; set; }
         public bool nullable { get; set; }
+        
+        [JsonProperty("$ref")]
         public string _ref { get; set; }
     }
 }

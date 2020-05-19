@@ -12,8 +12,8 @@ namespace ApiGw.ClientProxy
 {
     public interface IHttpSpecFactory
     {
-        bool TryGetHttpMethodSpec(MethodInfo methodInfo, out HttpMethodSpec sepc);
+        bool TryGet(MethodInfo methodInfo, out HttpMethodSpec sepc);
 
-        void RegisterSwaggerDoc(Uri endpoint);
+        void RegisterSwaggerDoc(Uri endpoint, bool forceReregister = false);
     }
 }

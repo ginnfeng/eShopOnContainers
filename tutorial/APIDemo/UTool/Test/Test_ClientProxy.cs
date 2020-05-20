@@ -58,12 +58,19 @@ namespace UTool.Test
         {
             var proxy = new ClientProxy<IHelloWorldService>(new Uri(apiUrl));
             proxy.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
-            string id1 = "id1";
+            string id1 = "*abc*";
             int id2 = 99;
             DateTime id3 = DateTime.Today;
             var id4 = new HelloInput() {UserName="Lee",Date= DateTime.Today };
             var rlt=proxy.Api.Hello(id1,id2,id3,id4);
-            print($"User={rlt.UserName}\nDate={rlt.Date}\n{rlt.Summary}");
+            print($"API={nameof(IHelloWorldService.Hello)} User={rlt.UserName}\nDate={rlt.Date}\n{rlt.Summary}");
+
+            var postrlt=proxy.Api.HelloPost("CCC", "DDD");
+            print($"API={nameof(IHelloWorldService.HelloPost)} result={postrlt}");
+
+            var getrlt = proxy.Api.HelloGet("EEE", "FFF");
+            print($"API={nameof(IHelloWorldService.HelloGet)} result={getrlt}");
+
         }
 
         

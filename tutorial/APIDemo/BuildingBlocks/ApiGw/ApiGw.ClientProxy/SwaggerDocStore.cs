@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using Support;
 using Support.Net.Util;
+using Support.Open.JsonNet;
 using Support.Open.RestSharp;
 using System;
 using System.Collections.Generic;
@@ -38,25 +39,41 @@ namespace ApiGw.ClientProxy
             RestClient client = new RestClient($"{endpoint.Scheme}://{endpoint.IdnHost}:{endpoint.Port}");
             var req = client.TakeRequest<JObject>(endpoint.LocalPath);
             var content = client.Execute(req);
-            
-            foreach (JProperty prop in content["paths"])
+            var paths = content["paths"];
+            foreach (JProperty prop in paths)
             {
                 var methodSpec = new HttpMethodSpec() { Path = prop.Name };
-                
-                foreach (JProperty method in prop.Values())
+                var methodProp = prop.Value.First as JProperty;
+                methodSpec.AssignHttpMethod(methodProp.Name);
+                var tags = methodProp.Value["tags"] as JArray;
+                if (tags != null && tags.Count > 0)
+                    methodSpec.Tag = tags.First.Value<string>();
+                var parameters = methodProp.Value["parameters"];
+                var parameterSpecArray = (parameters != null) ? parameters.Value<JArray>() : null;
+                if (parameterSpecArray != null)
                 {
-                    var tags = method.Value["tags"] as JArray;
-                    if (tags != null && tags.Count > 0)
-                        methodSpec.Tag = tags.First.Value<string>();
-                    var parameters = method.Value["parameters"];
-                    var parameterSpecArray = (parameters != null) ? parameters.Value<JArray>() : null;
-                    if (parameterSpecArray != null)
-                    {
-                        methodSpec.ParameterSpecs.AddRange(parameterSpecArray.ToObject<List<HttpMethodParameterSpec>>());
-                    }
-                    if (method.Exists(it => it["requestBody"] != null))
-                        methodSpec.ParameterSpecs.Add(new HttpMethodParameterSpec() { _in = "body" });
+                    methodSpec.ParameterSpecs.AddRange(parameterSpecArray.ToObject<List<HttpMethodParameterSpec>>());
                 }
+                var requestBody=methodProp.Value["requestBody"];
+                if (requestBody != null)
+                {
+                    if (requestBody["content"]["application/json"] !=null)
+                        methodSpec.ParameterSpecs.Add(new HttpMethodParameterSpec() { _in = "body" });
+                    else
+                    {
+                        var formData = requestBody["content"]["multipart/form-data"];
+                        if(formData!=null)
+                        {
+                            var formParameters = formData["schema"]["properties"];
+                            foreach (JProperty formParameter in formParameters)
+                            {
+                                methodSpec.ParameterSpecs.Add(new HttpMethodParameterSpec() { name = formParameter.Name, _in = "form" });
+                            }
+                        }
+
+                    }
+                }
+
                 var key=GenKey(endpoint, methodSpec.Tag);
                 lock (this)
                 {

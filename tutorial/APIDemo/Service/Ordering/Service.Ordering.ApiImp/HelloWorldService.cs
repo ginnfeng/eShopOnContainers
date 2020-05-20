@@ -50,5 +50,15 @@ namespace Service.Ordering.ApiImp
                 Summary = $"id1={id1} id2={id2}  id3={id3} "
             };
         }
+
+        public string HelloGet(string id1, string id2)
+        {
+            return $"HelloGet('{id1},{id2}')";
+        }
+
+        public string HelloPost(string id1, string id2)
+        {
+            return $"HelloPost('{id1},{id2}')";
+        }
     }
 }

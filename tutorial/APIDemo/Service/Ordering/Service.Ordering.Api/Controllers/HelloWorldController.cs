@@ -28,21 +28,30 @@ namespace Service.Ordering.Api.Controllers
 
 
         //[HttpGet]        
-        [ApiSpec(HTTP.GET,typeof(IHelloWorldService), "DefaultGet")]        
+        [ApiSpec(HTTP.GET,typeof(IHelloWorldService), nameof(IHelloWorldService.DefaultGet))]        
         public IEnumerable<HelloWeather> DefaultGet()
         {
             return svc.DefaultGet();
         }
         //[HttpPost]
         //[Route("Hello")]
-        [ApiSpec(HTTP.POST,typeof(IHelloWorldService), "Hello")]
+        [ApiSpec(HTTP.POST,typeof(IHelloWorldService), nameof(IHelloWorldService.Hello))]
         
         public HelloWeather Hello(string id1,[FromQuery]int id2, [FromHeader]DateTime id3, [FromBody]HelloInput inp)
         {
             return svc.Hello(id1,id2,id3,inp);
         }
-
-
+       
+        [ApiSpec(HTTP.GET, typeof(IHelloWorldService), nameof(IHelloWorldService.HelloGet))]
+        public string HelloGet(string id1, string id2)//[QuieryBody]
+        {
+            return svc.HelloGet(id1,id2);
+        }
+        [ApiSpec(HTTP.POST, typeof(IHelloWorldService), nameof(IHelloWorldService.HelloPost))]
+        public string HelloPost([FromForm]string id1, [FromForm]string id2)// [FromBody]不能超過一個且不可與[FromForm]混用，[FromForm]以key-value放在request body
+        {
+            return svc.HelloPost(id1,id2);
+        }
         IHelloWorldService svc = new HelloWorldService();
     }
 

@@ -17,8 +17,14 @@ namespace Service.Ordering.Contract.Servic
     {
         [ApiSpec("hello/{id1}")]
         HelloWeather Hello(string id1, int id2, DateTime id3, HelloInput inp);
-
         
+        [ApiSpec("HelloGet")]
+        string HelloGet(string id1, string id2);
+
+        [ApiSpec("HelloPost")]
+        string HelloPost(string id1, string id2);
+
+
 
         [ApiSpec("")]
         IEnumerable<HelloWeather> DefaultGet();

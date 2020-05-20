@@ -3,6 +3,7 @@
 // Description: HttpMethodSpec.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Common.Contract;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,19 @@ using System.Text;
 
 namespace ApiGw.ClientProxy
 {
+    
+    public enum ParameterFrom
+    {
+        QUERY,
+        FORM,
+        BODY,
+        HEADER,
+        PATH
+    }
     public class HttpMethodSpec
     {
         public string Tag { get; set; }
+        public HTTP HttpMethod { get; set; }
         public string Path { get; set; }
         public List<HttpMethodParameterSpec> ParameterSpecs {
             get { 
@@ -20,15 +31,27 @@ namespace ApiGw.ClientProxy
                 return parameterSpecs; 
             }
         }
+        public void AssignHttpMethod(string methodString)
+        {
+            HttpMethod=(HTTP)Enum.Parse(typeof(HTTP), methodString.ToUpper());
+        }
         private List<HttpMethodParameterSpec> parameterSpecs;
     }
     public class HttpMethodParameterSpec
     {
         public string name { get; set; }
         [JsonProperty("in")]
-        public string _in { get; set; }
+        public string _in { 
+            //get;
+            set { AssignParameterFrom(value); }
+        }
         public bool required { get; set; }
         public SchemaSpec schema { get; set; }
+        public ParameterFrom From { get; set; }
+        public void AssignParameterFrom(string methodString)
+        {
+            From = (ParameterFrom)Enum.Parse(typeof(ParameterFrom), methodString.ToUpper());
+        }
     }
 
     public class SchemaSpec

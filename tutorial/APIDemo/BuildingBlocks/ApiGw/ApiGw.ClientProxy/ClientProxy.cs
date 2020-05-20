@@ -3,6 +3,7 @@
 // Description: ClientProxy.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Common.Contract;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -33,7 +34,11 @@ namespace ApiGw.ClientProxy
             //SwaggerDocEndpoint = swaggerDocEndpoint;
             realProxy.InvokeMethodEvent += RealProxyInvokeMethodEvent;
         }
-
+        private Method To(HTTP  method)
+        {
+            var name=Enum.GetName(typeof(HTTP), method);
+            return (Method)Enum.Parse(typeof(Method), name);
+        }
         private object RealProxyInvokeMethodEvent(MethodInfo methodInfo, ref object[] args)
         {
 
@@ -44,20 +49,30 @@ namespace ApiGw.ClientProxy
             MethodInfo method = typeof(RestClientExt).GetMethod($"{nameof(RestClientExt.TakeRequest)}", 1, new Type[] { typeof(string), typeof(string), typeof(string) });
             MethodInfo takeRequestMethodInfo = method.MakeGenericMethod(methodInfo.ReturnType);
             var req = takeRequestMethodInfo.Invoke(typeof(RestClientExt), new object[] { httpMethodSpec.Path, null, null }) as DynamicRestRequest;//DynamicRestRequest<T>
-            req.Node.Method = Method.POST;
+            req.Node.Method = To(httpMethodSpec.HttpMethod);
             if (args != null && args.Length > 0)
             {
                 for (int i = 0; i < httpMethodSpec.ParameterSpecs.Count; i++)
                 {
                     var parameterSpec = httpMethodSpec.ParameterSpecs[i];
-                    if (parameterSpec._in.Equals("path"))
-                        req.Node.AddUrlSegment("id", args[i]);
-                    if (parameterSpec._in.Equals("body"))
-                        req.Node.AddJsonBody(args[i]);
-                    else if (parameterSpec._in.Equals("query"))
-                        req.Node.AddQueryParameter(parameterSpec.name, args[i].ToString());
-                    else if (parameterSpec._in.Equals("header"))
-                        req.Node.AddHeader(parameterSpec.name, args[i].ToString());
+                    switch (parameterSpec.From)
+                    {
+                        case ParameterFrom.QUERY:
+                            req.Node.AddQueryParameter(parameterSpec.name, args[i].ToString());
+                            break;
+                        case ParameterFrom.FORM:
+                            req.Node.AddParameter(parameterSpec.name, args[i].ToString());
+                            break;
+                        case ParameterFrom.BODY:
+                            req.Node.AddJsonBody(args[i]);
+                            break;
+                        case ParameterFrom.HEADER:
+                            req.Node.AddHeader(parameterSpec.name, args[i].ToString());
+                            break;
+                        case ParameterFrom.PATH:
+                            req.Node.AddUrlSegment("id", args[i]);
+                            break;                        
+                    }                    
                 }
             }
             var response = client.Execute(req);

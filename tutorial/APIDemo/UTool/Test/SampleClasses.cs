@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 
 namespace UTool.Test
 {
+    #region ****DI sample classes****
     public interface IMessage
     {
         string Write(string message);
@@ -48,9 +49,10 @@ namespace UTool.Test
 
         }
     }
+    #endregion
 
+    #region ****MediatR****
 
-    //***************************MediatR****************************************
     public class SampleCommand : IRequest<bool>, INotification
     {
         public enum CmdType
@@ -118,8 +120,9 @@ namespace UTool.Test
         }
     }
 
+    #endregion  
 
-
+    #region ****AppSettings****
     public class ClientInfo
     {
         public string Name { get; set; }
@@ -127,7 +130,7 @@ namespace UTool.Test
         public string ClientSecret { get; set; }
     }
 
-
+    
     public class AppSettingsHelper
     {
         //private IConfigurationRoot _configuration;
@@ -161,9 +164,9 @@ namespace UTool.Test
             return _configuration.GetSection(key).Value;
         }
     }
+    #endregion
 
-
-    //************************************************************
+    #region ****IpLogParser****
     public class IpLogParser
     {
         public IpLogParser()
@@ -182,4 +185,94 @@ namespace UTool.Test
         //(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
         static readonly Regex regex = new Regex("(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})");
     }
+    #endregion  
+
+    #region *****Factory Design Pattern*****
+    public interface IInstanceFactortry
+    {
+        TInterface CreateInstance<TInterface>();
+    }
+    public class InstanceFactortry : IInstanceFactortry
+    {
+        public void Register<TInterface, TImplementation>(Func<IInstanceFactortry, TImplementation> ctorFun = null)
+            where TImplementation : TInterface, new()
+        {
+            dic[typeof(TInterface)] = new InstanceCreator<TImplementation>(this, ctorFun); ;
+        }
+        public TInterface CreateInstance<TInterface>()
+        {
+            IInstanceCreator ctorFun;
+            if (dic.TryGetValue(typeof(TInterface), out ctorFun))
+            {
+                return (TInterface)ctorFun.Create();
+            }
+            throw new Exception();
+        }
+
+        private Dictionary<Type, IInstanceCreator> dic = new Dictionary<Type, IInstanceCreator>();
+    }
+    public interface IInstanceCreator
+    {
+        object Create();
+    }
+    public class InstanceCreator<TImplementation> : IInstanceCreator
+        where TImplementation : new()
+    {
+        public InstanceCreator(IInstanceFactortry factory, Func<IInstanceFactortry, TImplementation> createFunc)
+        {
+            this.createFunc = createFunc;
+            this.factory = factory;
+        }
+        public object Create()
+        {
+            return (createFunc == null) ? new TImplementation() : createFunc(factory);
+        }
+        private Func<IInstanceFactortry, TImplementation> createFunc;
+        private IInstanceFactortry factory;
+    }
+
+    public interface IDemoSvc
+    {
+        string Echo(string s);
+    }
+    public class DemoSvc : IDemoSvc
+    {
+        public DemoSvc()
+        {
+        }
+        public DemoSvc(IDemoImp imp)
+        {
+            this.imp = imp;
+        }
+        public string Echo(string s)
+        {
+            return imp.Echo(s);
+        }
+        IDemoImp imp;
+    }
+
+    public interface IDemoImp : IDemoSvc
+    {
+    }
+    public class DemoImp1 : IDemoImp
+    {
+        public DemoImp1()
+        {
+        }
+        public string PreString { get; set; }
+        public string Echo(string s)
+        {
+            return $"{PreString}{s}";
+        }
+    }
+    public class DemoImp2 : IDemoImp
+    {
+        public DemoImp2() { }
+        public string PostString { get; set; }
+        public string Echo(string s)
+        {
+            return $"{s}{PostString}";
+        }
+    }
+    #endregion  
 }

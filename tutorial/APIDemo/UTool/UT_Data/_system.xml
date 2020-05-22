@@ -16,6 +16,7 @@
     <UTool.Test.Test_Await src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_Await.cs" />
     <UTool.Test.Test_IoC src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_IoC.cs" />
     <UTool.Test.Test_ClientProxy src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_ClientProxy.cs" />
+    <UTool.Test.Test_Csharp src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_Csharp.cs" />
   </Cache>
   <CacheDir>
     <F_344>d:\Dev\UTool\UTool\Test</F_344>

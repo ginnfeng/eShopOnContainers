@@ -182,6 +182,17 @@ namespace UTool.Test
             }
             return iplist;
         }
+        public event Action<Match> ProcessEvent;
+        public void Processs(string log, Action<Match> act )
+        {
+            var iplist = new List<IPAddress>();
+            var matchs = regex.Matches(log);
+            foreach (Match match in matchs)
+            {
+                if (ProcessEvent != null) ProcessEvent(match);
+            }
+            
+        }
         //(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})
         static readonly Regex regex = new Regex("(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})");
     }
@@ -275,4 +286,6 @@ namespace UTool.Test
         }
     }
     #endregion  
+
+
 }

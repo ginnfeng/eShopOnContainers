@@ -1,6 +1,5 @@
 <UTest id="UTool.Test.Test_Csharp">
   <TestCase>
-    <T_FactoryPattern>"123",1
-"321",2</T_FactoryPattern>
+    <T_FactoryPattern>"123",2</T_FactoryPattern>
   </TestCase>
 </UTest>

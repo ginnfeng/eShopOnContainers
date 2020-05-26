@@ -14,7 +14,7 @@ namespace Service.Ordering.Api.Controllers
 {
     [ApiController]
     [ApiSpec(typeof(IHelloWorldService))]
-    
+    //[Route("api/v{version:apiVersion}/[controller]")]
     //[Route("api/[controller]")]
     public class HelloWorldController : ControllerBase, IHelloWorldService
     {

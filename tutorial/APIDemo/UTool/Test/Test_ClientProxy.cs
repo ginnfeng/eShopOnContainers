@@ -57,6 +57,8 @@ namespace UTool.Test
         public void T_ClientProxy(string apiUrl,string swaggerDocUrl)
         {
             var proxy = new ClientProxy<IHelloWorldService>(new Uri(apiUrl));
+            proxy.ApiVersion = "1.0";// "1.0"同"1"
+
             proxy.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
             string id1 = "*abc*";
             int id2 = 99;

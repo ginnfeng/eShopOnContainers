@@ -31,12 +31,14 @@ namespace ApiGw.ClientProxy
         }
         public HttpSpecFactory()
         {
-            swaggerDocStore = SwaggerDocStore.Instance;            
+            swaggerDocStore = SwaggerDocStore.Instance;
+            ServiceSpec = ApiSpecAttribute.TakeFrom(typeof(TServiceInterface));
         }
-        public bool TryGet(MethodInfo methodInfo, out HttpMethodSpec sepc)
+        public bool TryGetValue(MethodInfo methodInfo, out HttpMethodSpec sepc)
         {
            return serviceInterfaceMethodSpecDic.TryGetValue(methodInfo.Name,out sepc);
         }
+        public ApiSpecAttribute ServiceSpec { get; private set; }
         public void RegisterSwaggerDoc(Uri endpoint,bool forceReregister=false)
         {
             if (forceReregister) serviceInterfaceMethodSpecDic = null;
@@ -45,10 +47,9 @@ namespace ApiGw.ClientProxy
                 swaggerDocStore.RegisterSwaggerDoc(endpoint);
                 Type type = typeof(TServiceInterface);
                 serviceInterfaceMethodSpecDic= new Dictionary<string, HttpMethodSpec>();
-                serviceInterfaceMethodSpecDic.Clear();
-                serviceInterfaceSpec = ApiSpecAttribute.TakeFrom(type);
-                var matchs=regex.Matches(serviceInterfaceSpec.Template);
-                var controllerName = (matchs.Count >= 2) ? matchs[1].Groups[0].Value.ToString() : matchs[0].Groups[0].Value.ToString();
+                serviceInterfaceMethodSpecDic.Clear();               
+                //var matchs=regex.Matches(serviceInterfaceSpec.Template);
+                var controllerName = ServiceSpec.ServiceName; //(matchs.Count >= 2) ? matchs[1].Groups[0].Value.ToString() : matchs[0].Groups[0].Value.ToString();
                 List <HttpMethodSpec> httpMethodSpecList;
                 if (!swaggerDocStore.TryGetValue(endpoint, controllerName, out httpMethodSpecList))
                     throw new KeyNotFoundException("RegisterSwaggerDoc");
@@ -56,8 +57,8 @@ namespace ApiGw.ClientProxy
                 foreach (var methodInfo in methodInfos)
                 {
                     
-                    var apiSpec = ApiSpecAttribute.TakeFrom(type, methodInfo.Name);
-                    var path =string.IsNullOrEmpty( apiSpec.Template)? $"/{serviceInterfaceSpec.Template}":$"/{serviceInterfaceSpec.Template}/{apiSpec.Template}";
+                    var apiSpec = ApiSpecAttribute.TakeFrom(type, methodInfo.Name);                    
+                    var path =string.IsNullOrEmpty( apiSpec.Template)? $"/{ServiceSpec.SwaggerRoutePath}":$"/{ServiceSpec.SwaggerRoutePath}/{apiSpec.Template}";
                     var matchedMethodSpec=httpMethodSpecList.Find(spec=> spec.Path.Equals(path));
                     if(matchedMethodSpec==null)
                         throw new KeyNotFoundException("RegisterSwaggerDoc");
@@ -67,8 +68,8 @@ namespace ApiGw.ClientProxy
         }
         private Dictionary<string, HttpMethodSpec> serviceInterfaceMethodSpecDic;
         //private Dictionary<string, ApiSpecAttribute> serviceInterfaceMethodSpecDic;
-        ApiSpecAttribute serviceInterfaceSpec;
-        ISwaggerDocStore swaggerDocStore;
-        readonly Regex regex = new Regex("([^/]{1,})");
+        
+        private ISwaggerDocStore swaggerDocStore;
+        private  readonly Regex regex = new Regex("([^/]{1,})");
     }
 }

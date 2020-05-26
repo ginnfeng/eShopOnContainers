@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Common.Contract
 {    
@@ -20,13 +21,25 @@ namespace Common.Contract
         POST,
         DELETE
     }
+    public enum RouteTemplate
+    {
+        API_VER_SVC,
+        API_SVC,
+        SVC        
+    }
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Constructor)]
     public class ApiSpecAttribute : Attribute, IActionHttpMethodProvider, IRouteTemplateProvider
     {
         /// <summary>
         /// For Service Interface only
         /// </summary>
-        public ApiSpecAttribute(string template) 
+        public ApiSpecAttribute(Type svcInterfaceType, RouteTemplate routeTemplate) 
+        //: this(new string[] { "GET" }, template)
+        {           
+            HttpMethods = new string[] { };
+            SetupRouteTemplate(svcInterfaceType,  routeTemplate);            
+        }
+        public ApiSpecAttribute(string template)
         //: this(new string[] { "GET" }, template)
         {
             HttpMethods = new string[] { };
@@ -70,14 +83,7 @@ namespace Common.Contract
         public int? Order { get; private set; }
 
         public string Name { get; private set; }
-        private void CopyFrom(ApiSpecAttribute baseAttri)
-        {
-            if (baseAttri == null) return;
-            Template = baseAttri.Template;
-            //HttpMethods = baseAttri.HttpMethods;            
-            //Order = baseAttri.Order;
-            //Name = baseAttri.Name;
-        }
+        
         public static ApiSpecAttribute TakeFrom(Type interfaceType)
         {
             var attris = interfaceType.GetCustomAttributes(typeof(ApiSpecAttribute), true);
@@ -91,7 +97,48 @@ namespace Common.Contract
             var attris = method.GetCustomAttributes(typeof(ApiSpecAttribute), true);
             return (attris.Length > 0) ? (ApiSpecAttribute)attris[0] : null;
         }
-        
+        public string ServiceName { get; private set; }
+        public  string SwaggerRoutePath { get; private set; }
+        public bool IsVersionInRoutePath()
+        {
+            return routeTemplate == RouteTemplate.API_VER_SVC;
+        }
+        private void CopyFrom(ApiSpecAttribute baseAttri)
+        {
+            if (baseAttri == null) return;
+            Template = baseAttri.Template;
+            ServiceName = baseAttri.ServiceName;
+            //HttpMethods = baseAttri.HttpMethods;            
+            //Order = baseAttri.Order;
+            //Name = baseAttri.Name;
+        }
+        private void SetupRouteTemplate(Type svcInterfaceType, RouteTemplate routeTemplate)
+        {
+            this.routeTemplate = routeTemplate;
+            var match = svcRegex.Match(svcInterfaceType.Name);
+            if (!match.Success)
+                throw new FormatException();
+            ServiceName = match.Groups[1].Value.ToString();
+            switch (routeTemplate)
+            {
+                case RouteTemplate.API_VER_SVC:
+                    Template = string.Format("api/v{1}/{0}", ServiceName,"{version:apiVersion}");
+                    SwaggerRoutePath= string.Format("api/v{1}/{0}", ServiceName, "{version}");
+                    break;
+                case RouteTemplate.API_SVC:
+                    Template = string.Format("api/{0}", ServiceName);
+                    SwaggerRoutePath = Template;
+                    break;
+                
+                default:
+                    Template = string.Format("{0}", ServiceName);
+                    SwaggerRoutePath = Template;
+                    break;
+            }
+            
+        }
+        private RouteTemplate routeTemplate;
+        static readonly Regex svcRegex = new Regex("I(.*)[A-Z]");
     }
 
     //[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Constructor)]

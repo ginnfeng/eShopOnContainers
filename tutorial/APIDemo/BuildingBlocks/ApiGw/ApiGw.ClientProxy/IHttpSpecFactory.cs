@@ -3,6 +3,7 @@
 // Description: IHttpSpecFactory.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Common.Contract;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -12,8 +13,9 @@ namespace ApiGw.ClientProxy
 {
     public interface IHttpSpecFactory
     {
-        bool TryGet(MethodInfo methodInfo, out HttpMethodSpec sepc);
+        bool TryGetValue(MethodInfo methodInfo, out HttpMethodSpec sepc);
 
         void RegisterSwaggerDoc(Uri endpoint, bool forceReregister = false);
+        ApiSpecAttribute ServiceSpec { get;}
     }
 }

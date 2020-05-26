@@ -4,10 +4,12 @@
 // Revisions  :            		
 // **************************************************************************** 
 using Common.Contract;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using Support.Net.Proxy;
+using Support.Net.Util;
 using Support.Open.RestSharp;
 using System;
 using System.Collections.Generic;
@@ -43,12 +45,19 @@ namespace ApiGw.ClientProxy
         {
 
             HttpMethodSpec httpMethodSpec;
-            if (!httpSpecFactory.TryGet(methodInfo, out httpMethodSpec))
+            if (!httpSpecFactory.TryGetValue(methodInfo, out httpMethodSpec))
                 throw new Exception("RealProxyInvokeMethodEvent");
             RestClient client = new RestClient(ApiEndpoint);
-            MethodInfo method = typeof(RestClientExt).GetMethod($"{nameof(RestClientExt.TakeRequest)}", 1, new Type[] { typeof(string), typeof(string), typeof(string) });
-            MethodInfo takeRequestMethodInfo = method.MakeGenericMethod(methodInfo.ReturnType);
-            var req = takeRequestMethodInfo.Invoke(typeof(RestClientExt), new object[] { httpMethodSpec.Path, null, null }) as DynamicRestRequest;//DynamicRestRequest<T>
+            var req=client.TakeRequest(httpMethodSpec.Path);
+            var parameterDic = new Dictionary<string, object>();
+            var parameters=methodInfo.GetParameters();
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                parameterDic[parameters[i].Name] = args[i];
+            }            
+            //MethodInfo method = typeof(RestClientExt).GetMethod($"{nameof(RestClientExt.TakeRequest)}", 1, new Type[] { typeof(string), typeof(string), typeof(string) });
+            //MethodInfo takeRequestMethodInfo = method.MakeGenericMethod(methodInfo.ReturnType);
+            //var req = takeRequestMethodInfo.Invoke(typeof(RestClientExt), new object[] { httpMethodSpec.Path, null, null }) as DynamicRestRequest;//DynamicRestRequest<T>
             req.Node.Method = To(httpMethodSpec.HttpMethod);
             if (args != null && args.Length > 0)
             {
@@ -58,28 +67,31 @@ namespace ApiGw.ClientProxy
                     switch (parameterSpec.From)
                     {
                         case ParameterFrom.QUERY:
-                            req.Node.AddQueryParameter(parameterSpec.name, args[i].ToString());
+                            req.Node.AddQueryParameter(parameterSpec.name, parameterDic[parameterSpec.name].ToString());
                             break;
                         case ParameterFrom.FORM:
-                            req.Node.AddParameter(parameterSpec.name, args[i].ToString());
+                            req.Node.AddParameter(parameterSpec.name, parameterDic[parameterSpec.name].ToString());
                             break;
                         case ParameterFrom.BODY:
-                            req.Node.AddJsonBody(args[i]);
+                            req.Node.AddJsonBody(args[httpSpecFactory.ServiceSpec.IsVersionInRoutePath()?i-1:i]);
                             break;
                         case ParameterFrom.HEADER:
-                            req.Node.AddHeader(parameterSpec.name, args[i].ToString());
+                            req.Node.AddHeader(parameterSpec.name, parameterDic[parameterSpec.name].ToString());
                             break;
                         case ParameterFrom.PATH:
-                            req.Node.AddUrlSegment("id", args[i]);
+                            object v;
+                            if(parameterDic.TryGetValue(parameterSpec.name,out v))
+                                req.Node.AddUrlSegment($"{parameterSpec.name}", v);
+                            else
+                                req.Node.AddUrlSegment($"{parameterSpec.name}", this.ApiVersion);
                             break;                        
                     }                    
                 }
             }
-            var response = client.Execute(req);
-            //ToEntity<T>(DynamicRestRequest < T > request, IRestResponse response)
-            MethodInfo execMethod = typeof(RestClientExt).GetMethod($"{nameof(RestClientExt.ToEntity)}");
-            MethodInfo exevcMethodInfo = execMethod.MakeGenericMethod(methodInfo.ReturnType);
-            var rlt=exevcMethodInfo.Invoke(typeof(RestClientExt), new object[] { req, response });
+            var response = client.Execute(req);            
+            JsonToObjectGerericMethod??= typeof(IRestResponseExt).GetMethod($"{nameof(IRestResponseExt.Json2Object)}");
+            MethodInfo exevcMethodInfo = JsonToObjectGerericMethod.MakeGenericMethod(methodInfo.ReturnType);            
+            var rlt = exevcMethodInfo.Invoke(typeof(IRestResponseExt), new object[] { response,null });
             return rlt;
         }        
         public TService Api
@@ -87,15 +99,25 @@ namespace ApiGw.ClientProxy
             get { return realProxy.Entity; }
         }
         public Uri ApiEndpoint { get; set; }
+        public string ApiVersion
+        {
+            get {return apiVersion.ToString(); } 
+            set { apiVersion = Microsoft.AspNetCore.Mvc.ApiVersion.Parse(value); }
+        }
         public void RegisterSwaggerDoc(Uri endpoint)
         {
+            httpSpecFactory ??= HttpSpecFactory<TService>.Instance;
             httpSpecFactory.RegisterSwaggerDoc(endpoint);
-        }        
-        //private Method ToHttpMethod(HttpMethodSpec spec)
-        //{
-        //    spec.
-        //}
+        }
+        private bool TryGetSpec(MethodInfo methodInfo, out HttpMethodSpec httpMethodSpec)
+        {
+            //if(httpSpecFactory==null)
+
+            return httpSpecFactory.TryGetValue(methodInfo, out httpMethodSpec);
+        }
+        private MethodInfo JsonToObjectGerericMethod;
         private RealProxy<TService> realProxy = new RealProxy<TService>();
-        private IHttpSpecFactory httpSpecFactory = HttpSpecFactory<TService>.Instance;
+        private IHttpSpecFactory httpSpecFactory ;
+        private ApiVersion apiVersion =new ApiVersion(1,0);
     }
 }

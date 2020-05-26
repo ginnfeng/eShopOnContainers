@@ -12,7 +12,7 @@ using System.Text;
 
 namespace Service.Ordering.Contract.Servic
 {
-    [ApiSpec("api/HelloWorld")]
+    [ApiSpec(typeof(IHelloWorldService),RouteTemplate.API_VER_SVC)]
     public interface IHelloWorldService
     {
         [ApiSpec("hello/{id1}")]

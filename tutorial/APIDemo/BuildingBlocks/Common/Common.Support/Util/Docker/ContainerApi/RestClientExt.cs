@@ -26,7 +26,7 @@ namespace Support.Open.RestSharp
 
     static public partial class RestClientExt
     {
-        static internal Func<string, string> ContentProcessMethod
+        static public Func<string, string> ContentProcessMethod
         {
             get { return content => "[" + content.Replace("}{", "},{").Replace("}\r\n{", "},{") + "]"; }
         }
@@ -153,7 +153,7 @@ namespace Support.Open.RestSharp
                 throw err;
             if (request.ContentConvertMethod != null)
                 return request.ContentConvertMethod(response);
-            return response.JsonToObject<T>(request.ContentProcessMethod);
+            return response.Json2Entity<T>(request.ContentProcessMethod);
         }
 
         public static DynamicRestRequest TakeRequest(this RestClient client, string defKey, string id = null, string act = null)

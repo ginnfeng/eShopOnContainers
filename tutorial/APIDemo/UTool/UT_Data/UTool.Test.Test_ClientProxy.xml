@@ -3,5 +3,6 @@
     <T_ParseSwaggerJson>44363</T_ParseSwaggerJson>
     <T_HttpSpecFactory>"https://localhost:44363/swagger/v1/swagger.json"</T_HttpSpecFactory>
     <T_ClientProxy>"https://localhost:44363","https://localhost:44363/swagger/v1/swagger.json"</T_ClientProxy>
+    <T_ClientProxyAsync>"https://localhost:44363","https://localhost:44363/swagger/v1/swagger.json"</T_ClientProxyAsync>
   </TestCase>
 </UTest>

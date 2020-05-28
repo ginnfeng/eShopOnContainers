@@ -21,17 +21,16 @@ namespace Service.Ordering.Api.Controllers
         [Route("IssueOrder")]
         public async Task<IActionResult> IssueOrder(Order order)
         {
-            var wrapper = new AsyncCallWrapper<IOrderingService>(svc);
-            await wrapper.AsyncCall(itSvc => itSvc.IssueOrder(order));
+            //var wrapper = new AsyncCallWrapper<IOrderingService>(svc);
+            //await wrapper.AsyncCall(itSvc => itSvc.IssueOrder(order));
+            await Task.Run(() => svc.IssueOrder(order));
             return Ok();
         }
         [HttpGet]        
         [Route("QueryOrder")]
         public async Task<ActionResult<Order>> QueryOrder(string orderId)
         {
-            //Order order = new Order();
-            var wrapper = new AsyncCallWrapper<IOrderingService>(svc);
-            Order order = await wrapper.AsyncCall(itSvc => itSvc.QueryOrder(orderId));
+            Order order = await Task.Run<Order>(() => svc.QueryOrder(orderId));
             return Ok(order);
         }
         private IOrderingService svc;//= new OrderingService();

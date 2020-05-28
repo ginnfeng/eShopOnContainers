@@ -75,6 +75,8 @@ namespace UTool.Test
             //https://dotnettutorials.net/lesson/asp-net-core-appsettings-json-file/
             //https://docs.microsoft.com/zh-tw/aspnet/core/fundamentals/environments?view=aspnetcore-3.1
             var cfg = serviceProvider.GetService<IConfiguration>();
+            var registeredServices = cfg.GetSection("RegisteredServices").Get<List<string>>();
+            registeredServices.ForEach(svc=>print(svc));
             print(cfg["EventBusConnection"]);
             print(cfg.GetValue<bool>("AzureServiceBusEnabled"));
             var x=cfg.GetSection("ClientInfo");

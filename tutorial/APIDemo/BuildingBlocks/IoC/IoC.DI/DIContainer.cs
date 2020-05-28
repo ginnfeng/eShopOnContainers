@@ -23,7 +23,7 @@ public static class DIContainer
     {
         //Domain Bus
         services.AddMediatR(typeof(IMediator));
-        services.AddSingleton<IEventBus, RabbitMQBus>(sp=>new RabbitMQBus(sp));
+        services.AddSingleton<IEventBus, RabbitMQBus>(sp => new RabbitMQBus(sp));
 
         //Service
         services.AddTransient<IOrderingService, OrderingService>();
@@ -51,5 +51,8 @@ public static class DIContainer
                }
                );
 
+    }
+    public static void TakeServicDefinitions()
+    {
     }
 }

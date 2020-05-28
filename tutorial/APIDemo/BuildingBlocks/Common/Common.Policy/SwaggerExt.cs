@@ -60,24 +60,32 @@ namespace Common.Policy
             var svcName = TakeServiceName();
             app.UseSwagger();
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            var swaggerRoutePrefix = "swagger";
+            // specifying the Swagger JSON endpoint.            
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint($"/swagger/v{ver}/swagger.json", $"{svcName} API {ver}");
-                c.RoutePrefix = $"{swaggerRoutePrefix}";// is default
+                c.SwaggerEndpoint(string.Format(SwaggerPathTemplate,ver), $"{svcName} API {ver}");
+                //c.RoutePrefix = $"{swaggerRoutePrefix}";// "swagger" is default
                 //swagger UI=> http://localhost:<port>/swagger
                 //swagger Doc=> http://localhost:<port>/swagger/v1/swagger.json
             });
         }
+        static public string SwaggerPathTemplate { get { return "/swagger/v{0}/swagger.json"; } }
         static string TakeServiceName()
         {
-            var callingAssemblyName= Assembly.GetEntryAssembly().GetName().Name;
-            var match = regex.Match(callingAssemblyName);
+            return ResolveServiceName(Assembly.GetEntryAssembly().GetName().Name);            
+        }
+        static public string ResolveServiceName<TServiceInterface>(string moduleName)
+        {
+            return ResolveServiceName(typeof(TServiceInterface).Name);
+        }
+        static public string ResolveServiceName(string moduleName)
+        {
+            var match = regex.Match(moduleName);
             if (match.Success)
                 return match.Groups[1].ToString();
-            return callingAssemblyName.Replace(".","");
+            return moduleName.Replace(".", "");
         }
         static readonly Regex regex = new Regex("\\.([^\\.]{1,})\\.");
+        //static readonly string swaggerRoutePrefix = "swagger";
     }
 }

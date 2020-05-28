@@ -45,7 +45,7 @@ namespace ApiGw.ClientProxy
         {
 
             HttpMethodSpec httpMethodSpec;
-            if (!httpSpecFactory.TryGetValue(methodInfo, out httpMethodSpec))
+            if (!TryGetSpec(methodInfo, out httpMethodSpec))
                 throw new Exception("RealProxyInvokeMethodEvent");
             RestClient client = new RestClient(ApiEndpoint);
             var req=client.TakeRequest(httpMethodSpec.Path);
@@ -104,20 +104,28 @@ namespace ApiGw.ClientProxy
             get {return apiVersion.ToString(); } 
             set { apiVersion = Microsoft.AspNetCore.Mvc.ApiVersion.Parse(value); }
         }
-        public void RegisterSwaggerDoc(Uri endpoint)
+        public void RegisterSwaggerDoc(Uri endpoint,bool lazyDo=true)
         {
-            httpSpecFactory ??= HttpSpecFactory<TService>.Instance;
-            httpSpecFactory.RegisterSwaggerDoc(endpoint);
+            swaggerDocEndpoint = endpoint;
+            if (lazyDo)
+                httpSpecFactory = null;
+            else
+            {
+                httpSpecFactory = HttpSpecFactory<TService>.Instance;
+                httpSpecFactory.RegisterSwaggerDoc(swaggerDocEndpoint);
+            }
+
         }
         private bool TryGetSpec(MethodInfo methodInfo, out HttpMethodSpec httpMethodSpec)
         {
-            //if(httpSpecFactory==null)
-
+            if (httpSpecFactory == null)
+                RegisterSwaggerDoc(swaggerDocEndpoint, false);
             return httpSpecFactory.TryGetValue(methodInfo, out httpMethodSpec);
         }
         private MethodInfo JsonToObjectGerericMethod;
         private RealProxy<TService> realProxy = new RealProxy<TService>();
         private IHttpSpecFactory httpSpecFactory ;
         private ApiVersion apiVersion =new ApiVersion(1,0);
+        private Uri swaggerDocEndpoint;
     }
 }

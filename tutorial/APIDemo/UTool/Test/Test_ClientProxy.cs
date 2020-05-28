@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Policy;
 using System.Text;
+using System.Threading.Tasks;
 using UTDll;
 namespace UTool.Test
 {
@@ -74,9 +75,18 @@ namespace UTool.Test
             print($"API={nameof(IHelloWorldService.HelloGet)} result={getrlt}");
 
         }
-
-        
         [UMethod]
+        async public void T_ClientProxyAsync(string apiUrl, string swaggerDocUrl)
+        {
+            var proxy = new ClientProxy<IHelloWorldService>(new Uri(apiUrl));
+            proxy.ApiVersion = "1.0";// "1.0"同"1"
+            proxy.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
+            var getrlt = await Task.Run<string>(()=> proxy.Api.HelloGet("EEE", "FFF"));
+            printMsg($"API={nameof(IHelloWorldService.HelloGet)} result={getrlt}");
+        }
+
+
+            [UMethod]
         public void T_ParseSwaggerJson(int port)
         {// TODO: Add Testing logic here
             //https://localhost:44363/swagger/v1/swagger.json

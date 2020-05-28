@@ -18,6 +18,13 @@ namespace ApiGw.Ocelot
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            var registeredServices = Configuration.GetSection("RegisteredServices").Get<List<string>>();
+            var svcDefs = new List<ServiceDef>();
+            foreach (var svcTagName in registeredServices)
+            {
+                svcDefs.Add(Configuration.GetSection(svcTagName).Get<ServiceDef>()); 
+            }
+            //CfgGen.Instance.GenOcelotJsonFile(svcDefs);
         }
 
         public IConfiguration Configuration { get; }
@@ -57,13 +64,13 @@ namespace ApiGw.Ocelot
             //});
             //app.UseOcelot().Wait();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
-            });
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapGet("/", async context =>
+            //    {
+            //        await context.Response.WriteAsync("Hello World!");
+            //    });
+            //});
         }
     }
 }

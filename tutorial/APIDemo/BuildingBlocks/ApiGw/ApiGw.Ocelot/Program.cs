@@ -17,13 +17,17 @@ namespace ApiGw.Ocelot
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>            
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args) {
+            var apigwcfg = CfgGen.Instance.GetOcelotJsonPath();
+            var builder=Host.CreateDefaultBuilder(args)
                 //.ConfigureAppConfiguration(ic => ic.AddJsonFile(Path.Combine("configuration","configuration.json")))
-                .ConfigureAppConfiguration(ic => ic.AddJsonFile(Path.Combine("configuration", "ocelot.json")))
+                
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+                .ConfigureAppConfiguration(ic => ic.AddJsonFile(apigwcfg));
+            return builder;
+        }
     }
 }

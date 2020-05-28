@@ -27,7 +27,7 @@
       "SwaggerKey": "ordering"
     }
   ],
-  "SwaggerEndPoints": [
+  "SwaggerEndPoints": [    
     {
       "Key": "ordering",
       "Config": [

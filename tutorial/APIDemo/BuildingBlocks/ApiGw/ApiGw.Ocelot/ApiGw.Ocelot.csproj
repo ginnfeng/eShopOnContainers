@@ -14,4 +14,18 @@
     <PackageReference Include="Ocelot" Version="15.0.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.Policy\Common.Policy.csproj" />
+    <ProjectReference Include="..\..\Common\Common.Support\Support.Net.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="CfgGen.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="CfgEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

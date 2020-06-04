@@ -4,6 +4,8 @@
 // Revisions  :            		
 // **************************************************************************** 
 using Common.Policy;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.FileProviders;
 using Support;
 using Support.Serializer;
 using System;
@@ -27,7 +29,24 @@ namespace ApiGw.Ocelot
         public CfgGen()
         {
         }
-        public void GenOcelotJsonFile(List<ServiceDef> svcDefs)
+        public string GenOcelotJsonFile()
+        {
+            //var basePath = Directory.GetCurrentDirectory();
+            var builder = new ConfigurationBuilder()
+                //.SetFileProvider(new PhysicalFileProvider(basePath))                
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+                    optional: true);
+            var cfg= builder.Build();
+            var registeredServices = cfg.GetSection("RegisteredServices").Get<List<string>>();
+            var svcDefs = new List<ServiceDef>();
+            foreach (var svcTagName in registeredServices)
+            {
+                svcDefs.Add(cfg.GetSection(svcTagName).Get<ServiceDef>());
+            }
+            return GenOcelotJsonFile(svcDefs);
+        }
+        public string GenOcelotJsonFile(List<ServiceDef> svcDefs)
         {
             var rootCfg = new CfgRootobject() { GlobalConfiguration = new Globalconfiguration() {BaseUrl= "http://localhost" }};
             var reroutes = new List<Reroute>();
@@ -52,7 +71,7 @@ namespace ApiGw.Ocelot
                     var swaggerendpoint = new Swaggerendpoint()
                     {
                         Key = svcAliasName                        
-                        ,Config = new Config[] { new Config() { Name = svcAliasName, Version = ver, Url = $"http://{svcDef.Host}{swaggerPath}" } }
+                        ,Config = new Config[] { new Config() { Name = svcAliasName, Version = $"v{ver}", Url = $"http://{svcDef.Host}{swaggerPath}" } }
                     };
                     swaggerendpoints.Add(swaggerendpoint);
                 }
@@ -63,7 +82,10 @@ namespace ApiGw.Ocelot
             rootCfg.ReRoutes = reroutes.ToArray();
             rootCfg.SwaggerEndPoints = swaggerendpoints.ToArray();
             var ts=new JsonNetTransfer();
-            ts.Save(rootCfg, GetOcelotJsonPath());
+            ts.NeedFormatting = true;
+            var jsonPath = GetOcelotJsonPath();
+            ts.Save(rootCfg, jsonPath );
+            return jsonPath;
         }
         public string GetOcelotJsonPath()
         {

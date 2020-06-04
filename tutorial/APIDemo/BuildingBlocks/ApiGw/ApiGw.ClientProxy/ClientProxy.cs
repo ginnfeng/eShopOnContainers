@@ -21,10 +21,9 @@ using System.Text;
 
 namespace ApiGw.ClientProxy
 {
-    class ClientProxy
-    {
-    }
-    public class ClientProxy<TService>
+    
+    public class ClientProxy<TService>: IServiceProxy<TService>
+        where TService:class
     {
         public ClientProxy(IConfiguration cfg)
         {
@@ -94,7 +93,7 @@ namespace ApiGw.ClientProxy
             var rlt = exevcMethodInfo.Invoke(typeof(IRestResponseExt), new object[] { response,null });
             return rlt;
         }        
-        public TService Api
+        public TService Svc
         {
             get { return realProxy.Entity; }
         }

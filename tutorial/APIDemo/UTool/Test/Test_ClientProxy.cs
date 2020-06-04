@@ -4,6 +4,7 @@
 // Revisions  :            		
 // **************************************************************************** 
 using ApiGw.ClientProxy;
+using ApiGw.ClientProxy.Ext;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using Service.Ordering.Contract.Entity;
@@ -54,39 +55,49 @@ namespace UTool.Test
         {
             HttpSpecFactory<IHelloWorldService>.Instance.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
         }
+        private void CallApi(ClientProxy<IHelloWorldService> proxy)
+        {
+            string id1 = "*abc*";
+            int id2 = 99;
+            DateTime id3 = DateTime.Today;
+            var id4 = new HelloInput() { UserName = "Lee", Date = DateTime.Today };
+            var rlt = proxy.Svc.Hello(id1, id2, id3, id4);
+            print($"API={nameof(IHelloWorldService.Hello)} User={rlt.UserName}\nDate={rlt.Date}\n{rlt.Summary}");
+
+            var postrlt = proxy.Svc.HelloPost("CCC", "DDD");
+            print($"API={nameof(IHelloWorldService.HelloPost)} result={postrlt}");
+
+            var getrlt = proxy.Svc.HelloGet("EEE", "FFF");
+            print($"API={nameof(IHelloWorldService.HelloGet)} result={getrlt}");
+        }
         [UMethod]
         public void T_ClientProxy(string apiUrl,string swaggerDocUrl)
         {
             var proxy = new ClientProxy<IHelloWorldService>(new Uri(apiUrl));
-            proxy.ApiVersion = "1.0";// "1.0"同"1"
-
+            proxy.ApiVersion = "1";
             proxy.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
-            string id1 = "*abc*";
-            int id2 = 99;
-            DateTime id3 = DateTime.Today;
-            var id4 = new HelloInput() {UserName="Lee",Date= DateTime.Today };
-            var rlt=proxy.Api.Hello(id1,id2,id3,id4);
-            print($"API={nameof(IHelloWorldService.Hello)} User={rlt.UserName}\nDate={rlt.Date}\n{rlt.Summary}");
-
-            var postrlt=proxy.Api.HelloPost("CCC", "DDD");
-            print($"API={nameof(IHelloWorldService.HelloPost)} result={postrlt}");
-
-            var getrlt = proxy.Api.HelloGet("EEE", "FFF");
-            print($"API={nameof(IHelloWorldService.HelloGet)} result={getrlt}");
-
+            CallApi(proxy);
         }
+        
         [UMethod]
-        async public void T_ClientProxyAsync(string apiUrl, string swaggerDocUrl)
+        public void T_ClientProxyByGW(string apiUrl)
         {
             var proxy = new ClientProxy<IHelloWorldService>(new Uri(apiUrl));
-            proxy.ApiVersion = "1.0";// "1.0"同"1"
-            proxy.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
-            var getrlt = await Task.Run<string>(()=> proxy.Api.HelloGet("EEE", "FFF"));
+            proxy.ApiVersion = "1";
+            proxy.RegisterChtSwaggerDoc(useApiGateway: true);
+            CallApi(proxy);            
+        }
+        [UMethod]
+        async public void T_ClientProxyAsync(string apiUrl)
+        {
+            var proxy = new ClientProxy<IHelloWorldService>(new Uri(apiUrl));
+            proxy.ApiVersion = "1";// 
+            //proxy.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
+            proxy.RegisterChtSwaggerDoc(useApiGateway: false);
+            var getrlt = await Task.Run<string>(() => proxy.Svc.HelloGet("EEE", "FFF"));
             printMsg($"API={nameof(IHelloWorldService.HelloGet)} result={getrlt}");
         }
-
-
-            [UMethod]
+        [UMethod]
         public void T_ParseSwaggerJson(int port)
         {// TODO: Add Testing logic here
             //https://localhost:44363/swagger/v1/swagger.json

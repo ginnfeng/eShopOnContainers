@@ -44,7 +44,9 @@ namespace Support.Serializer
             using (var writer = new StreamWriter(stream, Encoding.Default, 120, true))
             {
                 var jsonTextWriter = new JsonTextWriter(writer);
-                serializer.Serialize(jsonTextWriter, it);
+                if (base.NeedFormatting)
+                    serializer.Formatting = Formatting.Indented;
+                serializer.Serialize(jsonTextWriter, it);                
                 jsonTextWriter.Flush();
             }
         }

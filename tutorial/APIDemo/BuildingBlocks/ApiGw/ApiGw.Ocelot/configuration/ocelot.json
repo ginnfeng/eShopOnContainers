@@ -5,46 +5,56 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "service.banking.api",
+          "Host": "Service.Ordering.Api",
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/BankingSvc/api/{everything}",
-      "UpstreamHttpMethod": [ "POST", "PUT", "GET" ],
-      "SwaggerKey": "banking"
+      "UpstreamPathTemplate": "/Ordering/api/{everything}",
+      "UpstreamHttpMethod": [
+        "POST",
+        "PUT",
+        "GET",
+        "DELETE"
+      ],
+      "SwaggerKey": "Ordering"
     },
     {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "service.ordering.api",
+          "Host": "Service.Banking.Api",
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/OrderingSvc/api/{everything}",
-      "UpstreamHttpMethod": [ "POST", "PUT", "GET" ],
-      "SwaggerKey": "ordering"
+      "UpstreamPathTemplate": "/Banking/api/{everything}",
+      "UpstreamHttpMethod": [
+        "POST",
+        "PUT",
+        "GET",
+        "DELETE"
+      ],
+      "SwaggerKey": "Banking"
     }
   ],
   "SwaggerEndPoints": [
     {
-      "Key": "ordering",
+      "Key": "Ordering",
       "Config": [
         {
-          "Name": "Odering API",
+          "Name": "Ordering",
           "Version": "v1",
-          "Url": "http://service.ordering.api/swagger/v1/swagger.json"
+          "Url": "http://Service.Ordering.Api/swagger/v1/swagger.json"
         }
       ]
     },
     {
-      "Key": "banking",
+      "Key": "Banking",
       "Config": [
         {
-          "Name": "Banking API",
+          "Name": "Banking",
           "Version": "v1",
-          "Url": "http://service.banking.api/swagger/v1/swagger.json"
+          "Url": "http://Service.Banking.Api/swagger/v1/swagger.json"
         }
       ]
     }

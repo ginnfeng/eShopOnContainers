@@ -18,7 +18,7 @@ namespace ApiGw.Ocelot
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) {
-            var apigwcfg = CfgGen.Instance.GetOcelotJsonPath();
+            var apigwcfg = CfgGen.Instance.GenOcelotJsonFile();
             var builder=Host.CreateDefaultBuilder(args)
                 //.ConfigureAppConfiguration(ic => ic.AddJsonFile(Path.Combine("configuration","configuration.json")))
                 

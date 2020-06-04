@@ -62,6 +62,8 @@ namespace EventBus.RabbitMQ
             using (var conn = factory.CreateConnection())
             using (var channel = conn.CreateModel())
             {
+                //var props = channel.CreateBasicProperties(); props.ReplyTo = "Queue"; props.CorrelationId;
+                  
                 var enentName = theEevent.GetType().Name;
                 channel.QueueDeclare(enentName, false, false, false, null);
                 var message = JsonConvert.SerializeObject(theEevent);

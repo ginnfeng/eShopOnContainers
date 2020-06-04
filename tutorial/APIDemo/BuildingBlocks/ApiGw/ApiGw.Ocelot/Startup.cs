@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common.Policy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,12 +19,12 @@ namespace ApiGw.Ocelot
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            var registeredServices = Configuration.GetSection("RegisteredServices").Get<List<string>>();
-            var svcDefs = new List<ServiceDef>();
-            foreach (var svcTagName in registeredServices)
-            {
-                svcDefs.Add(Configuration.GetSection(svcTagName).Get<ServiceDef>()); 
-            }
+            //var registeredServices = Configuration.GetSection("RegisteredServices").Get<List<string>>();
+            //var svcDefs = new List<ServiceDef>();
+            //foreach (var svcTagName in registeredServices)
+            //{
+            //    svcDefs.Add(Configuration.GetSection(svcTagName).Get<ServiceDef>()); 
+            //}
             //CfgGen.Instance.GenOcelotJsonFile(svcDefs);
         }
 
@@ -35,6 +36,7 @@ namespace ApiGw.Ocelot
             // ****STD*** 
             services.AddOcelot(Configuration);
             services.AddSwaggerForOcelot(Configuration);
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,14 +52,15 @@ namespace ApiGw.Ocelot
             // ****STD*** 
             app.UseSwaggerForOcelotUI(Configuration, opt =>
             {
-                opt.DownstreamSwaggerHeaders = new[]
-                {
-                        new KeyValuePair<string, string>("Key", "Value"),
-                        new KeyValuePair<string, string>("Key2", "Value2"),
-                    };
+                opt.PathToSwaggerGenerator = $"/{SwaggerExt.SwaggerGwRoutePrefix}";
+                //opt.DownstreamSwaggerHeaders = new[]
+                //{
+                //        new KeyValuePair<string, string>("Key", "Value"),
+                //        new KeyValuePair<string, string>("Key2", "Value2"),
+                //};
             })
-                .UseOcelot()
-                .Wait();
+            .UseOcelot()
+            .Wait();
             //app.UseSwaggerForOcelotUI(Configuration, opt =>
             //{
             //    opt.PathToSwaggerGenerator = "/swagger/docs";

@@ -181,5 +181,6 @@ namespace Support.Serializer
         }
 
         public IEnumerable<Type> KnownTypes { get; set; }
+        public bool NeedFormatting { get; set; }
     }
 }

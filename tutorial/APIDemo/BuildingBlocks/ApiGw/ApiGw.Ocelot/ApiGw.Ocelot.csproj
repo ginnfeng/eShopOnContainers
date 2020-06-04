@@ -28,4 +28,10 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="configuration\ocelot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

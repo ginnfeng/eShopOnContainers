@@ -41,9 +41,10 @@ namespace ApiGw.ClientProxy
         public ApiSpecAttribute ServiceSpec { get; private set; }
         public void RegisterSwaggerDoc(Uri endpoint,bool forceReregister=false)
         {
-            if (forceReregister) serviceInterfaceMethodSpecDic = null;
+            if (forceReregister || currentSwaggerEndpoint != endpoint) serviceInterfaceMethodSpecDic = null;
             if (serviceInterfaceMethodSpecDic == null)
             {
+                currentSwaggerEndpoint = endpoint;
                 swaggerDocStore.RegisterSwaggerDoc(endpoint);
                 Type type = typeof(TServiceInterface);
                 serviceInterfaceMethodSpecDic= new Dictionary<string, HttpMethodSpec>();
@@ -59,7 +60,7 @@ namespace ApiGw.ClientProxy
                     
                     var apiSpec = ApiSpecAttribute.TakeFrom(type, methodInfo.Name);                    
                     var path =string.IsNullOrEmpty( apiSpec.Template)? $"/{ServiceSpec.SwaggerRoutePath}":$"/{ServiceSpec.SwaggerRoutePath}/{apiSpec.Template}";
-                    var matchedMethodSpec=httpMethodSpecList.Find(spec=> spec.Path.Equals(path));
+                    var matchedMethodSpec=httpMethodSpecList.Find(spec=> spec.Path.Contains(path));
                     if(matchedMethodSpec==null)
                         throw new KeyNotFoundException("RegisterSwaggerDoc");
                     serviceInterfaceMethodSpecDic[methodInfo.Name] = matchedMethodSpec;
@@ -71,5 +72,6 @@ namespace ApiGw.ClientProxy
         
         private ISwaggerDocStore swaggerDocStore;
         private  readonly Regex regex = new Regex("([^/]{1,})");
+        private Uri currentSwaggerEndpoint;
     }
 }

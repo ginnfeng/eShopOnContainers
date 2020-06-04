@@ -64,19 +64,26 @@ namespace Common.Policy
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint(string.Format(SwaggerPathTemplate,ver), $"{svcName} API {ver}");
-                //c.RoutePrefix = $"{swaggerRoutePrefix}";// "swagger" is default
+                c.RoutePrefix = swaggerRoutePrefix;// "swagger" is default
                 //swagger UI=> http://localhost:<port>/swagger
                 //swagger Doc=> http://localhost:<port>/swagger/v1/swagger.json
             });
         }
-        static public string SwaggerPathTemplate { get { return "/swagger/v{0}/swagger.json"; } }
+        static public string SwaggerGwRoutePrefix { get { return swaggerGwRoutePrefix; } } //"/swagger/docs"
+       
+        static public string SwaggerPathTemplate { get { return swaggerPathTemplate; } }
+        static public string TakeSwaggerPathTemplate<TServiceInterface>()
+        {
+            var svcName = ResolveServiceName<TServiceInterface>();
+            return string.Format("/{0}/v{1}/{2}", swaggerGwRoutePrefix, "{0}", svcName); ///swagger/docs/v1/ordering
+        }
         static string TakeServiceName()
         {
             return ResolveServiceName(Assembly.GetEntryAssembly().GetName().Name);            
         }
-        static public string ResolveServiceName<TServiceInterface>(string moduleName)
+        static public string ResolveServiceName<TServiceInterface>()
         {
-            return ResolveServiceName(typeof(TServiceInterface).Name);
+            return ResolveServiceName(typeof(TServiceInterface).Assembly.GetName().Name);
         }
         static public string ResolveServiceName(string moduleName)
         {
@@ -86,6 +93,8 @@ namespace Common.Policy
             return moduleName.Replace(".", "");
         }
         static readonly Regex regex = new Regex("\\.([^\\.]{1,})\\.");
-        //static readonly string swaggerRoutePrefix = "swagger";
+        static readonly string swaggerRoutePrefix = "swagger";
+        static readonly string swaggerGwRoutePrefix = $"{swaggerRoutePrefix}/docs";
+        static readonly string swaggerPathTemplate = string.Format("/{0}/v{1}/swagger.json", swaggerRoutePrefix, "{0}");        
     }
 }

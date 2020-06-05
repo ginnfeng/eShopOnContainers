@@ -52,6 +52,12 @@ namespace Service.Ordering.Api.Controllers
         {
             return svc.HelloPost(id1,id2);
         }
+        [ApiSpec(HTTP.POST, typeof(IHelloWorldService), nameof(IHelloWorldService.HelloMQDemo))]
+        public void HelloMQDemo(string id1, HelloInput inp)
+        {
+            svc.HelloMQDemo(id1, inp);
+        }
+
         IHelloWorldService svc = new HelloWorldService();
     }
 

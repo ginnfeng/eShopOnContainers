@@ -14,10 +14,11 @@ namespace EventBus.RabbitMQ
     {
         public Msg(object[] parameters)
         {
-            Params = new ReadOnlyCollection<object>(parameters);
+            if(parameters!=null)
+                Params = new List<object>(parameters);
         }
         public string Id { get; set; }
         public string MethodName  { get; set; }
-        public ReadOnlyCollection<object> Params { get; private set; }
+        public List<object> Params { get; set; }
     }
 }

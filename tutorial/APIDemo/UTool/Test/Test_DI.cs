@@ -74,7 +74,7 @@ namespace UTool.Test
             //https://www.jerriepelser.com/tutorials/airport-explorer/basic/working-with-configuration/
             //https://dotnettutorials.net/lesson/asp-net-core-appsettings-json-file/
             //https://docs.microsoft.com/zh-tw/aspnet/core/fundamentals/environments?view=aspnetcore-3.1
-            var cfg = serviceProvider.GetService<IConfiguration>();
+            var cfg = serviceProvider.GetService<IConfiguration>();//如果服務不存在則GetService()返回null，GetRequiredService()而是丟擲異常
             var registeredServices = cfg.GetSection("RegisteredServices").Get<List<string>>();
             registeredServices.ForEach(svc=>print(svc));
             print(cfg["EventBusConnection"]);

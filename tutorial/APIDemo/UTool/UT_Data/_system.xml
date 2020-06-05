@@ -17,6 +17,7 @@
     <UTool.Test.Test_IoC src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_IoC.cs" />
     <UTool.Test.Test_ClientProxy src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_ClientProxy.cs" />
     <UTool.Test.Test_Csharp src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_Csharp.cs" />
+    <UTool.Test.Test_MQProxy src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_MQProxy.cs" />
   </Cache>
   <CacheDir>
     <F_344>d:\Dev\UTool\UTool\Test</F_344>

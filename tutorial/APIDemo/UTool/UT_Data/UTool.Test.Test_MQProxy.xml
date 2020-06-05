@@ -1,0 +1,7 @@
+<UTest id="UTool.Test.Test_MQProxy">
+  <TestCase>
+    <T_StartSubscriber>
+    </T_StartSubscriber>
+    <T_Publish>"123"</T_Publish>
+  </TestCase>
+</UTest>

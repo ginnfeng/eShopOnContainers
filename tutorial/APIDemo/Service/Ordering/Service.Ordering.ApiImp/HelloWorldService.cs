@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Service.Ordering.Contract.Entity;
 using Service.Ordering.Contract.Servic;
+using Support.Serializer;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -59,6 +61,12 @@ namespace Service.Ordering.ApiImp
         public string HelloPost(string id1, string id2)
         {
             return $"HelloPost('{id1},{id2}')";
+        }
+        public void HelloMQDemo(string id1, HelloInput inp)
+        {
+            Debug.WriteLine($"ConsoleMessage (*** HelloMQDemo {id1}) ");
+            //var ts = new JsonNetTransfer();
+            //ts.Save(inp, @"d:\temp\a.json");
         }
     }
 }

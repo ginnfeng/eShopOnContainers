@@ -3,6 +3,7 @@
 // Description: Test_Await.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Support.ThreadExt;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,11 +11,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using UTDll;
+
+
 namespace UTool.Test
 {
-    class Test_Await : UTest
+    class Test_ThreadAwait : UTest
     {
-        public Test_Await()
+        public Test_ThreadAwait()
         {
             //
             // TODO: Add constructor logic here
@@ -64,6 +67,75 @@ namespace UTool.Test
             task.Start(); // invoke another thread ➠
             Debug.WriteLine($"➳ AsyncGetInfo()--End!  ThreadId:{Thread.CurrentThread.ManagedThreadId}");
             return task;
+        }
+
+        static int tid = 0;
+        [UMethod]
+        async public void T_ThreadTask()
+        {// TODO: Add Testing logic here
+            
+            Action act = () => new MyJob1(tid++).OnRun();            
+            await act.RunParallel(5);
+        }
+
+        private static readonly SmartThreadPool threadPool = new SmartThreadPool(3);
+        [UMethod]
+        public void T_ThreadPool()
+        {// TODO: Add Testing logic here
+            var task1=threadPool.CreateTask<MyJob1>();
+            task1.TaskContent.Id = 100;
+            task1.Controller = new TaskControl(false, new Timecard(TimeSpan.FromSeconds(3)));
+
+            var task2 = threadPool.CreateTask<MyJob2>();
+            task2.CompleteEvent += OnTask2CompleteEvent;
+
+            threadPool.PushTask(task1);
+            threadPool.PushTask(task2);
+        }
+
+        private void OnTask2CompleteEvent(object sender, object taskContent)
+        {
+            MyJob2 job2 = taskContent as MyJob2;
+            Debug.WriteLine($"OnTask2CompleteEvent {job2.RunAt}");
+        }
+    }
+    public static class CommClassExt
+    {
+        public static async Task RunParallel(this Action act, int amount)
+        {
+            do
+            {
+                await Task.Run( () => act());
+            } while (amount-- > 1);           
+        }
+    }
+
+    public class MyJob1 : ISmartTaskContent
+    {
+        public MyJob1()
+        {
+        }
+        public int Id { get; set; }
+        public MyJob1(int id)
+        {
+            Id = id;
+        }
+       
+        public void OnRun()
+        {
+            Debug.WriteLine($"Run TaskId={Id}");
+        }
+    }
+    public class MyJob2 : ISmartTaskContent
+    {
+        public MyJob2()
+        {
+        }
+        public DateTime RunAt { get; set; }
+        public void OnRun()
+        {
+            RunAt = DateTime.Now;
+            Debug.WriteLine($"Run MyTask2={RunAt}");
         }
     }
 }

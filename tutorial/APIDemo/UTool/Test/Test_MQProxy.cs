@@ -24,17 +24,17 @@ namespace UTool.Test
         [UMethod]
         public void T_StartSubscriber()
         {// TODO: Add Testing logic here
-            var svcHandler = new MQServiceHandler();
+            var svcHandler = new QuServiceHandler();
             var holderSvc = new HelloWorldService();
             svcHandler.Subscribe<IHelloWorldService>(holderSvc);
         }
         [UMethod]
         public void T_Publish(string id1)
         {
-            using (var mqProxy = new MQCleintProxy<IHelloWorldService>())
+            using (var mqProxy = new QuCleintProxy<IHelloWorldService>())
             {
                 var id2 = new HelloInput() { UserName = "Lee", Date = DateTime.Today };
-                mqProxy.Svc.HelloMQDemo(id1, id2);
+                mqProxy.Svc.OneWayCall(id1, id2);
             }
         }
     }

@@ -4,5 +4,9 @@
     </T_AwaitSimple0>
     <T_UI>
     </T_UI>
+    <T_ThreadTask>
+    </T_ThreadTask>
+    <T_ThreadPool>
+    </T_ThreadPool>
   </TestCase>
 </UTest>

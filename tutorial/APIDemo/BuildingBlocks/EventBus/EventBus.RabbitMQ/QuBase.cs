@@ -3,6 +3,8 @@
 // Description: MQBase.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
@@ -10,11 +12,21 @@ using System.Text;
 
 namespace EventBus.RabbitMQ
 {
-    public class MQBase:IDisposable
+    public class QuBase:IDisposable
     {
-        public MQBase()
+        public QuBase()
+            :this(null)
+        {
+        }
+        public QuBase(IServiceProvider serviceProvider)
         {
             ConnFactory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };//暫時   
+
+            if (serviceProvider == null) return;
+            TheServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
+            ILoggerFactory loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+            if (loggerFactory != null)
+                TheLogger = loggerFactory.CreateLogger<QuServiceHandler>();
         }
         public void Dispose()
         {
@@ -41,6 +53,8 @@ namespace EventBus.RabbitMQ
         }
         
         protected ConnectionFactory ConnFactory { get; private set; }
+        protected IServiceScopeFactory TheServiceScopeFactory { get; }
+        protected ILogger TheLogger { get; }
         protected IConnection Conn 
         { 
             get {
@@ -59,5 +73,6 @@ namespace EventBus.RabbitMQ
         private bool disposed;
         private IConnection conn;
         private IModel channel;
+        
     }
 }

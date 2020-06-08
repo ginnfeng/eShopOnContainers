@@ -12,8 +12,18 @@ using System.Text;
 
 namespace Service.Ordering.Contract.Servic
 {
+    public interface IHelloService
+    {
+        [ApiSpec("OneWayCall")]
+        void OneWayCall(string id1, HelloInput inp);
+    }
+    public interface IHelloQuService: IHelloService
+    {
+        [ApiSpec("TwoWayCall", AsQueueName = true)]
+        IQuResult<HelloWeather> TwoWayCall(string id1);
+    }
     [ApiSpec(typeof(IHelloWorldService), RouteTemplate.API_VER_SVC)]
-    public interface IHelloWorldService
+    public interface IHelloWorldService: IHelloService
     {
         [ApiSpec("hello/{id1}")]
         HelloWeather Hello(string id1, int id2, DateTime id3, HelloInput inp);
@@ -22,10 +32,7 @@ namespace Service.Ordering.Contract.Servic
         string HelloGet(string id1, string id2);
 
         [ApiSpec("HelloPost")]
-        string HelloPost(string id1, string id2);
-
-        [ApiSpec("HelloMQDemo/{id1}", AsQueueName =true)]
-        void HelloMQDemo(string id1,HelloInput inp);
+        string HelloPost(string id1, string id2);        
 
         [ApiSpec("")]
         IEnumerable<HelloWeather> DefaultGet();

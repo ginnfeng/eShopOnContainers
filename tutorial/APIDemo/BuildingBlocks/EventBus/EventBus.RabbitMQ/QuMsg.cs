@@ -10,9 +10,9 @@ using System.Text;
 
 namespace EventBus.RabbitMQ
 {
-    internal class Msg
+    internal class QuMsg
     {
-        public Msg(object[] parameters)
+        public QuMsg(object[] parameters)
         {
             if(parameters!=null)
                 Params = new List<object>(parameters);

@@ -13,13 +13,20 @@ using System.Text;
 
 namespace EventBus.RabbitMQ
 {
-    internal static class ImpRegulation<TService>
+    internal static class QuRegulation
+    {
+        static QuRegulation()
+        {
+            Transfer = new JsonNetTransfer();
+        }
+        public static BaseTransfer Transfer { get; set; }        
+    }
+    internal static class QuRegulation<TService>
         where TService:class
     {
-        static ImpRegulation()
+        static QuRegulation()
         {
-            defaultQuetePair = new KeyValuePair<string, string>(typeof(TService).FullName, $"@{typeof(TService).FullName}");
-            Transfer = new JsonNetTransfer();
+            defaultQuetePair = new KeyValuePair<string, string>(typeof(TService).FullName, $"@{typeof(TService).FullName}");            
         }
         public static List<KeyValuePair<string, string>> TakeQuetePairs()
         {
@@ -42,10 +49,9 @@ namespace EventBus.RabbitMQ
                 qpair= defaultQuetePair;
                 return false;
             }
-            qpair = new KeyValuePair<string, string>($"{defaultQuetePair.Key}:{specAttri.Template}", $"{defaultQuetePair.Value}:{specAttri.Template}");
+            qpair = new KeyValuePair<string, string>($"{defaultQuetePair.Key}:{specAttri.Template}", $"{defaultQuetePair.Value}");
             return true;
         }
-        public static BaseTransfer Transfer { get; set; }
         private static KeyValuePair<string, string> defaultQuetePair { get; set; }
        
     }

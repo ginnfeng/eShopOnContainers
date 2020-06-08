@@ -98,7 +98,17 @@ namespace Common.Contract
 
         public static ApiSpecAttribute TakeFrom(Type interfaceType, string methodName)
         {
+            
             var method = interfaceType.GetMethod(methodName);
+            if (method == null)
+            {                
+                var baseInterfacs=interfaceType.GetInterfaces();
+                foreach (var baseInterface in baseInterfacs)
+                {
+                    method = baseInterface.GetMethod(methodName);
+                    if (method != null) break;
+                }
+            }
             var attris = method.GetCustomAttributes(typeof(ApiSpecAttribute), true);
             return (attris.Length > 0) ? (ApiSpecAttribute)attris[0] : null;
         }

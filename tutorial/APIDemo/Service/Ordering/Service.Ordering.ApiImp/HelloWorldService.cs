@@ -62,7 +62,7 @@ namespace Service.Ordering.ApiImp
         {
             return $"HelloPost('{id1},{id2}')";
         }
-        public void HelloMQDemo(string id1, HelloInput inp)
+        public void OneWayCall(string id1, HelloInput inp)
         {
             Debug.WriteLine($"ConsoleMessage (*** HelloMQDemo {id1}) ");
             //var ts = new JsonNetTransfer();

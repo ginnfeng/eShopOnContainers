@@ -17,25 +17,19 @@ using System.Threading.Tasks;
 
 namespace EventBus.RabbitMQ
 {
-    public class MQServiceHandler: MQBase
+    public class QuServiceHandler: QuBase
     {
-        public MQServiceHandler()
+        public QuServiceHandler()            
         {
-            connFactory = new ConnectionFactory() { HostName = "localhost" };//暫時
         }
-        public MQServiceHandler(IServiceProvider serviceProvider)
-            :this()
-        {
-            this.serviceProvider = serviceProvider;
-            this.serviceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
-            ILoggerFactory loggerFactory = serviceProvider.GetService<ILoggerFactory>();
-            if (loggerFactory != null)
-                logger = loggerFactory.CreateLogger<MQServiceHandler>();
+        public QuServiceHandler(IServiceProvider serviceProvider)
+            :base(serviceProvider)
+        {           
         }
         public void Subscribe<TService>()
            where TService : class
         {
-            using (var scope = serviceScopeFactory.CreateScope())
+            using (var scope = TheServiceScopeFactory.CreateScope())
             {
                 var svcs=scope.ServiceProvider.GetServices<TService>();                
                 Subscribe<TService>(svcs);
@@ -49,15 +43,13 @@ namespace EventBus.RabbitMQ
         public void Subscribe<TService>(IEnumerable<TService> svcs)
            where TService : class
         {
-            var qPairs = ImpRegulation<TService>.TakeQuetePairs();
+            var qPairs = QuRegulation<TService>.TakeQuetePairs();
             qPairs.ForEach(qp => Subscribe<TService>(qp.Key, qp.Value,svcs, ProcessEvent));
         }
         private void Subscribe<TService>(string targetQueue,string replyQueue, IEnumerable<TService> svcs, Func<string, string, IEnumerable<TService>, Task> processEvent)
             where TService : class
-        {
-            
-            Channel.QueueDeclare(targetQueue, false, false, false, null);
-            
+        {            
+            Channel.QueueDeclare(targetQueue, false, false, false, null);            
             var consumer = new AsyncEventingBasicConsumer(Channel);
             //consumer.Received += ConsumerReceived;
             consumer.Received += async (sender, e) =>
@@ -70,8 +62,8 @@ namespace EventBus.RabbitMQ
                 }
                 catch (Exception err)
                 {
-                    if (logger != null)
-                        logger.LogError(err.Message);
+                    if (TheLogger != null)
+                        TheLogger.LogError(err.Message);
                     throw;
                 }
             };
@@ -83,7 +75,7 @@ namespace EventBus.RabbitMQ
             where TService : class
         {
             var type = typeof(TService);
-            var msg = ImpRegulation<TService>.Transfer.ToObject<Msg>(msgText);
+            var msg = QuRegulation.Transfer.ToObject<QuMsg>(msgText);
             var methodInfo= type.GetMethod(msg.MethodName);
             var paramInfos = methodInfo.GetParameters();
             var methodparams= new object[paramInfos.Length];
@@ -98,12 +90,8 @@ namespace EventBus.RabbitMQ
                 //methodInfo.Invoke(svc, methodparams);
                 await Task.Run(() => methodInfo.Invoke(svc, methodparams)).ConfigureAwait(false); 
             }
-
            
         }
-        private readonly IServiceScopeFactory serviceScopeFactory;
-        private readonly IServiceProvider serviceProvider;
-        private readonly ILogger logger;
-        private ConnectionFactory connFactory;
+               
     }
 }

@@ -52,10 +52,10 @@ namespace Service.Ordering.Api.Controllers
         {
             return svc.HelloPost(id1,id2);
         }
-        [ApiSpec(HTTP.POST, typeof(IHelloWorldService), nameof(IHelloWorldService.HelloMQDemo))]
-        public void HelloMQDemo(string id1, HelloInput inp)
+        [ApiSpec(HTTP.POST, typeof(IHelloWorldService), nameof(IHelloWorldService.OneWayCall))]
+        public void OneWayCall(string id1, [FromBody]  HelloInput inp)
         {
-            svc.HelloMQDemo(id1, inp);
+            svc.OneWayCall(id1, inp);
         }
 
         IHelloWorldService svc = new HelloWorldService();

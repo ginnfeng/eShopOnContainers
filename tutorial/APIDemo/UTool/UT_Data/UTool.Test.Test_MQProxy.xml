@@ -3,5 +3,6 @@
     <T_StartSubscriber>
     </T_StartSubscriber>
     <T_Publish>"123"</T_Publish>
+    <T_Method>""</T_Method>
   </TestCase>
 </UTest>

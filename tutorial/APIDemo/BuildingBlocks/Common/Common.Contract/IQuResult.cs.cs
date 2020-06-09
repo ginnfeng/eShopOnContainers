@@ -9,15 +9,16 @@ using System.Text;
 
 namespace Common.Contract
 {
-    public interface IQuResult
+    public interface ICorrleation
     {
         public string CorrleationId { get; set; }
-        void OnResult(object rlt);
+        //void OnResult(object rlt);
     }
-    public interface IQuResult<T>
+    public class QuResult<T>: ICorrleation
     {
         public event Action<T> WaitResultEvent;
         public T Value { get;}
+        public string CorrleationId { get; set; }
     }
     
 }

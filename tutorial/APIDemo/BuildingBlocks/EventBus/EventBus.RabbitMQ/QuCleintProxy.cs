@@ -37,10 +37,10 @@ namespace EventBus.RabbitMQ
             var msg = CreateQueueMessage(methodInfo,args);
             var targetQueue = queuePair.Key;
             var replyQueue = queuePair.Value;
-            IQuResult quRlt=null;
+            ICorrleation quRlt=null;
             IBasicProperties props = null;
             bool noReturn = methodInfo.ReturnType.Equals(typeof(void));            
-            if(noReturn)
+            if(!noReturn)
             {
                 props = Channel.CreateBasicProperties();
                 props.ReplyTo = replyQueue;
@@ -62,13 +62,14 @@ namespace EventBus.RabbitMQ
         {
             get { return realProxy.Entity; }
         }
-        private IQuResult RegistQuReslut(MethodInfo methodInfo, string correlationId,string replyQueue)
+        private ICorrleation RegistQuReslut(MethodInfo methodInfo, string correlationId,string replyQueue)
         {
-            bool noReturn = !methodInfo.ReturnType.IsAssignableFrom(typeof(IQuResult));
+            bool noReturn = !typeof(ICorrleation).IsAssignableFrom(methodInfo.ReturnType);
             if (noReturn) return null;
-            IQuResult quRlt = Activator.CreateInstance(methodInfo.ReturnType) as IQuResult;
+            //var type=typeof(QuResult<>).MakeGenericType(methodInfo.ReturnType.GetGenericArguments());
+            ICorrleation quRlt = Activator.CreateInstance(methodInfo.ReturnType) as ICorrleation;
             quRlt.CorrleationId = correlationId;            
-            quResultMap ??= new Dictionary<string, IQuResult>();
+            quResultMap ??= new Dictionary<string, ICorrleation>();
             lock (this)
                 quResultMap[quRlt.CorrleationId] = quRlt;            
             var props = Channel.CreateBasicProperties();
@@ -109,7 +110,7 @@ namespace EventBus.RabbitMQ
         
         private RealProxy<TService> realProxy = new RealProxy<TService>();
         private Dictionary<MethodInfo, KeyValuePair<string, string>> queueOfMethodMap = new Dictionary<MethodInfo, KeyValuePair<string, string>>();
-        private Dictionary<string, IQuResult> quResultMap;
+        private Dictionary<string, ICorrleation> quResultMap;
         private bool isListeningReslutQueue;
     }
 }

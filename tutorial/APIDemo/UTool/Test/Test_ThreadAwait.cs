@@ -73,9 +73,15 @@ namespace UTool.Test
         [UMethod]
         async public void T_ThreadTask()
         {// TODO: Add Testing logic here
-            
-            Action act = () => new MyJob1(tid++).OnRun();            
+
+            Action act = () => new MyJob1(tid++).OnRun();
             await act.RunParallel(5);
+
+            //Action<string> act2 = async (s) => { await Task.Run(() => "Hello"); };
+            //Func<Task<string>> func2 = async () => await Task<string>.Run(() =>{return "Hello"; });            
+            string rlt = await Task<string>.Run(() => "Hello");//.ConfigureAwait(true);似乎在.Net core Form無用
+            print(rlt);
+           
         }
 
         private static readonly SmartThreadPool threadPool = new SmartThreadPool(3);

@@ -20,7 +20,7 @@ namespace Service.Ordering.Contract.Servic
     public interface IHelloQuService: IHelloService
     {
         [ApiSpec("TwoWayCall", AsQueueName = true)]
-        IQuResult<HelloWeather> TwoWayCall(string id1);
+        QuResult<HelloWeather> TwoWayCall(string id1);
     }
     [ApiSpec(typeof(IHelloWorldService), RouteTemplate.API_VER_SVC)]
     public interface IHelloWorldService: IHelloService

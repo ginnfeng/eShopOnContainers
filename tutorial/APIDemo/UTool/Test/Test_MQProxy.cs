@@ -37,5 +37,16 @@ namespace UTool.Test
                 mqProxy.Svc.OneWayCall(id1, id2);
             }
         }
+
+        [UMethod]
+        public void T_Method(string id1)
+        {// TODO: Add Testing logic here
+            
+            using (var mqProxy = new QuCleintProxy<IHelloQuService>())
+            {                
+                var quRlt=mqProxy.Svc.TwoWayCall(id1);
+            }
+        }
+
     }
 }

@@ -3,6 +3,7 @@
 // Description: HelloWorldService.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Common.Contract;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Service.Ordering.Contract.Entity;
@@ -16,7 +17,7 @@ using System.Text;
 
 namespace Service.Ordering.ApiImp
 {
-    public class HelloWorldService : IHelloWorldService
+    public class HelloWorldService : IHelloWorldService, IHelloQuService
     {
         private static readonly string[] Summaries = new[]
        {
@@ -67,6 +68,11 @@ namespace Service.Ordering.ApiImp
             Debug.WriteLine($"ConsoleMessage (*** HelloMQDemo {id1}) ");
             //var ts = new JsonNetTransfer();
             //ts.Save(inp, @"d:\temp\a.json");
+        }
+
+        public QuResult<HelloWeather> TwoWayCall(string id1)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,0 +1,6 @@
+<UTest id="UTool.Test.Test_ThreadAwait">
+  <TestCase>
+    <T_ThreadTask>
+    </T_ThreadTask>
+  </TestCase>
+</UTest>

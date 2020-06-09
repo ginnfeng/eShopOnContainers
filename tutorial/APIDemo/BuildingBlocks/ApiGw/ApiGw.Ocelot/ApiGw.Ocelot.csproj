@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Common.Policy\Common.Policy.csproj" />
-    <ProjectReference Include="..\..\Common\Common.Support\Support.Net.Core.csproj" />
+    <ProjectReference Include="..\..\Common\Common.Support\Common.Support.csproj" />
   </ItemGroup>
 
   <ItemGroup>

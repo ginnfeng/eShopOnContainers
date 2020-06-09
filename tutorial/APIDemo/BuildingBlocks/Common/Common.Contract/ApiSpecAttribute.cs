@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -98,17 +99,7 @@ namespace Common.Contract
 
         public static ApiSpecAttribute TakeFrom(Type interfaceType, string methodName)
         {
-            
-            var method = interfaceType.GetMethod(methodName);
-            if (method == null)
-            {                
-                var baseInterfacs=interfaceType.GetInterfaces();
-                foreach (var baseInterface in baseInterfacs)
-                {
-                    method = baseInterface.GetMethod(methodName);
-                    if (method != null) break;
-                }
-            }
+            var method = FindIncludBaseType<MethodInfo>(interfaceType, t => t.GetMethod(methodName));            
             var attris = method.GetCustomAttributes(typeof(ApiSpecAttribute), true);
             return (attris.Length > 0) ? (ApiSpecAttribute)attris[0] : null;
         }
@@ -151,6 +142,19 @@ namespace Common.Contract
                     break;
             }
             
+        }
+        static public TInfo FindIncludBaseType<TInfo>(Type it, Func<Type, TInfo> cond)
+            where TInfo : class
+        {
+            TInfo info = cond(it);
+            if (info != null) return info;
+            var baseInterfacs = it.GetInterfaces();
+            foreach (var baseInterface in baseInterfacs)
+            {
+                info = FindIncludBaseType(baseInterface,cond);
+                if (info != null) return info;
+            }
+            return null;
         }
         private RouteTemplate routeTemplate;
         static readonly Regex svcRegex = new Regex("I(.*)[A-Z]");

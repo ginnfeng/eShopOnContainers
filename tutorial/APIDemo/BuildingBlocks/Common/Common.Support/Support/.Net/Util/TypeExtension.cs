@@ -94,6 +94,19 @@ namespace Support.Net.Util
             return entityPropertyInfos;
 
         }
+        static public TInfo FindIncludBaseType<TInfo>(this Type it,Func<Type, TInfo> cond)
+            where TInfo:class
+        {
+            TInfo info = cond(it);
+            if (info!=null) return info;
+            var baseInterfacs = it.GetInterfaces();
+            foreach (var baseInterface in baseInterfacs)
+            {
+                info=baseInterface.FindIncludBaseType(cond);
+                if (info != null) return info;
+            }
+            return null;
+        }
 
         static public bool IsXmlString(string it)
         {

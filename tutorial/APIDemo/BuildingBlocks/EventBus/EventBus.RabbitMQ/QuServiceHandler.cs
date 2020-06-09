@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Support.Net.Util;
+using System.Reflection;
 
 namespace EventBus.RabbitMQ
 {
@@ -76,7 +78,10 @@ namespace EventBus.RabbitMQ
         {
             var type = typeof(TService);
             var msg = QuRegulation.Transfer.ToObject<QuMsg>(msgText);
-            var methodInfo= type.GetMethod(msg.MethodName);
+            //type.GetInterfaces
+            
+            var methodInfo=type.FindIncludBaseType<MethodInfo>(t=>t.GetMethod(msg.MethodName));
+            
             var paramInfos = methodInfo.GetParameters();
             var methodparams= new object[paramInfos.Length];
             for (int i = 0; i < paramInfos.Length; i++)

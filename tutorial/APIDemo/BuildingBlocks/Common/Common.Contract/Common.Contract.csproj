@@ -12,6 +12,9 @@
     <Compile Update="ApiSpecAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="QuMsg.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

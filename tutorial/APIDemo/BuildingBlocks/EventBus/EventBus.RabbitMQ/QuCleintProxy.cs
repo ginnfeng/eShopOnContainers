@@ -26,80 +26,106 @@ namespace EventBus.RabbitMQ
         {
             realProxy.InvokeMethodEvent += RealProxyInvokeMethodEvent;            
         }
+        private TimeSpan defaultWaitTimeout = new TimeSpan(0, 0, 120);
+        public T WaitResult<T>(QuResult<T> rltStamp)
+        {
+            return WaitResult(rltStamp, defaultWaitTimeout);
+        }
+        public T WaitResult<T>(QuResult<T> rltStamp, TimeSpan timeOut)
+        {
+            return responseService.Wait<T>(rltStamp, timeOut);
+        }
+        public async  Task<T> AsyncWaitResult<T>(QuResult<T> rltStamp)
+        {
+            return await AsyncWaitResult(rltStamp, defaultWaitTimeout).ConfigureAwait(false);
+        }
+        public async Task<T> AsyncWaitResult<T>(QuResult<T> rltStamp, TimeSpan timeOut)
+        {
+            return await Task<T>.Run(() => responseService.Wait<T>(rltStamp, timeOut)).ConfigureAwait(false);
+        }
         private object RealProxyInvokeMethodEvent(MethodInfo methodInfo, ref object[] args)
         {
-            KeyValuePair<string, string> queuePair;
-            if(!queueOfMethodMap.TryGetValue(methodInfo,out queuePair))
+            QuSpecAttribute queueSpec;
+            if(!queueOfMethodMap.TryGetValue(methodInfo,out queueSpec))
             {
-                QuRegulation<TService>.TryTakeCustomDefinedQuetePair(methodInfo, out queuePair);
-                queueOfMethodMap[methodInfo] = queuePair;
+                queueSpec = QuRegulation<TService>.TakeQueueSpec(methodInfo);
+                queueOfMethodMap[methodInfo] = queueSpec;
             }
-            var msg = CreateQueueMessage(methodInfo,args);
-            var targetQueue = queuePair.Key;
-            var replyQueue = queuePair.Value;
-            ICorrleation quRlt=null;
+            var msg = CreateQueueMessage(methodInfo,args);            
+            var targetQueue =string.IsNullOrEmpty(msg.TargetQueue)? queueSpec.Queue: msg.TargetQueue;
+            var replyQueue = string.IsNullOrEmpty(msg.ReplyQueue) ?queueSpec.ReplyQueue: msg.ReplyQueue;
+            IQuCorrleation quRlt=null;
             IBasicProperties props = null;
             bool noReturn = methodInfo.ReturnType.Equals(typeof(void));            
             if(!noReturn)
             {
-                props = Channel.CreateBasicProperties();
-                props.ReplyTo = replyQueue;
-                props.CorrelationId = msg.Id;
-                quRlt=RegistQuReslut(methodInfo, msg.Id, replyQueue);
+                quRlt=RegistQuReslut(methodInfo, queueSpec, msg);
+                if (quRlt != null)
+                {
+                    props = Channel.CreateBasicProperties();
+                    props.ReplyTo = queueSpec.ReplyQueue;
+                    props.CorrelationId = quRlt.CorrleationId;
+                }
             }
-            Channel.QueueDeclare(targetQueue, false, false, false, null);
+            Channel.QueueDeclare(targetQueue, queueSpec.Durable, queueSpec.Exclusive, queueSpec.AutoDelete, null);
             var message = QuRegulation.Transfer.ToText(msg);//JsonConvert.SerializeObject(msg);
             var body = Encoding.UTF8.GetBytes(message);
-            Channel.BasicPublish("", targetQueue, props, body);
+            
             if (quRlt != null)
             {
+                responseService.Register(quRlt);
                 StartListeningReslutQueue(replyQueue);
-                return quRlt;
             }
-            return (noReturn) ? null : Activator.CreateInstance(methodInfo.ReturnParameter.ParameterType);
+            Channel.BasicPublish("", targetQueue, props, body);
+            return (noReturn) ? 
+                null : 
+                (quRlt != null) ?quRlt:Activator.CreateInstance(methodInfo.ReturnParameter.ParameterType);
         }
         public TService Svc
         {
             get { return realProxy.Entity; }
         }
-        private ICorrleation RegistQuReslut(MethodInfo methodInfo, string correlationId,string replyQueue)
+        private IQuCorrleation RegistQuReslut(MethodInfo methodInfo, QuSpecAttribute queueSpec,QuMsg msg)
         {
-            bool noReturn = !typeof(ICorrleation).IsAssignableFrom(methodInfo.ReturnType);
+            bool noReturn = !typeof(IQuCorrleation).IsAssignableFrom(methodInfo.ReturnType);
             if (noReturn) return null;
             //var type=typeof(QuResult<>).MakeGenericType(methodInfo.ReturnType.GetGenericArguments());
-            ICorrleation quRlt = Activator.CreateInstance(methodInfo.ReturnType) as ICorrleation;
-            quRlt.CorrleationId = correlationId;            
-            quResultMap ??= new Dictionary<string, ICorrleation>();
+            IQuCorrleation quRlt = Activator.CreateInstance(methodInfo.ReturnType) as IQuCorrleation;
+            quRlt.CorrleationId = string.IsNullOrEmpty(msg.CorrleationId)?msg.Id:msg.CorrleationId;            
+            quResultMap ??= new Dictionary<string, IQuCorrleation>();
             lock (this)
-                quResultMap[quRlt.CorrleationId] = quRlt;            
-            var props = Channel.CreateBasicProperties();
-            props.ReplyTo = replyQueue;
-            props.CorrelationId = correlationId;
+                quResultMap[quRlt.CorrleationId] = quRlt;
             return quRlt;
         }
         private void StartListeningReslutQueue(string replyQueue)
         {
-            if (!isListeningReslutQueue)
-            {
-                Channel.QueueDeclare(replyQueue, false, true, false, null);
-                var consumer = new EventingBasicConsumer(Channel);
-                consumer.Received += ResultReceived;
-                Channel.BasicConsume(replyQueue, true, consumer);
-                isListeningReslutQueue = true;
-            }
+            var repSvcHandler=new QuServiceHandler();
+            var quSpec = QuRegulation<IQuResponseService>.TakeQueueSpec();
+            quSpec.Queue = replyQueue;
+            repSvcHandler.Subscribe<IQuResponseService>(responseService, quSpec);
+            //if (!isListeningReslutQueue)
+            //{
+            //    Channel.QueueDeclare(replyQueue, false, true, false, null);
+            //    var consumer = new AsyncEventingBasicConsumer(Channel);
+            //    consumer.Received += ResultReceived;
+            //    Channel.BasicConsume(replyQueue, true, consumer);
+            //    isListeningReslutQueue = true;
+            //}
         }
 
-        private void ResultReceived(object sender, BasicDeliverEventArgs e)
+        async private Task ResultReceived(object sender, BasicDeliverEventArgs e)
         {
             var eventName = e.RoutingKey;
             var message = Encoding.UTF8.GetString(e.Body);
-            var msg = QuRegulation.Transfer.ToObject<QuMsg>(message);
+            await Task.Run(()=>QuRegulation.Transfer.ToObject<QuMsg>(message)).ConfigureAwait(false);
         }
 
         static private QuMsg CreateQueueMessage(MethodInfo methodInfo, object[] args)
         {
             if (methodInfo == null)
                 throw new ArgumentNullException(nameof(methodInfo));
+            if (args != null && args.Length == 1  && typeof(QuMsg).IsAssignableFrom(args[0].GetType()))
+                return args[0] as QuMsg; //通常是response MSG
             return new QuMsg(args)
             {
                 Id = Guid.NewGuid().ToString(),              
@@ -109,8 +135,9 @@ namespace EventBus.RabbitMQ
 
         
         private RealProxy<TService> realProxy = new RealProxy<TService>();
-        private Dictionary<MethodInfo, KeyValuePair<string, string>> queueOfMethodMap = new Dictionary<MethodInfo, KeyValuePair<string, string>>();
-        private Dictionary<string, ICorrleation> quResultMap;
+        private Dictionary<MethodInfo, QuSpecAttribute> queueOfMethodMap = new Dictionary<MethodInfo, QuSpecAttribute>();
+        private Dictionary<string, IQuCorrleation> quResultMap;
         private bool isListeningReslutQueue;
+        private QuResponseService responseService = QuResponseService.Instance;
     }
 }

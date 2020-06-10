@@ -9,16 +9,36 @@ using System.Text;
 
 namespace Common.Contract
 {
-    public interface ICorrleation
+    public interface IQuCorrleation
     {
-        public string CorrleationId { get; set; }
+        string CorrleationId { get; set; }
+        //public string ReplyQueue { set; get; }
+        //object Value { get; }
         //void OnResult(object rlt);
     }
-    public class QuResult<T>: ICorrleation
+    public class QuResult: IQuCorrleation
     {
-        public event Action<T> WaitResultEvent;
-        public T Value { get;}
-        public string CorrleationId { get; set; }
+        public QuResult()
+        {
+        }
+        public QuResult(object v)
+        {
+            Value = v;
+        }
+        public string CorrleationId { get; set; }        
+        public object Value { get;  }
+    }
+    public class QuResult<T>: QuResult
+    {
+        public QuResult()
+        {
+
+        }
+        public QuResult(T v)
+            :base(v)
+        {
+        }        
+        public T ToObject() { return (T)Value; }        
     }
     
 }

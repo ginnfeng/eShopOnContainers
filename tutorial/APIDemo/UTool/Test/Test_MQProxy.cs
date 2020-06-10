@@ -9,6 +9,7 @@ using Service.Ordering.Contract.Entity;
 using Service.Ordering.Contract.Servic;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using UTDll;
 namespace UTool.Test
@@ -27,6 +28,7 @@ namespace UTool.Test
             var svcHandler = new QuServiceHandler();
             var holderSvc = new HelloWorldService();
             svcHandler.Subscribe<IHelloWorldService>(holderSvc);
+            svcHandler.Subscribe<IHelloQuService>(holderSvc);
         }
         [UMethod]
         public void T_Publish(string id1)
@@ -39,12 +41,25 @@ namespace UTool.Test
         }
 
         [UMethod]
-        public void T_Method(string id1)
+        public void T_PublishTwoWay(string id1)
         {// TODO: Add Testing logic here
             
             using (var mqProxy = new QuCleintProxy<IHelloQuService>())
             {                
                 var quRlt=mqProxy.Svc.TwoWayCall(id1);
+                var obj=mqProxy.WaitResult(quRlt);                
+                print(obj.Summary);
+            }
+        }
+        [UMethod]
+        async public void T_PublishTwoWayAsync(string id1)
+        {// TODO: Add Testing logic here
+
+            using (var mqProxy = new QuCleintProxy<IHelloQuService>())
+            {
+                var quRlt = mqProxy.Svc.TwoWayCall(id1);
+                var obj = await mqProxy.AsyncWaitResult(quRlt);
+                Debug.WriteLine(obj.Summary);
             }
         }
 

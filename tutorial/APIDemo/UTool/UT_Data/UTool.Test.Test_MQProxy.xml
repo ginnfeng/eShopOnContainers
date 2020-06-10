@@ -4,5 +4,7 @@
     </T_StartSubscriber>
     <T_Publish>"123"</T_Publish>
     <T_Method>""</T_Method>
+    <T_PublishTwoWay>"666"</T_PublishTwoWay>
+    <T_PublishTwoWayAsync>"async"</T_PublishTwoWayAsync>
   </TestCase>
 </UTest>

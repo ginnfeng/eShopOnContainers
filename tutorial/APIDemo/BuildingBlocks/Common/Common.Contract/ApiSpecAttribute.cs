@@ -85,10 +85,7 @@ namespace Common.Contract
         public int? Order { get; private set; }
 
         public string Name { get; private set; }
-        /// <summary>
-        /// 在MQ中以Template當Queue Name
-        /// </summary>
-        public bool AsQueueName { get; set; }
+        
 
         public static ApiSpecAttribute TakeFrom(Type interfaceType)
         {

@@ -14,12 +14,14 @@ namespace Service.Ordering.Contract.Servic
 {
     public interface IHelloService
     {
+        [QuSpec]
         [ApiSpec("OneWayCall")]
         void OneWayCall(string id1, HelloInput inp);
     }
     public interface IHelloQuService: IHelloService
     {
-        [ApiSpec("TwoWayCall", AsQueueName = true)]
+        [QuSpec]
+        [ApiSpec("TwoWayCall")]        
         QuResult<HelloWeather> TwoWayCall(string id1);
     }
     [ApiSpec(typeof(IHelloWorldService), RouteTemplate.API_VER_SVC)]

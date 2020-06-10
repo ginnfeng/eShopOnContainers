@@ -28,29 +28,27 @@ namespace EventBus.RabbitMQ
         {
             defaultQuetePair = new KeyValuePair<string, string>(typeof(TService).FullName, $"@{typeof(TService).FullName}");            
         }
-        public static List<KeyValuePair<string, string>> TakeQuetePairs()
+        public static List<QuSpecAttribute> TakeAllQueueSpec()
         {
-            var queueNames = new List<KeyValuePair<string, string>>();
-            queueNames.Add(defaultQuetePair);
-            var methodInfos=typeof(TService).GetMethods();
+            Type type = typeof(TService);            
+            var specs = new List<QuSpecAttribute>() { QuSpecAttribute.TakeSpec(type) };
+            var methodInfos= type.GetMethods();
             foreach (var methodInfo in methodInfos)
             {
-                KeyValuePair<string, string> qs;
-                if(TryTakeCustomDefinedQuetePair(methodInfo,out qs))
-                    queueNames.Add(qs);
+                var methodSpec=QuSpecAttribute.TakeSpec(type,methodInfo);
+                if (specs.Find(it => it.Queue==methodSpec.Queue) == null)
+                    specs.Add(methodSpec);
+               
             }
-            return queueNames;
+            return specs;
         }
-        public static bool TryTakeCustomDefinedQuetePair(MethodInfo methodInfo,out KeyValuePair<string, string> qpair)
+        public static QuSpecAttribute TakeQueueSpec(MethodInfo methodInfo)
         {
-            var specAttri=methodInfo.GetCustomAttribute<ApiSpecAttribute>();
-            if (specAttri == null || !specAttri.AsQueueName)
-            {
-                qpair= defaultQuetePair;
-                return false;
-            }
-            qpair = new KeyValuePair<string, string>($"{defaultQuetePair.Key}:{specAttri.Template}", $"{defaultQuetePair.Value}");
-            return true;
+            return QuSpecAttribute.TakeSpec(typeof(TService), methodInfo);            
+        }
+        public static QuSpecAttribute TakeQueueSpec()
+        {
+            return QuSpecAttribute.TakeSpec(typeof(TService));
         }
         private static KeyValuePair<string, string> defaultQuetePair { get; set; }
        

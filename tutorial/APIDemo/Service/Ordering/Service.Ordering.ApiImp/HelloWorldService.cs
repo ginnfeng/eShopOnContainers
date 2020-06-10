@@ -28,7 +28,7 @@ namespace Service.Ordering.ApiImp
         }
         public string Hello(string id)
         {
-            return $"Hello {id}";           
+            return $"*** Hello {id}";           
         }
         public IEnumerable<HelloWeather> DefaultGet()
         {
@@ -50,29 +50,37 @@ namespace Service.Ordering.ApiImp
                 Date = inp.Date,
                 UserName = inp.UserName,
                 TemperatureC = rng.Next(-20, 55),
-                Summary = $"id1={id1} id2={id2}  id3={id3} "
+                Summary = $"*** id1={id1} id2={id2}  id3={id3} "
             };
         }
 
         public string HelloGet(string id1, string id2)
         {
-            return $"HelloGet('{id1},{id2}')";
+            return $"*** HelloGet('{id1},{id2}')";
         }
 
         public string HelloPost(string id1, string id2)
         {
-            return $"HelloPost('{id1},{id2}')";
+            return $"*** HelloPost('{id1},{id2}')";
         }
         public void OneWayCall(string id1, HelloInput inp)
         {
-            Debug.WriteLine($"ConsoleMessage (*** HelloMQDemo {id1}) ");
+            Debug.WriteLine($"*** ConsoleMessage (HelloMQDemo {id1}) ");
             //var ts = new JsonNetTransfer();
             //ts.Save(inp, @"d:\temp\a.json");
         }
 
         public QuResult<HelloWeather> TwoWayCall(string id1)
         {
-            throw new NotImplementedException();
+            var rng = new Random();
+            var rlt = new HelloWeather()
+            {
+                Date = DateTime.Now,
+                UserName = id1,
+                TemperatureC = rng.Next(-20, 55)
+            };
+            rlt.Summary = $"*** from {nameof(TwoWayCall)}  {rlt.UserName} {rlt.TemperatureC} {rlt.Date}";
+            return new QuResult<HelloWeather> (rlt);
         }
     }
 }

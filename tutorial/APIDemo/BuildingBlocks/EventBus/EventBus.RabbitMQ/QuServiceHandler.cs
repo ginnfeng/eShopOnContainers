@@ -11,11 +11,11 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Support.Net.Util;
 using System.Reflection;
+using Common.Contract;
 
 namespace EventBus.RabbitMQ
 {
@@ -45,22 +45,31 @@ namespace EventBus.RabbitMQ
         public void Subscribe<TService>(IEnumerable<TService> svcs)
            where TService : class
         {
-            var qPairs = QuRegulation<TService>.TakeQuetePairs();
-            qPairs.ForEach(qp => Subscribe<TService>(qp.Key, qp.Value,svcs, ProcessEvent));
+            var queueSpecs = QuRegulation<TService>.TakeAllQueueSpec();
+            queueSpecs.ForEach(qpspec => Subscribe<TService>(qpspec,svcs, ProcessEvent));
         }
-        private void Subscribe<TService>(string targetQueue,string replyQueue, IEnumerable<TService> svcs, Func<string, string, IEnumerable<TService>, Task> processEvent)
+        /// <summary>
+        /// 
+        /// </summary>        
+        internal void Subscribe<TService>(TService svc, QuSpecAttribute quSpec)
+           where TService : class
+        {
+            Subscribe<TService>(quSpec, new TService[] { svc }, ProcessEvent);            
+        }
+        private void Subscribe<TService>(QuSpecAttribute quSpec, IEnumerable<TService> svcs, Func<BasicDeliverEventArgs, IEnumerable<TService>, Task> processEvent)
             where TService : class
         {            
-            Channel.QueueDeclare(targetQueue, false, false, false, null);            
+            Channel.QueueDeclare(quSpec.Queue, quSpec.Durable, quSpec.Exclusive, quSpec.AutoDelete, null);            
             var consumer = new AsyncEventingBasicConsumer(Channel);
             //consumer.Received += ConsumerReceived;
             consumer.Received += async (sender, e) =>
             {
-                var eventName = e.RoutingKey;
-                var message = Encoding.UTF8.GetString(e.Body);
+                //e.BasicProperties.ReplyTo;
+                //var eventName = e.RoutingKey;
+                //var message = Encoding.UTF8.GetString(e.Body);
                 try
                 {
-                    await processEvent(eventName, message, svcs).ConfigureAwait(false);
+                    await processEvent(e, svcs).ConfigureAwait(false);
                 }
                 catch (Exception err)
                 {
@@ -69,13 +78,15 @@ namespace EventBus.RabbitMQ
                     throw;
                 }
             };
-            Channel.BasicConsume(targetQueue, true, consumer);
+            Channel.BasicConsume(quSpec.Queue, true, consumer);
         }
 
 
-        private async Task ProcessEvent<TService>(string eventName, string msgText, IEnumerable<TService> svcs)
+        private async Task ProcessEvent<TService>( BasicDeliverEventArgs orginalMsg, IEnumerable<TService> svcs)
             where TService : class
         {
+            //var eventName = orginalMsg.RoutingKey;
+            var msgText = Encoding.UTF8.GetString(orginalMsg.Body);
             var type = typeof(TService);
             var msg = QuRegulation.Transfer.ToObject<QuMsg>(msgText);
             //type.GetInterfaces
@@ -93,9 +104,28 @@ namespace EventBus.RabbitMQ
             foreach (var svc in svcs)
             {
                 //methodInfo.Invoke(svc, methodparams);
-                await Task.Run(() => methodInfo.Invoke(svc, methodparams)).ConfigureAwait(false); 
+                if (string.IsNullOrEmpty(orginalMsg.BasicProperties.ReplyTo))
+                {
+                    await Task.Run(() => methodInfo.Invoke(svc, methodparams)).ConfigureAwait(false);
+                }
+                else
+                {
+                    object rlt= await Task<object>.Run(() => methodInfo.Invoke(svc, methodparams)).ConfigureAwait(false);
+                    //IQuCorrleation quRlt = (typeof(IQuCorrleation).IsAssignableFrom(methodInfo.ReturnType))
+                    //    ? rlt as IQuCorrleation
+                    //    : new QuResult<object>(rlt);
+                    //quRlt.CorrleationId= orginalMsg.BasicProperties.CorrelationId;
+                    rlt = (typeof(QuResult).IsAssignableFrom(methodInfo.ReturnType)) ? ((QuResult)rlt).Value : rlt;
+                    QuMsg repMsg = new QuMsg(new object[] { orginalMsg.BasicProperties.CorrelationId,rlt });                    
+                    //repMsg.CorrleationId = orginalMsg.BasicProperties.CorrelationId;
+                    repMsg.MethodName = nameof(IQuResponseService.ReceiveResponse);
+                    //Channel.QueueDeclare(orginalMsg.BasicProperties.ReplyTo, queueSpec.Durable, queueSpec.Exclusive, queueSpec.AutoDelete, null);
+                    var rspMessage = QuRegulation.Transfer.ToText(repMsg);//JsonConvert.SerializeObject(msg);
+                    var body = Encoding.UTF8.GetBytes(rspMessage);
+                    Channel.BasicPublish("", orginalMsg.BasicProperties.ReplyTo, null, body);
+                }
             }
-           
+            
         }
                
     }

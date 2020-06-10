@@ -115,7 +115,7 @@ namespace EventBus.RabbitMQ
                     //    ? rlt as IQuCorrleation
                     //    : new QuResult<object>(rlt);
                     //quRlt.CorrleationId= orginalMsg.BasicProperties.CorrelationId;
-                    rlt = (typeof(QuResult).IsAssignableFrom(methodInfo.ReturnType)) ? ((QuResult)rlt).Value : rlt;
+                    rlt = (typeof(QuResult).IsAssignableFrom(methodInfo.ReturnType)) ? ((QuResult)rlt).Value :rlt;
                     QuMsg repMsg = new QuMsg(new object[] { orginalMsg.BasicProperties.CorrelationId,rlt });                    
                     //repMsg.CorrleationId = orginalMsg.BasicProperties.CorrelationId;
                     repMsg.MethodName = nameof(IQuResponseService.ReceiveResponse);

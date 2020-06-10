@@ -7,6 +7,7 @@
 using Common.Contract;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Support.Net.Proxy;
@@ -56,10 +57,11 @@ namespace EventBus.RabbitMQ
             var replyQueue = string.IsNullOrEmpty(msg.ReplyQueue) ?queueSpec.ReplyQueue: msg.ReplyQueue;
             IQuCorrleation quRlt=null;
             IBasicProperties props = null;
+            bool immediatelyWaitRasult=false;
             bool noReturn = methodInfo.ReturnType.Equals(typeof(void));            
             if(!noReturn)
             {
-                quRlt=RegistQuReslut(methodInfo, queueSpec, msg);
+                quRlt=RegistQuReslut(methodInfo, queueSpec, msg, out immediatelyWaitRasult);
                 if (quRlt != null)
                 {
                     props = Channel.CreateBasicProperties();
@@ -77,24 +79,29 @@ namespace EventBus.RabbitMQ
                 StartListeningReslutQueue(replyQueue);
             }
             Channel.BasicPublish("", targetQueue, props, body);
-            return (noReturn) ? 
-                null : 
-                (quRlt != null) ?quRlt:Activator.CreateInstance(methodInfo.ReturnParameter.ParameterType);
+            if (noReturn || quRlt == null) return null;
+            if (immediatelyWaitRasult){
+                var obj= responseService.Wait(methodInfo.ReturnParameter.ParameterType,quRlt, defaultWaitTimeout);
+                return obj;
+            }
+            return quRlt;
+            //return Activator.CreateInstance(methodInfo.ReturnParameter.ParameterType);
+
         }
         public TService Svc
         {
             get { return realProxy.Entity; }
         }
-        private IQuCorrleation RegistQuReslut(MethodInfo methodInfo, QuSpecAttribute queueSpec,QuMsg msg)
+        private IQuCorrleation RegistQuReslut(MethodInfo methodInfo, QuSpecAttribute queueSpec,QuMsg msg,out bool immediatelyWaitRasult)
         {
-            bool noReturn = !typeof(IQuCorrleation).IsAssignableFrom(methodInfo.ReturnType);
-            if (noReturn) return null;
+            immediatelyWaitRasult = !typeof(IQuCorrleation).IsAssignableFrom(methodInfo.ReturnType);
+            //if (immediatelyWaitRasult) return null;
             //var type=typeof(QuResult<>).MakeGenericType(methodInfo.ReturnType.GetGenericArguments());
-            IQuCorrleation quRlt = Activator.CreateInstance(methodInfo.ReturnType) as IQuCorrleation;
+            IQuCorrleation quRlt =(immediatelyWaitRasult)?new QuResult(): Activator.CreateInstance(methodInfo.ReturnType) as IQuCorrleation;
             quRlt.CorrleationId = string.IsNullOrEmpty(msg.CorrleationId)?msg.Id:msg.CorrleationId;            
-            quResultMap ??= new Dictionary<string, IQuCorrleation>();
-            lock (this)
-                quResultMap[quRlt.CorrleationId] = quRlt;
+            //quResultMap ??= new Dictionary<string, IQuCorrleation>();
+            //lock (this)
+            //    quResultMap[quRlt.CorrleationId] = quRlt;
             return quRlt;
         }
         private void StartListeningReslutQueue(string replyQueue)
@@ -136,7 +143,7 @@ namespace EventBus.RabbitMQ
         
         private RealProxy<TService> realProxy = new RealProxy<TService>();
         private Dictionary<MethodInfo, QuSpecAttribute> queueOfMethodMap = new Dictionary<MethodInfo, QuSpecAttribute>();
-        private Dictionary<string, IQuCorrleation> quResultMap;
+        //private Dictionary<string, IQuCorrleation> quResultMap;
         private bool isListeningReslutQueue;
         private QuResponseService responseService = QuResponseService.Instance;
     }

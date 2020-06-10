@@ -37,7 +37,7 @@ namespace Service.Ordering.Api.Controllers
         //[Route("Hello")]
         [ApiSpec(HTTP.POST,typeof(IHelloWorldService), nameof(IHelloWorldService.Hello))]
         
-        public HelloWeather Hello(string id1,[FromQuery]int id2, [FromHeader]DateTime id3, [FromBody]HelloInput inp)
+        public HelloWeather Hello(string id1,[FromQuery]long id2, [FromHeader]DateTime id3, [FromBody]HelloInput inp)
         {
             return svc.Hello(id1,id2,id3,inp);
         }

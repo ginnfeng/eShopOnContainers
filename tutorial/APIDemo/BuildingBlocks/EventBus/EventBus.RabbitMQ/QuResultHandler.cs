@@ -20,7 +20,7 @@ namespace EventBus.RabbitMQ
             
             CorrleationId = cid;
         }        
-        private JObject Rlt { get; set; }
+        private object Rlt { get; set; }
         public string CorrleationId { get; set; }
 
         public void StartWatch()
@@ -28,13 +28,13 @@ namespace EventBus.RabbitMQ
             returnEvent = new AutoResetEvent(false);
             returnEvent.Reset();
         }
-        public void AssignResult(JObject rlt)
+        public void AssignResult(object rlt)
         {
             Rlt = rlt;
             returnEvent.Set();
         }
         
-        public JObject Wait(TimeSpan timeOut)
+        public object Wait(TimeSpan timeOut)
         {
             
             bool isTrue = returnEvent.WaitOne(timeOut);

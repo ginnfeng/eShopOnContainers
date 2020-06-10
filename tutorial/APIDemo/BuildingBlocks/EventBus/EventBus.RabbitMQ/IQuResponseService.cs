@@ -14,6 +14,6 @@ namespace EventBus.RabbitMQ
     [QuSpec(Exclusive =false,AutoDelete =true)]
     internal interface IQuResponseService
     {
-        void ReceiveResponse(string corrleationId,JObject rlt);
+        void ReceiveResponse(string corrleationId,object rlt);
     }
 }

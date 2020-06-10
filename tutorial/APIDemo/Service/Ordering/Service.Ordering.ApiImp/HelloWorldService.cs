@@ -42,7 +42,7 @@ namespace Service.Ordering.ApiImp
             .ToArray();
         }
 
-        public HelloWeather Hello(string id1, int id2, DateTime id3, HelloInput inp)
+        public HelloWeather Hello(string id1, long id2, DateTime id3, HelloInput inp)
         {
             var rng = new Random();
             return new HelloWeather()

@@ -27,8 +27,8 @@ namespace Service.Ordering.Contract.Servic
     [ApiSpec(typeof(IHelloWorldService), RouteTemplate.API_VER_SVC)]
     public interface IHelloWorldService: IHelloService
     {
-        [ApiSpec("hello/{id1}")]
-        HelloWeather Hello(string id1, int id2, DateTime id3, HelloInput inp);
+        [ApiSpec("hello/{id1}")]//在Queue的解法參數若傳int會有前端總會傳long的bug，
+        HelloWeather Hello(string id1, long id2, DateTime id3, HelloInput inp);
 
         [ApiSpec("HelloGet")]
         string HelloGet(string id1, string id2);

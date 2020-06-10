@@ -20,7 +20,7 @@ namespace EventBus.RabbitMQ
         {
 
         }
-        public void ReceiveResponse(string corrleationId, JObject rlt)
+        public void ReceiveResponse(string corrleationId, object rlt)
         {
             QuResultHandler rltHlper;
             lock (this)
@@ -56,14 +56,32 @@ namespace EventBus.RabbitMQ
                 if (!rltmap.TryGetValue(rltStamp.CorrleationId, out rltHlper))
                     throw new NullReferenceException(nameof(Wait));
             }
-            var jRlt = rltHlper.Wait(timeOut);
-            var rlt = jRlt.ToObject<T>();
+            var obj = rltHlper.Wait(timeOut);
+            var jObj = obj as JObject;
+            var rlt = (jObj!=null)? jObj.ToObject<T>():(T)obj;
             lock (this)
                 rltmap.Remove(rltHlper.CorrleationId);
             rltHlper.Dispose();
             return rlt;
             
         }
+        public object Wait(Type retType,IQuCorrleation rltStamp, TimeSpan timeOut)
+        {
+            QuResultHandler rltHlper;
+            lock (this)
+            {
+                if (!rltmap.TryGetValue(rltStamp.CorrleationId, out rltHlper))
+                    throw new NullReferenceException(nameof(Wait));
+            }
+            var obj = rltHlper.Wait(timeOut);
+            var jObj = obj as JObject;
+            var rlt = (jObj != null) ? jObj.ToObject(retType) : obj;
+            lock (this)
+                rltmap.Remove(rltHlper.CorrleationId);
+            rltHlper.Dispose();
+            return rlt;
+        }
+
         public void Dispose()
         {
             Dispose(true);

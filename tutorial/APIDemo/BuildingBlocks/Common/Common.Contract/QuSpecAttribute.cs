@@ -30,16 +30,20 @@ namespace Common.Contract
         {
             var typeSpec = TakeSpec(type);
             var methodSpec = methodInfo.GetCustomAttribute<QuSpecAttribute>();
-            methodSpec ??= typeSpec;
-            if(string.IsNullOrEmpty(methodSpec.Queue))
-                methodSpec.Queue = typeSpec.Queue;
+            if (methodSpec != null) {
+                if (string.IsNullOrEmpty(methodSpec.Queue))
+                    methodSpec.Queue = $"{typeSpec.Queue}:{methodInfo.Name}";
+            }
+            else 
+                methodSpec ??= typeSpec;            
             methodSpec.ReplyQueue = typeSpec.ReplyQueue;//便免Client端啟動過多listener
             return methodSpec;
         }
         static public QuSpecAttribute TakeSpec(Type type)
         {
+            
             var spec=type.GetCustomAttribute<QuSpecAttribute>();
-            return (spec != null) ? spec : new QuSpecAttribute(type.Name) { ReplyQueue=$"@{type.Name}"};
+            return (spec != null) ? spec : new QuSpecAttribute(type.Name) { ReplyQueue=$"#{type.Name}@{Environment.MachineName}"};
         }
     }
 }

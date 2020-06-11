@@ -33,9 +33,11 @@ namespace Service.Ordering.Contract.Servic
         [ApiSpec("HelloGet")]
         string HelloGet(string id1, string id2);
 
+        [QuSpec]
         [ApiSpec("HelloPost")]
-        string HelloPost(string id1, string id2);        
+        string HelloPost(string id1, string id2);
 
+        [QuSpec]
         [ApiSpec("")]
         IEnumerable<HelloWeather> DefaultGet();
     }

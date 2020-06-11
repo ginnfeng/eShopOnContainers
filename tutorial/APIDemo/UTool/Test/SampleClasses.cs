@@ -9,7 +9,8 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
-
+using Service.Ordering.Contract.Entity;
+using Service.Ordering.Contract.Servic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -287,5 +288,31 @@ namespace UTool.Test
     }
     #endregion  
 
+    #region *****MyMvcModel*****
 
+    public interface IMyMvcModel
+    {
+        IEnumerable<HelloWeather> QueryWeather();
+        string GetCustomerInfo();
+    }
+
+    public class MyMvcModel : IMyMvcModel
+    {
+        public MyMvcModel(IHelloWorldService svc)
+        {
+            Svc = svc;
+        }
+        private IHelloWorldService Svc { get;}
+        public string GetCustomerInfo()
+        {
+            return Svc.HelloGet("Unit Testing", "From MyMvcModel");
+        }
+
+        public IEnumerable<HelloWeather> QueryWeather()
+        {
+            return Svc.DefaultGet();
+        }
+    }
+
+    #endregion
 }

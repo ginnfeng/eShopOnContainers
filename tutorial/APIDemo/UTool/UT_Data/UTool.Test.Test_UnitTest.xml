@@ -1,0 +1,10 @@
+<UTest id="UTool.Test.Test_UnitTest">
+  <TestCase>
+    <T_1>
+    </T_1>
+    <T_MyMvcModel_GetCustomerInfo>
+    </T_MyMvcModel_GetCustomerInfo>
+    <T_MyMvcModel_QueryWeather>
+    </T_MyMvcModel_QueryWeather>
+  </TestCase>
+</UTest>

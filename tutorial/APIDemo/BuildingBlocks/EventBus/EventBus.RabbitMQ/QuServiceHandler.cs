@@ -56,7 +56,7 @@ namespace EventBus.RabbitMQ
         {
             Subscribe<TService>(quSpec, new TService[] { svc }, ProcessEvent);            
         }
-        private void Subscribe<TService>(QuSpecAttribute quSpec, IEnumerable<TService> svcs, Func<BasicDeliverEventArgs, IEnumerable<TService>, Task> processEvent)
+        private void Subscribe<TService>(QuSpecAttribute quSpec, IEnumerable<TService> svcs, Func<string, IBasicProperties, IEnumerable<TService>, Task> processEvent)
             where TService : class
         {            
             Channel.QueueDeclare(quSpec.Queue, quSpec.Durable, quSpec.Exclusive, quSpec.AutoDelete, null);            
@@ -66,10 +66,10 @@ namespace EventBus.RabbitMQ
             {
                 //e.BasicProperties.ReplyTo;
                 //var eventName = e.RoutingKey;
-                //var message = Encoding.UTF8.GetString(e.Body);
+                var msgText = Encoding.UTF8.GetString(e.Body);
                 try
                 {
-                    await processEvent(e, svcs).ConfigureAwait(false);
+                    await processEvent(msgText,e.BasicProperties, svcs).ConfigureAwait(false);
                 }
                 catch (Exception err)
                 {
@@ -82,11 +82,10 @@ namespace EventBus.RabbitMQ
         }
 
 
-        private async Task ProcessEvent<TService>( BasicDeliverEventArgs orginalMsg, IEnumerable<TService> svcs)
+        private async Task ProcessEvent<TService>(string msgText,IBasicProperties basicProperties, IEnumerable<TService> svcs)
             where TService : class
         {
-            //var eventName = orginalMsg.RoutingKey;
-            var msgText = Encoding.UTF8.GetString(orginalMsg.Body);
+            //var eventName = orginalMsg.RoutingKey;            
             var type = typeof(TService);
             var msg = QuRegulation.Transfer.ToObject<QuMsg>(msgText);
             //type.GetInterfaces
@@ -104,7 +103,7 @@ namespace EventBus.RabbitMQ
             foreach (var svc in svcs)
             {
                 //methodInfo.Invoke(svc, methodparams);
-                if (string.IsNullOrEmpty(orginalMsg.BasicProperties.ReplyTo))
+                if (string.IsNullOrEmpty(basicProperties.ReplyTo))
                 {
                     await Task.Run(() => methodInfo.Invoke(svc, methodparams)).ConfigureAwait(false);
                 }
@@ -116,13 +115,13 @@ namespace EventBus.RabbitMQ
                     //    : new QuResult<object>(rlt);
                     //quRlt.CorrleationId= orginalMsg.BasicProperties.CorrelationId;
                     rlt = (typeof(QuResult).IsAssignableFrom(methodInfo.ReturnType)) ? ((QuResult)rlt).Value :rlt;
-                    QuMsg repMsg = new QuMsg(new object[] { orginalMsg.BasicProperties.CorrelationId,rlt });                    
+                    QuMsg repMsg = new QuMsg(new object[] { basicProperties.CorrelationId,rlt });                    
                     //repMsg.CorrleationId = orginalMsg.BasicProperties.CorrelationId;
                     repMsg.MethodName = nameof(IQuResponseService.ReceiveResponse);
                     //Channel.QueueDeclare(orginalMsg.BasicProperties.ReplyTo, queueSpec.Durable, queueSpec.Exclusive, queueSpec.AutoDelete, null);
                     var rspMessage = QuRegulation.Transfer.ToText(repMsg);//JsonConvert.SerializeObject(msg);
                     var body = Encoding.UTF8.GetBytes(rspMessage);
-                    Channel.BasicPublish("", orginalMsg.BasicProperties.ReplyTo, null, body);
+                    Channel.BasicPublish("", basicProperties.ReplyTo, null, body);
                 }
             }
             

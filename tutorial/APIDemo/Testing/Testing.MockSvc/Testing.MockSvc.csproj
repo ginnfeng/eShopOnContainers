@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="DataSamples\HelloWeather_ListData_001.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="DataSamples\HelloWeather_ListData_001.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\Common\Common.Support\Common.Support.csproj" />
+    <ProjectReference Include="..\..\Service\Ordering\Service.Ordering.Contract\Service.Ordering.Contract.csproj" />
+  </ItemGroup>
+
+</Project>

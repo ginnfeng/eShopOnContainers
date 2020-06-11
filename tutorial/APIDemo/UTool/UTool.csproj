@@ -32,6 +32,7 @@
     <ProjectReference Include="..\BuildingBlocks\EventBus\EventBus.Domain\EventBus.Domain.csproj" />
     <ProjectReference Include="..\BuildingBlocks\EventBus\EventBus.RabbitMQ\EventBus.RabbitMQ.csproj" />
     <ProjectReference Include="..\BuildingBlocks\IoC\IoC.DI\IoC.DI.csproj" />
+    <ProjectReference Include="..\Testing\Testing.MockSvc\Testing.MockSvc.csproj" />
   </ItemGroup>
 
   <ItemGroup>

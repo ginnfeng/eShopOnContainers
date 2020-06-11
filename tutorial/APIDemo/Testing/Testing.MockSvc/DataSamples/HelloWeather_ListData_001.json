@@ -1,0 +1,37 @@
+﻿[
+  {
+    "UserName": "王大明",
+    "Date": "2020-06-12T09:54:57.7356063+08:00",
+    "TemperatureC": 52,
+    "TemperatureF": 125,
+    "Summary": "Scorching"
+  },
+  {
+    "UserName": null,
+    "Date": "2020-06-13T09:54:57.7362836+08:00",
+    "TemperatureC": -20,
+    "TemperatureF": -3,
+    "Summary": "Mild"
+  },
+  {
+    "UserName": null,
+    "Date": "2020-06-14T09:54:57.736287+08:00",
+    "TemperatureC": -3,
+    "TemperatureF": 27,
+    "Summary": "Mild"
+  },
+  {
+    "UserName": null,
+    "Date": "2020-06-15T09:54:57.7362873+08:00",
+    "TemperatureC": 18,
+    "TemperatureF": 64,
+    "Summary": "Cool"
+  },
+  {
+    "UserName": null,
+    "Date": "2020-06-16T09:54:57.7362875+08:00",
+    "TemperatureC": -15,
+    "TemperatureF": 6,
+    "Summary": "Warm"
+  }
+]

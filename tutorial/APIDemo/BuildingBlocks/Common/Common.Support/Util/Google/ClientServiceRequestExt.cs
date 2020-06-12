@@ -15,7 +15,7 @@ namespace Support.Open.Google
             where T : new()
         {
             var response = it.Execute();
-            return Singleton<SheetsEntityHelper>.Instance.ToEntities<T>(response.Values);
+            return Singleton0<SheetsEntityHelper>.Instance.ToEntities<T>(response.Values);
         }
     }
 }

@@ -161,8 +161,8 @@ namespace Support.Storage
         BaseTransfer GetTransfer()
         {
             return (format == FormatMode.Xml)
-                    ? (BaseTransfer)Singleton<XmlTransfer>.Instance
-                    : Singleton<BinaryTransfer>.Instance;
+                    ? (BaseTransfer)Singleton0<XmlTransfer>.Instance
+                    : Singleton0<BinaryTransfer>.Instance;
         }
         private string GetDefaultBaseBirectory()
         {

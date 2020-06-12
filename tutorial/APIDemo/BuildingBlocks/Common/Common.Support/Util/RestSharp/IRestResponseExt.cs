@@ -35,7 +35,7 @@ namespace Support.Open.RestSharp
         public static T XmlToObject<T>(this IRestResponse it, Func<string, string> contentMethod = null)
         //where T:class
         {
-            return Singleton<XmlTransfer>.Instance.ToObject<T>((contentMethod == null) ? it.Content : contentMethod(it.Content));
+            return Singleton0<XmlTransfer>.Instance.ToObject<T>((contentMethod == null) ? it.Content : contentMethod(it.Content));
         }
     }
 }

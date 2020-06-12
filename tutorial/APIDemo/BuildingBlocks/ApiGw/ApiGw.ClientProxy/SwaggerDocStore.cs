@@ -19,7 +19,7 @@ namespace ApiGw.ClientProxy
     {
         static public SwaggerDocStore Instance
         {
-            get { return Singleton<SwaggerDocStore>.Instance; }
+            get { return Singleton0<SwaggerDocStore>.Instance; }
         }
         public SwaggerDocStore()
         {

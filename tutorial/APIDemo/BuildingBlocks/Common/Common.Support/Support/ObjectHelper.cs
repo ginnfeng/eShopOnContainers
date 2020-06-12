@@ -183,7 +183,7 @@ namespace Support
         static public void Reset<T>(T target)
             where T:class,new()
         {
-            CopyProperties(Singleton<T>.Instance, target, true);  
+            CopyProperties(Singleton0<T>.Instance, target, true);  
         }
         static bool IsNullableType(Type type)
         {

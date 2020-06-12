@@ -23,7 +23,7 @@ namespace Support
         {
             get
             {
-                return Singleton<SupportSetting>.Instance;
+                return Singleton0<SupportSetting>.Instance;
             }
         }
 

@@ -26,7 +26,7 @@ namespace ApiGw.ClientProxy
         {
             get
             {
-                return Singleton<HttpSpecFactory<TServiceInterface>>.Instance;
+                return Singleton0<HttpSpecFactory<TServiceInterface>>.Instance;
             }
         }
         public HttpSpecFactory()

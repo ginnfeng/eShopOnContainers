@@ -22,7 +22,7 @@ namespace Support.Helper
     {
         static public EnumParser<TEnum> Instance 
         { 
-            get { return Singleton<EnumParser<TEnum>>.Instance; } 
+            get { return Singleton0<EnumParser<TEnum>>.Instance; } 
         }
 
         public EnumParser()

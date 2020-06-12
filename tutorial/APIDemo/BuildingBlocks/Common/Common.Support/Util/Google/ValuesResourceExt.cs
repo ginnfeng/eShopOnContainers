@@ -38,6 +38,6 @@ namespace Support.Open.Google
             return request;
         }
 
-        static private SheetsEntityHelper sheetsEntityHelper = Singleton<SheetsEntityHelper>.Instance;
+        static private SheetsEntityHelper sheetsEntityHelper = Singleton0<SheetsEntityHelper>.Instance;
     }
 }

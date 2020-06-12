@@ -51,7 +51,7 @@ namespace Support.Log
     public class DailyLogger : DailyLogger<ActionType>
     {
 
-        static public DailyLogger Instance { get { return Support.Singleton<DailyLogger>.Instance; } }
+        static public DailyLogger Instance { get { return Support.Singleton0<DailyLogger>.Instance; } }
         public void WriteStartupLog(string info)
         {
             var proc = Process.GetCurrentProcess();

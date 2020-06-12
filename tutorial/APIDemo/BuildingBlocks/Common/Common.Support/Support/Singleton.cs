@@ -3,6 +3,32 @@
 namespace Support
 {
     public static class Singleton<T>
+        where T : class//, new()
+    {
+        private static T instance;
+        static public T Create(Func<T> createFunc)
+        {
+            lock (typeof(T))
+            {
+                instance = createFunc();
+            }
+            return instance;
+        }
+
+        static public T Instance
+        {
+            get
+            {
+                lock (typeof(T))
+                {
+                    instance ??= Activator.CreateInstance<T>();
+                }
+                return instance;
+            }
+        }
+       
+    }
+    public static class Singleton0<T>
         where T : class, new()
     {
         private static T instance;

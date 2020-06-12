@@ -16,7 +16,7 @@ namespace Support.Helper
         {
             get
             {
-                return Singleton<DataTableHelper>.Instance;
+                return Singleton0<DataTableHelper>.Instance;
             }
         }
 

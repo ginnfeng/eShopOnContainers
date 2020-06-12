@@ -21,7 +21,7 @@ namespace Support.Net.Util
         /// </summary>
         static public AssemblyContainer Instance
         {
-            get { return Support.Singleton<AssemblyContainer>.Instance; }
+            get { return Support.Singleton0<AssemblyContainer>.Instance; }
         }
 
         /// <param name="type">可能是來自其他AppDomain之Type</param>

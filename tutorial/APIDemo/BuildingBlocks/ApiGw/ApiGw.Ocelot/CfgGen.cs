@@ -23,7 +23,7 @@ namespace ApiGw.Ocelot
         {
             get
             {
-                return Singleton<CfgGen>.Instance;
+                return Singleton0<CfgGen>.Instance;
             }
         }
         public CfgGen()

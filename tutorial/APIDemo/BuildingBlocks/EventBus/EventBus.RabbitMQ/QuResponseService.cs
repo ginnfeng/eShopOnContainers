@@ -14,7 +14,7 @@ namespace EventBus.RabbitMQ
 {
     internal class QuResponseService : IQuResponseService,IDisposable
     {
-        static public QuResponseService Instance => Singleton<QuResponseService>.Instance;
+        static public QuResponseService Instance => Singleton0<QuResponseService>.Instance;
         
         public QuResponseService()
         {

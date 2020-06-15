@@ -16,18 +16,22 @@ using System.Threading.Tasks;
 using Support.Net.Util;
 using System.Reflection;
 using Common.Contract;
+using Support.Net.Proxy;
 
 namespace EventBus.RabbitMQ
 {
-    public class QuServiceHandler: QuBase
+    public class QuListener: QuBase
     {
-        public QuServiceHandler()            
+        public QuListener(string host, IServiceProvider serviceProvider = null)
+            : base(host, serviceProvider)
         {
         }
-        public QuServiceHandler(IServiceProvider serviceProvider)
-            :base(serviceProvider)
-        {           
+        public QuListener(ConnectionFactory connFactory, IServiceProvider serviceProvider)
+            : base(connFactory, serviceProvider)
+        {
+            
         }
+        
         public void Subscribe<TService>()
            where TService : class
         {
@@ -59,8 +63,8 @@ namespace EventBus.RabbitMQ
         private void Subscribe<TService>(QuSpecAttribute quSpec, IEnumerable<TService> svcs, Func<string, IBasicProperties, IEnumerable<TService>, Task> processEvent)
             where TService : class
         {            
-            Channel.QueueDeclare(quSpec.Queue, quSpec.Durable, quSpec.Exclusive, quSpec.AutoDelete, null);            
-            var consumer = new AsyncEventingBasicConsumer(Channel);
+            ListeningChannel.QueueDeclare(quSpec.Queue, quSpec.Durable, quSpec.Exclusive, quSpec.AutoDelete, null);            
+            var consumer = new AsyncEventingBasicConsumer(ListeningChannel);
             //consumer.Received += ConsumerReceived;
             consumer.Received += async (sender, e) =>
             {
@@ -78,7 +82,7 @@ namespace EventBus.RabbitMQ
                     throw;
                 }
             };
-            Channel.BasicConsume(quSpec.Queue, true, consumer);
+            ListeningChannel.BasicConsume(quSpec.Queue, true, consumer);
         }
 
 
@@ -121,11 +125,37 @@ namespace EventBus.RabbitMQ
                     //Channel.QueueDeclare(orginalMsg.BasicProperties.ReplyTo, queueSpec.Durable, queueSpec.Exclusive, queueSpec.AutoDelete, null);
                     var rspMessage = QuRegulation.Transfer.ToText(repMsg);//JsonConvert.SerializeObject(msg);
                     var body = Encoding.UTF8.GetBytes(rspMessage);
-                    Channel.BasicPublish("", basicProperties.ReplyTo, null, body);
+                    using(var channel=Conn.Entity.Create())
+                        channel.Entity.BasicPublish("", basicProperties.ReplyTo, null, body);
                 }
             }
-            
+
         }
-               
+        protected IModel ListeningChannel
+        {
+            get
+            {
+                listeningChannel ??= Conn.Entity.Create();
+                return listeningChannel.Entity;
+            }        
+        }
+        protected override void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    //TODO: Add resource.Dispose() logic here 
+                    listeningChannel?.Dispose();
+                    base.Dispose(disposing);
+                }
+            }
+            //resource = null;
+            disposed = true;
+
+        }
+        private bool disposed;
+        private DisposableAdapter<IModel> listeningChannel;
+
     }
 }

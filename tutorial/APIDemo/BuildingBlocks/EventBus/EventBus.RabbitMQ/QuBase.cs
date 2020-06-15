@@ -6,6 +6,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
+using Support.Net.Proxy;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,20 +15,22 @@ namespace EventBus.RabbitMQ
 {
     public class QuBase:IDisposable
     {
-        public QuBase()
-            :this(null)
+        public QuBase(string host, IServiceProvider serviceProvider)
+            :this((ConnectionFactory)null, serviceProvider)
         {
+            Conn=QuConnPool.Instance.Create(host);            
         }
-        public QuBase(IServiceProvider serviceProvider)
+        public QuBase(ConnectionFactory connFactory, IServiceProvider serviceProvider)           
         {
-            ConnFactory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };//暫時   
-
+            if(connFactory!=null)
+                Conn = QuConnPool.Instance.Create(connFactory);            
             if (serviceProvider == null) return;
             TheServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
             ILoggerFactory loggerFactory = serviceProvider.GetService<ILoggerFactory>();
             if (loggerFactory != null)
-                TheLogger = loggerFactory.CreateLogger<QuServiceHandler>();
+                TheLogger = loggerFactory.CreateLogger<QuListener>();
         }
+        
         public void Dispose()
         {
             Dispose(true);
@@ -40,39 +43,23 @@ namespace EventBus.RabbitMQ
         {
             if (!disposed)
             {
-                if (disposing && Conn != null)
+                if (disposing)
                 {
-                    //TODO: Add resource.Dispose() logic here                    
-                    if (Channel != null) Channel.Dispose();
-                    Conn.Dispose();
+                    //TODO: Add resource.Dispose() logic here                     
+                    Conn?.Dispose();
                 }
             }
             //resource = null;
-            disposed = true;
-            
+            disposed = true;            
         }
         
-        protected ConnectionFactory ConnFactory { get; private set; }
+        
         protected IServiceScopeFactory TheServiceScopeFactory { get; }
         protected ILogger TheLogger { get; }
-        protected IConnection Conn 
-        { 
-            get {
-                conn ??= ConnFactory.CreateConnection();
-                return conn;
-            } 
-        }
-        protected IModel Channel
-        {
-            get
-            {
-                channel ??= Conn.CreateModel();
-                return channel;
-            }
-        }
-        private bool disposed;
-        private IConnection conn;
-        private IModel channel;
+        protected DisposableAdapter<QuConn> Conn { get; }
         
+        private bool disposed;
+        
+
     }
 }

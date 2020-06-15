@@ -10,6 +10,7 @@ using Support.Net.Proxy;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace EventBus.RabbitMQ
 {
@@ -18,86 +19,38 @@ namespace EventBus.RabbitMQ
         static public QuConnPool Instance=> Singleton<QuConnPool>.Instance;
         public QuConnPool()
         {
-            Func<Uri, IConnection> method = (uri) => { return this.connFactory.CreateConnection(); };
-            connPool = new SmartPool<IConnection, Uri>(method);
+            Func<ConnectionFactory, QuConn> method = (connFactory) => { return new QuConn(connFactory.CreateConnection()); };
+            connPool = new SmartPool<QuConn,ConnectionFactory>(method,(connfactory)=>$"{connfactory.GetType().Name}{connfactory.GetHashCode()}");
+            connPool.PoolMaxCount = 1;
         }
-        public DisposableAdapter<IConnection> Create(string host)
+       
+        public DisposableAdapter<QuConn> Create(string host)
         {
-            connFactory.HostName = host;
-            var conn=connPool.Create(new Uri(host));
-            Reset2DefaultConnFactory();
-            return conn;
+            var connFactory = TakeDefaultConnectionFactory(host);
+            return connPool.Create(connFactory);
         }
-        public DisposableAdapter<IConnection> Create(ConnectionFactory connectionFactory=null)
+        public DisposableAdapter<QuConn> Create(ConnectionFactory connectionFactory)
         {
-            connectionFactory ??= defaultConnFactory;
-            connFactory = connectionFactory;
-            var conn=connPool.Create(new Uri(connFactory.HostName));
-            Reset2DefaultConnFactory();
-            return conn;
+            return connPool.Create(connectionFactory);
         }
-        private void Reset2DefaultConnFactory()
+        
+        public ConnectionFactory TakeDefaultConnectionFactory(string host)
         {
-            connFactory = defaultConnFactory;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-
-            // Use SupressFinalize in case a subclass of this type implements a finalizer.
-            System.GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
+            defaultConnectionFactoryMap ??= new Dictionary<string, ConnectionFactory>();
+            ConnectionFactory connFactory;
+            if (!defaultConnectionFactoryMap.TryGetValue(host,out connFactory))
             {
-                if (disposing && connPool!=null)
+                connFactory = new ConnectionFactory
                 {
-                    //TODO: Add resource.Dispose() logic here
-                    connPool.Dispose();
-                }
+                    HostName = host,
+                    DispatchConsumersAsync = true,
+                    AutomaticRecoveryEnabled = true
+                };
+                defaultConnectionFactoryMap[host] = connFactory;
             }
-            //resource = null;
-            disposed = true;
+            return connFactory;
         }
-        private bool disposed;
-        private SmartPool<IConnection, Uri> connPool;
-        private ConnectionFactory connFactory;
-        static private readonly ConnectionFactory defaultConnFactory = new ConnectionFactory
-        {
-            HostName="localhost",
-            DispatchConsumersAsync = true,
-            AutomaticRecoveryEnabled = true
-        };
-    }
 
-    public class QuChannelPool 
-    {
-        static QuChannelPool()
-        {
-            
-//            Func<Uri, IModel> method = (uri) => { return conn.CreateModel(); };
-//#pragma warning disable CA2000 // Dispose objects before losing scope            
-//            Singleton<SmartPool<IModel, Uri>>.Create(() => new SmartPool<IModel, Uri>(method));
-//#pragma warning restore CA2000 // Dispose objects before losing scope
-        }
-        public QuChannelPool(IConnection conn)
-        {
-            
-        }
-        private SmartPool<IModel, Uri> channelPool = Singleton<SmartPool<IModel, Uri>>.Instance;
-    }
-    public class QuChannel : IDisposable
-    {
-        public QuChannel(IConnection conn)
-        {
-            Func<Uri, IModel> method = (uri) => { return conn.CreateModel(); };
-#pragma warning disable CA2000 // Dispose objects before losing scope            
-            Singleton<SmartPool<IModel, Uri>>.Create(() => new SmartPool<IModel, Uri>(method));
-#pragma warning restore CA2000 // Dispose objects before losing scope
-        }
         public void Dispose()
         {
             Dispose(true);
@@ -113,13 +66,61 @@ namespace EventBus.RabbitMQ
                 if (disposing)
                 {
                     //TODO: Add resource.Dispose() logic here
+                    connPool?.Dispose();
                 }
             }
             //resource = null;
-            disposed = true;            
+            disposed = true;
         }
         private bool disposed;
-        private DisposableAdapter<IModel> channelDisposableAdapter;
-        
+        private SmartPool<QuConn, ConnectionFactory> connPool;
+        private Dictionary<string, ConnectionFactory> defaultConnectionFactoryMap;
     }
+    public  class QuConn : IDisposable
+    {       
+        internal QuConn(IConnection conn)
+        {
+            Init(conn);
+        }
+       
+        private void Init(IConnection conn)
+        {
+            this.conn = conn;
+            if (conn == null)
+                throw new NullReferenceException(nameof(Init));
+            ChannelPool = new SmartPool<IModel, string>(rckey => conn.CreateModel());
+            ChannelPool.PoolMaxCount = 1;
+        }
+        public DisposableAdapter<IModel> Create()
+        {
+            return ChannelPool.Create(typeof(IModel).Name);
+        }
+        public SmartPool<IModel, string> ChannelPool { get; private set; }
+        public void Dispose()
+        {
+            Dispose(true);
+
+            // Use SupressFinalize in case a subclass of this type implements a finalizer.
+            System.GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    //TODO: Add resource.Dispose() logic here
+                    ChannelPool?.Dispose();
+                    conn?.Dispose();
+                }
+            }
+            //resource = null;
+            disposed = true;
+        }
+        private bool disposed;        
+        private IConnection conn;
+    }
+
+    
 }

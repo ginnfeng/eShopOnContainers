@@ -19,13 +19,15 @@ namespace Support.Net.Container
             public TKey OriginKey { get; set; }
         }
 
-        public SmartPool(Func<TKey,TResource> method)
+        public SmartPool(Func<TKey,TResource> method,Func<TKey,string> rcKeyFunc=null)
         {
             this.PoolMaxCount = 10;
             this.PoolTimeOut = TimeSpan.FromSeconds(60);//秒
             this.createMethod = method;
+            this.rcKeyFunc = rcKeyFunc;
             timer = new Timer(OnTimerElapsed, null, this.PoolTimeOut, this.PoolTimeOut);            
         }
+        private Func<TKey, string> rcKeyFunc;
         void OnTimerElapsed(object state)
         {           
             lock (this)
@@ -112,13 +114,14 @@ namespace Support.Net.Container
                 }
             }
         }
+        public bool TakeAnyOneFromPool { get; set; }
         private RcInfo TakeOneResource(TKey oringalKey)
         {
             RcInfo rc = null;
             string rcId = this.TakeResourceId(oringalKey);
             Queue<RcInfo> rcs;
             lock (this)
-            {
+            {      
                 if (poolMap.TryGetValue(rcId, out rcs))
                 {
 
@@ -151,7 +154,9 @@ namespace Support.Net.Container
         private string TakeUsingId(TKey oringalKey)
         {
             var key = TakeResourceId(oringalKey);
-            return string.Format("{0}#{1}", Thread.CurrentThread.ManagedThreadId,key);
+            return (rcKeyFunc==null)
+                ?string.Format("{0}#{1}", Thread.CurrentThread.ManagedThreadId,key)
+                : rcKeyFunc(oringalKey);
         }
 
         public void Dispose()

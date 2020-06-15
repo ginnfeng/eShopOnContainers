@@ -22,10 +22,17 @@ namespace EventBus.RabbitMQ
     public class QuCleintProxy<TService>: QuBase,IServiceProxy<TService>
         where TService:class
     {
-        public QuCleintProxy()
-            :base(null)
+        public QuCleintProxy(string host, IServiceProvider serviceProvider=null)
+            : base(host, serviceProvider)
         {
-            realProxy.InvokeMethodEvent += RealProxyInvokeMethodEvent;            
+            realProxy.InvokeMethodEvent += RealProxyInvokeMethodEvent;
+            ResultListener = new QuListener(host, serviceProvider);
+        }
+        public QuCleintProxy(ConnectionFactory connFactory, IServiceProvider serviceProvider)
+            : base(connFactory, serviceProvider)
+        {
+            realProxy.InvokeMethodEvent += RealProxyInvokeMethodEvent;
+            ResultListener = new QuListener(connFactory, serviceProvider);
         }
         private TimeSpan defaultWaitTimeout = new TimeSpan(0, 0, 120);
         public T WaitResult<T>(QuResult<T> rltStamp)
@@ -46,47 +53,53 @@ namespace EventBus.RabbitMQ
         }
         private object RealProxyInvokeMethodEvent(MethodInfo methodInfo, ref object[] args)
         {
+            using (var channel = base.Conn.Entity.Create())
+                return DispatchMethod(channel.Entity,methodInfo, ref args);
+
+        }
+        private object DispatchMethod(IModel channel,MethodInfo methodInfo, ref object[] args)
+        {
             QuSpecAttribute queueSpec;
-            if(!queueOfMethodMap.TryGetValue(methodInfo,out queueSpec))
+            if (!queueOfMethodMap.TryGetValue(methodInfo, out queueSpec))
             {
                 queueSpec = QuRegulation<TService>.TakeQueueSpec(methodInfo);
                 queueOfMethodMap[methodInfo] = queueSpec;
             }
-            var msg = CreateQueueMessage(methodInfo,args);            
-            var targetQueue =string.IsNullOrEmpty(msg.TargetQueue)? queueSpec.Queue: msg.TargetQueue;
-            var replyQueue = string.IsNullOrEmpty(msg.ReplyQueue) ?queueSpec.ReplyQueue: msg.ReplyQueue;
-            IQuCorrleation quRlt=null;
+            var msg = CreateQueueMessage(methodInfo, args);
+            var targetQueue = string.IsNullOrEmpty(msg.TargetQueue) ? queueSpec.Queue : msg.TargetQueue;
+            var replyQueue = string.IsNullOrEmpty(msg.ReplyQueue) ? queueSpec.ReplyQueue : msg.ReplyQueue;
+            IQuCorrleation quRlt = null;
             IBasicProperties props = null;
-            bool immediatelyWaitRasult=false;
-            bool noReturn = methodInfo.ReturnType.Equals(typeof(void));            
-            if(!noReturn)
+            bool immediatelyWaitRasult = false;
+            bool noReturn = methodInfo.ReturnType.Equals(typeof(void));
+            if (!noReturn)
             {
-                quRlt=RegistQuReslut(methodInfo, queueSpec, msg, out immediatelyWaitRasult);
+                quRlt = RegistQuReslut(methodInfo, queueSpec, msg, out immediatelyWaitRasult);
                 if (quRlt != null)
                 {
-                    props = Channel.CreateBasicProperties();
+                    props = channel.CreateBasicProperties();
                     props.ReplyTo = queueSpec.ReplyQueue;
                     props.CorrelationId = quRlt.CorrleationId;
                 }
             }
-            Channel.QueueDeclare(targetQueue, queueSpec.Durable, queueSpec.Exclusive, queueSpec.AutoDelete, null);
+            channel.QueueDeclare(targetQueue, queueSpec.Durable, queueSpec.Exclusive, queueSpec.AutoDelete, null);
             var message = QuRegulation.Transfer.ToText(msg);//JsonConvert.SerializeObject(msg);
             var body = Encoding.UTF8.GetBytes(message);
-            
+
             if (quRlt != null)
             {
                 responseService.Register(quRlt);
                 StartListeningReslutQueue(replyQueue);
             }
-            Channel.BasicPublish("", targetQueue, props, body);
+            channel.BasicPublish("", targetQueue, props, body);
             if (noReturn || quRlt == null) return null;
-            if (immediatelyWaitRasult){
-                var obj= responseService.Wait(methodInfo.ReturnParameter.ParameterType,quRlt, defaultWaitTimeout);
+            if (immediatelyWaitRasult)
+            {
+                var obj = responseService.Wait(methodInfo.ReturnParameter.ParameterType, quRlt, defaultWaitTimeout);
                 return obj;
             }
             return quRlt;
             //return Activator.CreateInstance(methodInfo.ReturnParameter.ParameterType);
-
         }
         public TService Svc
         {
@@ -106,10 +119,9 @@ namespace EventBus.RabbitMQ
         }
         private void StartListeningReslutQueue(string replyQueue)
         {
-            var repSvcHandler=new QuServiceHandler();
             var quSpec = QuRegulation<IQuResponseService>.TakeQueueSpec();
             quSpec.Queue = replyQueue;
-            repSvcHandler.Subscribe<IQuResponseService>(responseService, quSpec);
+            ResultListener.Subscribe<IQuResponseService>(responseService, quSpec);
             //if (!isListeningReslutQueue)
             //{
             //    Channel.QueueDeclare(replyQueue, false, true, false, null);
@@ -139,8 +151,23 @@ namespace EventBus.RabbitMQ
                 MethodName = methodInfo.Name                
             };
         }
+        protected override void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    //TODO: Add resource.Dispose() logic here 
+                    ResultListener?.Dispose();
+                    base.Dispose(disposing);
+                }
+            }
+            //resource = null;
+            disposed = true;
 
-        
+        }
+        private bool disposed;
+        private QuListener ResultListener { get; }
         private RealProxy<TService> realProxy = new RealProxy<TService>();
         private Dictionary<MethodInfo, QuSpecAttribute> queueOfMethodMap = new Dictionary<MethodInfo, QuSpecAttribute>();
         //private Dictionary<string, IQuCorrleation> quResultMap;

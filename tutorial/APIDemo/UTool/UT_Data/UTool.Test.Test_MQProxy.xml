@@ -7,5 +7,7 @@
     <T_PublishTwoWay>"666"</T_PublishTwoWay>
     <T_PublishTwoWayAsync>"async"</T_PublishTwoWayAsync>
     <T_Publish2>"555"</T_Publish2>
+    <T_Test>
+    </T_Test>
   </TestCase>
 </UTest>

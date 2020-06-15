@@ -107,6 +107,20 @@ namespace Support.Net.Util
             }
             return null;
         }
+        static public List<TInfo> GetAllIncludBaseType<TInfo>(this Type it, Func<Type, TInfo[]> cond)
+            where TInfo : class
+        {
+            List<TInfo> list = new List<TInfo>();
+            list.AddRange(cond(it));
+            
+            var baseInterfacs = it.GetInterfaces();
+            foreach (var baseInterface in baseInterfacs)
+            {
+                list.AddRange(baseInterface.GetAllIncludBaseType(cond));
+            }
+            return list;
+        }
+
 
         static public bool IsXmlString(string it)
         {

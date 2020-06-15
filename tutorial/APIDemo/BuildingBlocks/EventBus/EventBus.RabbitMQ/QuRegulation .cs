@@ -32,7 +32,8 @@ namespace EventBus.RabbitMQ
         {
             Type type = typeof(TService);            
             var specs = new List<QuSpecAttribute>() { QuSpecAttribute.TakeSpec(type) };
-            var methodInfos= type.GetMethods();
+            
+            var methodInfos = type.GetAllIncludBaseType<MethodInfo>(t => t.GetMethods());
             foreach (var methodInfo in methodInfos)
             {
                 var methodSpec=QuSpecAttribute.TakeSpec(type,methodInfo);

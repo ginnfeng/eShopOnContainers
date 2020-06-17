@@ -2,24 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>74027a14-52ad-4c0d-b4d9-241f9e96b6cd</UserSecretsId>
+    <UserSecretsId>1b82447d-4d00-4445-9e46-4aeccb7d1ab0</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..</DockerfileContext>
     <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
+    <AssemblyName>Service.HelloWorld.Api</AssemblyName>
+    <RootNamespace>Service.HelloWorld.Api</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\WeatherForecastController.cs" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.8" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\Common\Common.Contract\Common.Contract.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\Common\Common.Policy\Common.Policy.csproj" />
-    <ProjectReference Include="..\Service.Banking.Contract\Service.Banking.Contract.csproj" />
+    <ProjectReference Include="..\Service.HelloWorld.ApiImp\Service.HelloWorld.ApiImp.csproj" />
+    <ProjectReference Include="..\Service.HelloWorld.Contract\Service.HelloWorld.Contract.csproj" />
   </ItemGroup>
 
 

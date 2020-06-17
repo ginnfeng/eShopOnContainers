@@ -5,13 +5,11 @@
 // **************************************************************************** 
 using EventBus.RabbitMQ;
 using RabbitMQ.Client;
-using Service.Ordering.ApiImp;
-using Service.Ordering.Contract.Entity;
-using Service.Ordering.Contract.Servic;
+using Service.HelloWorld.ApiImp;
+using Service.HelloWorld.Contract.Entity;
+using Service.HelloWorld.Contract.Servic;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using UTDll;
 namespace UTool.Test
 {

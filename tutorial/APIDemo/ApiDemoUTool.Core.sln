@@ -61,9 +61,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGw.ClientProxy.Ext", "Bu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Support", "BuildingBlocks\Common\Common.Support\Common.Support.csproj", "{B31A1A21-942A-4A29-AE96-59C5DDF3EB1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.MockSvc", "Testing\Testing.MockSvc\Testing.MockSvc.csproj", "{B517DAE9-7F58-4A92-BA0B-FF6C41B188E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing.MockSvc", "Testing\Testing.MockSvc\Testing.MockSvc.csproj", "{B517DAE9-7F58-4A92-BA0B-FF6C41B188E9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tesing", "Tesing", "{E39CCFB0-E20F-494A-B3DF-1A9A2DD449F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HelloWorld", "HelloWorld", "{55C0A87B-3D23-4906-884C-4EE1CF08FF7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.HelloWorld.Api", "Service\HelloWorld\Service.HelloWorld.Api\Service.HelloWorld.Api.csproj", "{EDC4703F-60CF-43F8-9DE7-5D2889A31B64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.HelloWorld.ApiImp", "Service\HelloWorld\Service.HelloWorld.ApiImp\Service.HelloWorld.ApiImp.csproj", "{E17D3F25-4D66-4936-A3A6-F48AB5CEEE28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.HelloWorld.Contract", "Service\HelloWorld\Service.HelloWorld.Contract\Service.HelloWorld.Contract.csproj", "{E0070BCC-26DD-4D0F-87BC-024928178E82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +159,18 @@ Global
 		{B517DAE9-7F58-4A92-BA0B-FF6C41B188E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B517DAE9-7F58-4A92-BA0B-FF6C41B188E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B517DAE9-7F58-4A92-BA0B-FF6C41B188E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDC4703F-60CF-43F8-9DE7-5D2889A31B64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDC4703F-60CF-43F8-9DE7-5D2889A31B64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDC4703F-60CF-43F8-9DE7-5D2889A31B64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDC4703F-60CF-43F8-9DE7-5D2889A31B64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E17D3F25-4D66-4936-A3A6-F48AB5CEEE28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E17D3F25-4D66-4936-A3A6-F48AB5CEEE28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E17D3F25-4D66-4936-A3A6-F48AB5CEEE28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E17D3F25-4D66-4936-A3A6-F48AB5CEEE28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0070BCC-26DD-4D0F-87BC-024928178E82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0070BCC-26DD-4D0F-87BC-024928178E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0070BCC-26DD-4D0F-87BC-024928178E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0070BCC-26DD-4D0F-87BC-024928178E82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -180,6 +200,10 @@ Global
 		{34DBD2CC-08F4-4C61-9DC3-872022FE4B9B} = {DD4C4D3E-27F4-43E3-BB18-87BBD8D730B1}
 		{B31A1A21-942A-4A29-AE96-59C5DDF3EB1B} = {AD8A7880-7609-4DF1-B506-987A01B5DFA1}
 		{B517DAE9-7F58-4A92-BA0B-FF6C41B188E9} = {E39CCFB0-E20F-494A-B3DF-1A9A2DD449F3}
+		{55C0A87B-3D23-4906-884C-4EE1CF08FF7A} = {89844742-9008-49A5-B7B7-F0DB9A621E63}
+		{EDC4703F-60CF-43F8-9DE7-5D2889A31B64} = {55C0A87B-3D23-4906-884C-4EE1CF08FF7A}
+		{E17D3F25-4D66-4936-A3A6-F48AB5CEEE28} = {55C0A87B-3D23-4906-884C-4EE1CF08FF7A}
+		{E0070BCC-26DD-4D0F-87BC-024928178E82} = {55C0A87B-3D23-4906-884C-4EE1CF08FF7A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EB5E539E-49D5-4A7A-8F44-2B31DAED129C}

@@ -12,5 +12,10 @@ namespace Service.Banking.Contract.Entity
 {
     public class TransferRecord:IDataContract
     {
+        public long Id { get; set; }
+        public bool Succes { get; set; }
+        public PaymentDetail Detail { get; set; }
+        public DateTime At { get; set; }
+        public string Info { get; set; }
     }
 }

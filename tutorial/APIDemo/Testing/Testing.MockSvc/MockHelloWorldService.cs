@@ -4,17 +4,16 @@
 // Revisions  :            		
 // ###########################################################################* 
 using Common.Contract;
-using Service.Ordering.Contract.Entity;
-using Service.Ordering.Contract.Servic;
+using Service.HelloWorld.Contract.Entity;
+using Service.HelloWorld.Contract.Servic;
 using Support.Net.Util;
 using Support.Serializer;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
+
 using System.Reflection;
-using System.Text;
+
 
 namespace Testing.MockSvc
 {

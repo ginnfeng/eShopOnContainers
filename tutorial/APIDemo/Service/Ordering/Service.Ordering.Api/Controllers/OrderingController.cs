@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Common.Contract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Ordering.ApiImp;
@@ -13,57 +13,30 @@ using Support.ThreadExt;
 
 namespace Service.Ordering.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiSpec(typeof(IOrderingService))]
     [ApiController]
     public class OrderingController : ControllerBase
     {
-        [HttpPost]
-        [Route("IssueOrder")]
-        public async Task<IActionResult> IssueOrder(Order order)
+        [ApiSpec(HTTP.POST, typeof(IOrderingService), nameof(IOrderingService.IssueOrder))]
+        public async Task<IActionResult> IssueOrder([FromBody] Order order)
         {
             //var wrapper = new AsyncCallWrapper<IOrderingService>(svc);
             //await wrapper.AsyncCall(itSvc => itSvc.IssueOrder(order));
             await Task.Run(() => svc.IssueOrder(order));
             return Ok();
         }
-        [HttpGet]        
-        [Route("QueryOrder")]
+        [ApiSpec(HTTP.GET, typeof(IOrderingService), nameof(IOrderingService.QueryOrder))]
         public async Task<ActionResult<Order>> QueryOrder(string orderId)
         {
             Order order = await Task.Run<Order>(() => svc.QueryOrder(orderId));
             return Ok(order);
         }
-        private IOrderingService svc;//= new OrderingService();
-        [HttpGet]
+
+        [ApiSpec(HTTP.GET, typeof(IOrderingService), "")]
         public IEnumerable<string> Get()
         {
             return new string[] { "Hello", "Ordering API" };
         }
-        //}
-
-        //// GET: api/Ordering/5
-        //[HttpGet("{id}", Name = "Get")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST: api/Ordering
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
-
-        //// PUT: api/Ordering/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        //// DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        private IOrderingService svc;//= new OrderingService();
     }
 }

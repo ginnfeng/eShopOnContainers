@@ -57,9 +57,9 @@ namespace ApiGw.ClientProxy
                 var methodInfos = type.GetMethods();
                 foreach (var methodInfo in methodInfos)
                 {
-                    
-                    var apiSpec = ApiSpecAttribute.TakeFrom(type, methodInfo.Name);                    
-                    var path =string.IsNullOrEmpty( apiSpec.Template)? $"/{ServiceSpec.SwaggerRoutePath}":$"/{ServiceSpec.SwaggerRoutePath}/{apiSpec.Template}";
+                    var apiSpec = ApiSpecAttribute.TakeFrom(type, methodInfo.Name);
+                    var template = (apiSpec == null) ? methodInfo.Name : apiSpec.Template;
+                    var path =string.IsNullOrEmpty(template) ? $"/{ServiceSpec.SwaggerRoutePath}":$"/{ServiceSpec.SwaggerRoutePath}/{template}";
                     var matchedMethodSpec=httpMethodSpecList.Find(spec=> spec.Path.Contains(path));
                     if(matchedMethodSpec==null)
                         throw new KeyNotFoundException("RegisterSwaggerDoc");

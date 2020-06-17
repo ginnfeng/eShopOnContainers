@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Service.Ordering.Contract.Entity
+namespace Service.HelloWorld.Contract.Entity
 {
     public class HelloInput
     {

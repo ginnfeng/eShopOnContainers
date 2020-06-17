@@ -7,15 +7,15 @@ using ApiGw.ClientProxy;
 using ApiGw.ClientProxy.Ext;
 using Newtonsoft.Json.Linq;
 using RestSharp;
-using Service.Ordering.Contract.Entity;
-using Service.Ordering.Contract.Servic;
-using Service.Ordering.Contract.Service;
+using Service.HelloWorld.ApiImp;
+using Service.HelloWorld.Contract.Entity;
+using Service.HelloWorld.Contract.Servic;
+
 using Support.Net.Util;
 using Support.Open.RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Security.Policy;
-using System.Text;
+
 using System.Threading.Tasks;
 using UTDll;
 namespace UTool.Test
@@ -53,7 +53,7 @@ namespace UTool.Test
         [UMethod]
         public void T_HttpSpecFactory(string swaggerDocUrl)
         {
-            HttpSpecFactory<IHelloWorldService>.Instance.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
+            HttpSpecFactory<HelloWorldService>.Instance.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
         }
         private void CallApi(ClientProxy<IHelloWorldService> proxy)
         {

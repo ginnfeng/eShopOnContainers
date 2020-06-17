@@ -88,9 +88,8 @@ namespace Common.Policy
         static public string ResolveServiceName(string moduleName)
         {
             var match = regex.Match(moduleName);
-            if (match.Success)
-                return match.Groups[1].ToString();
-            return moduleName.Replace(".", "");
+            var svcName= (match.Success)?match.Groups[1].ToString(): moduleName.Replace(".", "");
+            return svcName;//.ToLower();
         }
         static readonly Regex regex = new Regex("\\.([^\\.]{1,})\\.");
         static readonly string swaggerRoutePrefix = "swagger";

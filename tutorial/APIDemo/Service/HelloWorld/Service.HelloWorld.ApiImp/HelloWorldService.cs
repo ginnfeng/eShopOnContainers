@@ -4,18 +4,15 @@
 // Revisions  :            		
 // **************************************************************************** 
 using Common.Contract;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Service.Ordering.Contract.Entity;
-using Service.Ordering.Contract.Servic;
-using Support.Serializer;
+using Service.HelloWorld.Contract.Entity;
+using Service.HelloWorld.Contract.Servic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
-namespace Service.Ordering.ApiImp
+
+namespace Service.HelloWorld.ApiImp
 {
     public class HelloWorldService : IHelloWorldService, IHelloQuService
     {

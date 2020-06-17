@@ -4,14 +4,10 @@
 // Revisions  :            		
 // **************************************************************************** 
 using Microsoft.Extensions.DependencyInjection;
-using Service.Ordering.ApiImp;
-using Service.Ordering.Contract.Servic;
-using Support.Serializer;
+using Service.HelloWorld.ApiImp;
+using Service.HelloWorld.Contract.Servic;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using Testing.MockSvc;
 using UTDll;
 namespace UTool.Test

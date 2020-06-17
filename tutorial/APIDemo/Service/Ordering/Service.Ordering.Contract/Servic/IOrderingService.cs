@@ -3,6 +3,7 @@
 // Description: OrderingService.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Common.Contract;
 using Service.Ordering.Contract.Entity;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Service.Ordering.Contract.Service
 {
+    [ApiSpec(typeof(IOrderingService), RouteTemplate.API_VER_SVC)]
     public interface IOrderingService
     {
         void IssueOrder(Order order );        

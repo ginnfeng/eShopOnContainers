@@ -4,13 +4,12 @@
 // Revisions  :            		
 // **************************************************************************** 
 using Common.Contract;
-using Microsoft.AspNetCore.Mvc;
-using Service.Ordering.Contract.Entity;
+using Service.HelloWorld.Contract.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Service.Ordering.Contract.Servic
+namespace Service.HelloWorld.Contract.Servic
 {
     public interface IHelloService
     {

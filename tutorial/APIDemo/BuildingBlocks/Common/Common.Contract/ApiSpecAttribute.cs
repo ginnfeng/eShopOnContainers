@@ -68,7 +68,7 @@ namespace Common.Contract
         /// </summary>
         public ApiSpecAttribute(IEnumerable<HTTP> httpMethods,Type fromInterfaceType, string methodName)
         {
-            CopyFrom(TakeFrom(fromInterfaceType, methodName));
+            CopyFrom(TakeFrom(fromInterfaceType, methodName), methodName);
             var methods = new string[httpMethods.Count()];
             for (int i = 0; i < httpMethods.Count(); i++)
             {
@@ -96,7 +96,9 @@ namespace Common.Contract
 
         public static ApiSpecAttribute TakeFrom(Type interfaceType, string methodName)
         {
-            var method = FindIncludBaseType<MethodInfo>(interfaceType, t => t.GetMethod(methodName));            
+            if (string.IsNullOrEmpty(methodName)) return null;
+            var method = FindIncludBaseType<MethodInfo>(interfaceType, t => t.GetMethod(methodName));
+            if (methodName==null) throw new NullReferenceException(nameof(TakeFrom));
             var attris = method.GetCustomAttributes(typeof(ApiSpecAttribute), true);
             return (attris.Length > 0) ? (ApiSpecAttribute)attris[0] : null;
         }
@@ -106,9 +108,13 @@ namespace Common.Contract
         {
             return routeTemplate == RouteTemplate.API_VER_SVC;
         }
-        private void CopyFrom(ApiSpecAttribute baseAttri)
+        private void CopyFrom(ApiSpecAttribute baseAttri,string orginMethodName="")
         {
-            if (baseAttri == null) return;
+            if (baseAttri == null)
+            {
+                Template = orginMethodName;
+                return;
+            }
             Template = baseAttri.Template;
             ServiceName = baseAttri.ServiceName;
             //HttpMethods = baseAttri.HttpMethods;            
@@ -121,7 +127,7 @@ namespace Common.Contract
             var match = svcRegex.Match(svcInterfaceType.Name);
             if (!match.Success)
                 throw new FormatException();
-            ServiceName = match.Groups[1].Value.ToString();
+            ServiceName = match.Groups[1].Value.ToString();//.ToLower();
             switch (routeTemplate)
             {
                 case RouteTemplate.API_VER_SVC:

@@ -32,6 +32,14 @@ services:
     networks:
       - dev_network
 
+  service.helloworld.api:
+    image: ${DOCKER_REGISTRY-}servicehelloworldapi
+    build:
+      context: .
+      dockerfile: Service/HelloWorld/Service.HelloWorld.Api/Dockerfile
+    container_name: service.helloworld.api
+    networks:
+      - dev_network
 networks:
   dev_network:
       driver: bridge

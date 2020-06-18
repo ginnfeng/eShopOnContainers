@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Service.Banking.Contract.Entity
+namespace Sid.Bss.Banking
 {
     public class PaymentDetail : IDataContract
     {

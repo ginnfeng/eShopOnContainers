@@ -4,10 +4,7 @@
 // Revisions  :            		
 // **************************************************************************** 
 using EventBus.Domain;
-using Service.Ordering.Contract.Entity;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Sid.Bss.Ordering;
 
 namespace Service.Ordering.Contract.Command
 {

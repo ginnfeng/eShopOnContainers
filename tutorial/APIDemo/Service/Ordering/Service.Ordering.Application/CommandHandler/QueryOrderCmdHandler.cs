@@ -7,10 +7,7 @@ using EventBus.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Service.Ordering.Contract.Command;
-using Service.Ordering.Contract.Entity;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Sid.Bss.Ordering;
 using System.Threading;
 using System.Threading.Tasks;
 

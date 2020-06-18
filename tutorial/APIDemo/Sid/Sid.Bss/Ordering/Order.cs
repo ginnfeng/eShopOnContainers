@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Service.Ordering.Contract.Entity
+namespace Sid.Bss.Ordering
 {
     public class Order: IDataContract
     {

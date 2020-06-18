@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Common.Contract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Service.Banking.Contract.Entity;
 using Service.Banking.Contract.Service;
+using Sid.Bss.Banking;
 
 namespace Service.Banking.Api.Controllers
 {

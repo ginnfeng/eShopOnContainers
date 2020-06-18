@@ -3,7 +3,8 @@
 // Description: AccountContext.cs  
 // Revisions  :            		
 // **************************************************************************** 
-using Service.Banking.Contract.Entity;
+
+using Sid.Bss.Banking;
 using Support;
 using System;
 using System.Collections.Generic;

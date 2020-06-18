@@ -12,10 +12,11 @@ using Service.Banking.Contract.Event;
 using Service.Ordering.ApiImp;
 using Service.Ordering.Application.CommandHandler;
 using Service.Ordering.Contract.Command;
-using Service.Ordering.Contract.Entity;
+
 using Service.Ordering.Contract.Service;
 using System;
 using System.IO;
+using Sid.Bss.Ordering;
 
 public static class DIContainer
 {

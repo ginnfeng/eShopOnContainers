@@ -5,14 +5,9 @@
 // **************************************************************************** 
 
 using EventBus.Domain;
-
 using Service.Ordering.Contract.Command;
-using Service.Ordering.Contract.Entity;
 using Service.Ordering.Contract.Service;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using Sid.Bss.Ordering;
 
 namespace Service.Ordering.ApiImp
 {

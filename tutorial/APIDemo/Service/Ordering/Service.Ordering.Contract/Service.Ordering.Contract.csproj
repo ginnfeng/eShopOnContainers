@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Common\Common.Contract\Common.Contract.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.Domain\EventBus.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Sid\Sid.Bss\Sid.Bss.csproj" />
   </ItemGroup>
 
   <ItemGroup>

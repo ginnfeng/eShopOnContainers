@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 using Common.Contract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Service.Ordering.ApiImp;
-using Service.Ordering.Contract;
-using Service.Ordering.Contract.Entity;
 using Service.Ordering.Contract.Service;
+using Sid.Bss.Ordering;
 using Support.ThreadExt;
 
 namespace Service.Ordering.Api.Controllers

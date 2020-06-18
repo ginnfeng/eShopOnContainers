@@ -7,11 +7,11 @@ using EventBus.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using Service.Banking.Application.EventHandler;
 using Service.Banking.Contract.Event;
-using Service.Ordering.Contract.Entity;
+
 using Service.Ordering.Contract.Service;
+using Sid.Bss.Ordering;
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 using UTDll;
 namespace UTool.Test
 {

@@ -5,8 +5,9 @@
 // **************************************************************************** 
 using Common.Contract;
 using Service.Banking.Application.Data.Context;
-using Service.Banking.Contract.Entity;
+
 using Service.Banking.Contract.Service;
+using Sid.Bss.Banking;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +17,7 @@ namespace Service.Banking.ApiImp
     internal class PaymentService : IPaymentService
     {
        
-        public QuResult<TransferRecord> BankTransfers(BankAccount from, BankAccount to, PaymentDetail detail)
+        public QuResult<TransferRecord> BankTransfers(string from, string to, PaymentDetail detail)
         {
             var rd = new TransferRecord()
             {
@@ -27,25 +28,25 @@ namespace Service.Banking.ApiImp
             return new QuResult<TransferRecord>(rd);
         }
 
-        public QuResult<TransferRecord> CardTransfer(BankAccount from, BankAccount to, PaymentDetail detail)
+        public QuResult<TransferRecord> CardTransfer(string from, string to, PaymentDetail detail)
         {
             throw new NotImplementedException();
         }
 
         
-        public void WireTransfer(BankAccount to, PaymentDetail detail)
+        public void WireTransfer(string to, PaymentDetail detail)
         {
             throw new NotImplementedException();
         }
 
-        public bool WireDeposit(BankAccount account, PaymentDetail detail)
+        public bool WireDeposit(string account, PaymentDetail detail)
         {
             waitingWirePayments ??= new Dictionary<string, PaymentDetail>();
             
             lock (AccountContext.Instance)
             {
                 BankAccount toAccount;
-                if (!AccountContext.Instance.TryGetValue(account.Id, out toAccount))
+                if (!AccountContext.Instance.TryGetValue(account, out toAccount))
                     return false;
                 toAccount.AccountBalance += detail.Amount;
             }

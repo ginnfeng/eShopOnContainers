@@ -4,10 +4,7 @@
 // Revisions  :            		
 // **************************************************************************** 
 using Common.Contract;
-using Service.Banking.Contract.Entity;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Sid.Bss.Banking;
 
 namespace Service.Banking.Contract.Service
 {

@@ -26,7 +26,7 @@ namespace Service.Ordering.Application.CommandHandler
         
         public Task<bool> Handle(IssueOrderCmd request, CancellationToken cancellationToken)
         {
-            TheLogger.LogInformation($"IssueOrderCmdHandler OrderId={request.DataContract.OrderId}");
+            TheLogger.LogInformation($"IssueOrderCmdHandler OrderId={request.DataContract.Id}");
             var issueOrderEvent = new IssueOrderEvent() { DataContract = request.DataContract };
             TheEventBus.PublishEvent(issueOrderEvent);
             return Task.FromResult(true);

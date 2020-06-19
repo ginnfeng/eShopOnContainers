@@ -23,7 +23,7 @@ namespace Service.Banking.Application.EventHandler
         public Task Handle(IssueOrderEvent theEvent)
         {
             var order = theEvent.DataContract;
-            TheLogger.LogInformation($"OrderId={order.OrderId} ShipAddres={order.ShipAddress}");
+            TheLogger.LogInformation($"OrderId={order.Id} ShipAddres={order.ShipAddress}");
             return Task.CompletedTask;
         }
     }

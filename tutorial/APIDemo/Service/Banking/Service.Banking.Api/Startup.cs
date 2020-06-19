@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Common.Policy;
+using EventBus.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,8 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
+using Service.Banking.ApiImp;
+using Service.Banking.Contract.Service;
+
 
 namespace Service.Banking.Api
 {
@@ -53,6 +55,25 @@ namespace Service.Banking.Api
             {
                 endpoints.MapControllers();
             });
+
+            // ****STD***
+            ConfigureEventBus(app);
+        }
+
+        private void ConfigureEventBus(IApplicationBuilder app)
+        {
+            try
+            {
+                var svcHandler = new QuListener("service.rabbitmq");
+                var qSvc = new PaymentService();
+                svcHandler.Subscribe<IPaymentService>(qSvc);
+            }
+            catch (Exception)
+            {
+
+                
+            }
+                        
         }
     }
 }

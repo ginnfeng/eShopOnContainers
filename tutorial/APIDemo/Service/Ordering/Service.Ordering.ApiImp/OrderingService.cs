@@ -5,28 +5,81 @@
 // **************************************************************************** 
 
 using EventBus.Domain;
+using EventBus.RabbitMQ;
+using Service.Banking.Contract.Service;
+using Service.Ordering.Application.Data.Context;
 using Service.Ordering.Contract.Command;
 using Service.Ordering.Contract.Service;
+using Sid.Bss.Banking;
 using Sid.Bss.Ordering;
+using System;
 
 namespace Service.Ordering.ApiImp
 {
     public class OrderingService : IOrderingService
     {
-        private readonly IEventBus bus;
-        public OrderingService(IEventBus bus)
+        private string storePaymentAccount = "B0001";
+        async public void IssueOrder(Order order)
         {
-            this.bus = bus;
-        }
-        public void IssueOrder(Order order)
-        {
-            bus.SendCmd(new IssueOrderCmd(order));
+            var paymentDetail = new PaymentDetail() 
+            { 
+                Id=Guid.NewGuid().ToString()
+                ,TaxRate=5
+                ,Amount=order.Detail.Quantity*1000
+            };
+            order.PaymentDetailRecord = paymentDetail;
+            order.Status = Order.OrderStatus.Create;
+            order.Comment = "訂單成立!";
+            OrderContext.Instance.Insert(order);
+            using (var mqProxy = new QuCleintProxy<IPaymentService>("localhost"))//host暫時
+            {
+                switch (order.Detail.PayMethod)
+                {
+                    case OrderDetail.PayMethodMode.Bank:
+                        var quRlt = mqProxy.Svc.BankTransfers(order.Detail.PaymentAccout, storePaymentAccount, paymentDetail);                        
+                        var transferRecord=await mqProxy.AsyncWaitResult(quRlt);
+                        if (transferRecord.Succes)
+                        {
+                            order.Status = Order.OrderStatus.Paid;
+                            order.Comment = "已付款，進行備貨中!";
+                        }
+                        else
+                        {
+                            order.Status = Order.OrderStatus.Trouble;
+                            order.Comment = transferRecord.Info;
+                        }
+                        break;
+                    case OrderDetail.PayMethodMode.Wire:
+                        mqProxy.Svc.WireTransfer(storePaymentAccount, paymentDetail);
+                        order.Status = Order.OrderStatus.Paying;
+                        order.Comment = "等待付款!";
+                        break;                    
+                }                
+            }
+            OrderContext.Instance.Update(order);
         }
 
         public Order QueryOrder(string orderId)
         {
-            var task= bus.SendCmd(new QueryOrderCmd(orderId));            
-            return task.Result;
+            Order order;
+            if (OrderContext.Instance.TryGetValue(orderId, out order))
+                return order;
+            return null;                
         }
+        //public OrderingService(IEventBus bus)
+        //{
+        //    this.bus = bus;
+        //}
+        //public void IssueOrder(Order order)
+        //{
+        //    bus.SendCmd(new IssueOrderCmd(order));
+        //}
+        //private readonly IEventBus bus;
+        //public Order QueryOrder(string orderId)
+        //{
+        //    var task= bus.SendCmd(new QueryOrderCmd(orderId));            
+        //    return task.Result;
+        //}
+
     }
 }

@@ -12,6 +12,13 @@ namespace Sid.Bss.Ordering
 {
     public class OrderDetail: IDataContract
     {
+        public enum PayMethodMode
+        {
+            Bank, //轉帳
+            Wire //電匯
+        }
+        public PayMethodMode PayMethod { get; set; }
+        public string PaymentAccout { get; set; }
         public string ProductId  { get; set; }
         public int Quantity { get; set; }
     }

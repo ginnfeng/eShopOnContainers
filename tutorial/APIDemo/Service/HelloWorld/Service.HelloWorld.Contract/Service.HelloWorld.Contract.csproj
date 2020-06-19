@@ -12,7 +12,7 @@
     <Compile Update="Enitty\HelloWeather.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Service\IHelloorldService.cs">
+    <Compile Update="Service\IHelloWorldService.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

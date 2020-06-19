@@ -14,6 +14,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Common.Policy;
 using Microsoft.OpenApi;
+using EventBus.RabbitMQ;
+using Service.Ordering.ApiImp;
+using Service.Ordering.Contract.Servic;
 
 namespace Service.Ordering.Api
 {
@@ -55,6 +58,25 @@ namespace Service.Ordering.Api
             {
                 endpoints.MapControllers();
             });
+
+            // ****STD***
+            ConfigureEventBus(app);
+        }
+
+        // ****STD***
+        private void ConfigureEventBus(IApplicationBuilder app)
+        {
+            try
+            {
+                var svcHandler = new QuListener("service.rabbitmq");
+                var qSvc = new PaymentCallbackService();
+                svcHandler.Subscribe<IPaymentCallbackService>(qSvc);
+            }
+            catch (Exception)
+            {
+
+               
+            }
             
         }
     }

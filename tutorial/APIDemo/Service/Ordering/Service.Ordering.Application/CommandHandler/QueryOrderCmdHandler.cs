@@ -23,7 +23,7 @@ namespace Service.Ordering.Application.CommandHandler
         {
             string orderId = request.DataContract;
             TheLogger.LogInformation($"IssueOrderCmdHandler OrderId={orderId}");
-            var order = new Order() {OrderId= orderId,CustomerId="R3234566777", ShipAddress="台北市信義路四段11號"};
+            var order = new Order() {Id= orderId,CustomerId="R3234566777", ShipAddress="台北市信義路四段11號"};
             return Task.FromResult(order);
         }
     }

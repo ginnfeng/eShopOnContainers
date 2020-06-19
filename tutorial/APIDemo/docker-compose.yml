@@ -1,6 +1,12 @@
 version: '3.4'
 
 services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: service.rabbitmq
+    networks:
+      - dev_network
+
   service.ordering.api:
     image: ${DOCKER_REGISTRY-}serviceorderingapi
     build:
@@ -8,12 +14,7 @@ services:
       dockerfile: Service/Ordering/Service.Ordering.Api/Dockerfile
     container_name: service.ordering.api # 
     networks:
-      - dev_network
-
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    networks:
-      - dev_network
+      - dev_network  
 
   service.banking.api:
     image: ${DOCKER_REGISTRY-}servicebankingapi

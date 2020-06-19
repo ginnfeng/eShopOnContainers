@@ -16,6 +16,7 @@ namespace Service.Banking.Application.Data.Context
    
     public class AccountContext
     {   //暫時模擬DB data
+        static public AccountContext Instance => Singleton<AccountContext>.Instance;
         public AccountContext()
         {
             accountRepository = new Dictionary<string, BankAccount>()
@@ -29,23 +30,32 @@ namespace Service.Banking.Application.Data.Context
         }
         public bool TryGetValue(string id, out BankAccount account)
         {
-            return accountRepository.TryGetValue(id, out account);
+            lock (this)
+            {
+                return accountRepository.TryGetValue(id, out account);
+            }
         }
         public bool Insert(BankAccount account)
         {
-            if (accountRepository.ContainsKey(account.Id))
-                return false;
-            accountRepository[account.Id] = account;
-            return true;
+            lock (this)
+            {
+                if (accountRepository.ContainsKey(account.Id))
+                    return false;
+                accountRepository[account.Id] = account;
+                return true;
+            }
         }
         public bool Update(BankAccount account)
         {
-            if (!accountRepository.ContainsKey(account.Id))
-                return false;
-            accountRepository[account.Id] = account;
-            return true;
+            lock (this)
+            {
+                if (!accountRepository.ContainsKey(account.Id))
+                    return false;
+                accountRepository[account.Id] = account;
+                return true;
+            }
         }
-        static public AccountContext Instance=> Singleton<AccountContext>.Instance;
+        
         private Dictionary<string, BankAccount> accountRepository = new Dictionary<string, BankAccount>();
     }
 }

@@ -36,7 +36,7 @@ namespace UTool.Test
         [UMethod]
         public void T_IssueOrder(string customerId, string adr)
         {// TODO: Add Testing logic here
-            var order = new Order() {OrderId= $"{orderIdNum++}",CustomerId= customerId, ShipAddress=adr };
+            var order = new Order() {Id= $"{orderIdNum++}",CustomerId= customerId, ShipAddress=adr };
             var svc=SP.GetService<IOrderingService>();
             svc.IssueOrder(order);
         }

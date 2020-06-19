@@ -1,0 +1,7 @@
+<UTest id="UTool.Test.Test_OrderCase">
+  <TestCase>
+    <T_A1_CreateAccount>
+    </T_A1_CreateAccount>
+    <T_A1_NewOrder>"IBM001",3,0</T_A1_NewOrder>
+  </TestCase>
+</UTest>

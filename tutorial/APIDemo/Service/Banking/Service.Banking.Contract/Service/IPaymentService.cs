@@ -15,6 +15,6 @@ namespace Service.Banking.Contract.Service
 
         QuResult<TransferRecord> CardTransfer(string fromId, string toId, PaymentDetail detail);//信用卡支付
         void WireTransfer(string toId, PaymentDetail detail);//電匯
-        bool WireDeposit(string accountId, PaymentDetail detail);//電存
+        
     }
 }

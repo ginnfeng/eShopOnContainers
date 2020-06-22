@@ -28,7 +28,7 @@ namespace Service.Banking.ApiImp
                 Succes = false
             };
             BankAccount fromAccount;
-            if (!AccountContext.Instance.TryGetValue(to, out fromAccount))
+            if (!AccountContext.Instance.TryGetValue(from, out fromAccount))
             {
                 rd.Info = "存款帳戶不存在";
                 return new QuResult<TransferRecord>(rd);
@@ -44,8 +44,8 @@ namespace Service.Banking.ApiImp
                 toAccount = new BankAccount() { Id = to };
                 AccountContext.Instance.Insert(toAccount);
             }
-            fromAccount.AccountBalance-= detail.Amount;
-            toAccount.AccountBalance += detail.Amount;
+            fromAccount.AccountBalance= fromAccount.AccountBalance-detail.Amount;
+            toAccount.AccountBalance = toAccount.AccountBalance+detail.Amount;
             rd.Succes = true;
             return new QuResult<TransferRecord>(rd);
         }
@@ -72,8 +72,7 @@ namespace Service.Banking.ApiImp
         }
         public bool WireDepositForPayment(string account, PaymentDetail detail)
         {
-            waitingWirePayments ??= new Dictionary<string, PaymentDetail>();            
-            
+           
             BankAccount toAccount;
             if (!AccountContext.Instance.TryGetValue(account, out toAccount))
                 return false;
@@ -82,21 +81,21 @@ namespace Service.Banking.ApiImp
             lock (waitingWirePayments)
             {
                 PaymentDetail toPaymentDetail;
-                if (waitingWirePayments.TryGetValue(detail.Id, out toPaymentDetail))
+                if (!waitingWirePayments.TryGetValue(detail.Id, out toPaymentDetail))
+                    return false;
+                if (detail.Amount != toPaymentDetail.Amount)
+                    return false;
+                var rd = new TransferRecord()
                 {
-                    if (detail.Amount != toPaymentDetail.Amount)
-                        return false;
-                    var rd = new TransferRecord()
-                    {
-                        At = DateTime.Now,
-                        Detail = toPaymentDetail,
-                        Succes = true
-                    };
-                    using (var mqProxy = new QuCleintProxy<IPaymentCallbackService>("localhost"))//host暫時
-                    {
-                        mqProxy.Svc.WireTransferCommit(rd);
-                    }                        
+                    At = DateTime.Now,
+                    Detail = toPaymentDetail,
+                    Succes = true
+                };
+                using (var mqProxy = new QuCleintProxy<IPaymentCallbackService>("service.rabbitmq"))//host暫時
+                {
+                    mqProxy.Svc.WireTransferCommit(rd);
                 }
+                waitingWirePayments.Remove(detail.Id);
             }
             return true;
         }
@@ -104,12 +103,23 @@ namespace Service.Banking.ApiImp
         public BankAccount CreateBankAccount(string cid)
         {
             accountIdx++;
-            return new BankAccount()
-            {
-                Id = $"A(accountIdx)"
-            };
+            var account= new BankAccount(){Id = $"A{accountIdx}"};
+            AccountContext.Instance.Insert(account);
+            return account;
         }
+
+        public BankAccount Deposit(string accountId, decimal amount)
+        {
+            BankAccount account;
+            if (!AccountContext.Instance.TryGetValue(accountId, out account))
+            {
+                throw new Exception("存款帳戶不存在");                
+            }
+            account.AccountBalance += amount;
+            return account;
+        }
+
         private static int accountIdx=1000; 
-        private static Dictionary<string, PaymentDetail> waitingWirePayments;
+        private static Dictionary<string, PaymentDetail> waitingWirePayments = new Dictionary<string, PaymentDetail>();
     }
 }

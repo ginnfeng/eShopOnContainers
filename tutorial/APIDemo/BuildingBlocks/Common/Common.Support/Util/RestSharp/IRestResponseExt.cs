@@ -21,9 +21,11 @@ namespace Support.Open.RestSharp
         }
         public static object Json2Object<T>(this IRestResponse it, Func<string, string> contentMethod)        
         {
+            if (!it.IsSuccessful)
+                throw it.ErrorException;
             var returnType = typeof(T);
             if (typeof(bool).Equals(returnType))
-                return string.IsNullOrEmpty(it.Content) ? false : it.Content.Contains("OK");
+                return string.IsNullOrEmpty(it.Content) ? false : it.Content.Contains("true")||it.Content.Contains("OK");
             if (returnType.IsPrimitive || typeof(string).IsAssignableFrom(returnType))
                 return it.Content;
             if (typeof(byte[]).IsAssignableFrom(returnType))

@@ -31,7 +31,7 @@ namespace Service.Ordering.ApiImp
             order.Status = Order.OrderStatus.Create;
             order.Comment = "訂單成立!";
             OrderContext.Instance.Insert(order);
-            using (var mqProxy = new QuCleintProxy<IPaymentService>("localhost"))//host暫時
+            using (var mqProxy = new QuCleintProxy<IPaymentService>("service.rabbitmq"))//host暫時
             {
                 switch (order.Detail.PayMethod)
                 {
@@ -52,7 +52,8 @@ namespace Service.Ordering.ApiImp
                     case OrderDetail.PayMethodMode.Wire:
                         mqProxy.Svc.WireTransfer(storePaymentAccount, paymentDetail);
                         order.Status = Order.OrderStatus.Paying;
-                        order.Comment = "等待付款!";
+                        order.Detail.PaymentAccout = storePaymentAccount;
+                        order.Comment = "等待付款!";                        
                         break;                    
                 }                
             }

@@ -3,5 +3,33 @@
     <T_A1_CreateAccount>
     </T_A1_CreateAccount>
     <T_A1_NewOrder>"IBM001",3,0</T_A1_NewOrder>
+    <T_A1_QueryOrder>
+    </T_A1_QueryOrder>
+    <T_A1_NewOrder1>
+    </T_A1_NewOrder1>
+    <T_A1_QueryOrder1>
+    </T_A1_QueryOrder1>
+    <T_A2_NewOrder>
+    </T_A2_NewOrder>
+    <T_A1_QueryOrder2>
+    </T_A1_QueryOrder2>
+    <T_A3_QueryOrder>
+    </T_A3_QueryOrder>
+    <T_A4_Deposit>
+    </T_A4_Deposit>
+    <T_A5_NewOrder2>
+    </T_A5_NewOrder2>
+    <T_B1_NewOrder>
+    </T_B1_NewOrder>
+    <T_A6_QueryOrder>
+    </T_A6_QueryOrder>
+    <T_B2_QueryOrder>
+    </T_B2_QueryOrder>
+    <T_B3_WireDeposit>
+    </T_B3_WireDeposit>
+    <T_B4_QueryOrder2>
+    </T_B4_QueryOrder2>
+    <T_A5_NewOrder>
+    </T_A5_NewOrder>
   </TestCase>
 </UTest>

@@ -34,46 +34,106 @@ namespace UTool.Test
         }
         [UMethod]
         public void T_A1_CreateAccount()
-        {// TODO: Add Testing logic here
+        {// TODO: 開戶
             var proxy = CreateProxy<IDepositService>();
             currentCustomerAccount = proxy.Svc.CreateBankAccount("R122088167");
-            print($"BankAccount.Id={currentCustomerAccount.Id}");
+            print($"Create Bank Account Id={currentCustomerAccount.Id} $={currentCustomerAccount.AccountBalance}");
         }
         [UMethod]
-        public void T_A1_NewOrder(string prodId,int quantity,int payMethod)
-        {// TODO: Add Testing logic here
-            
-            currentOrderId = Guid.NewGuid().ToString();
-            var order = new Order()
+        public void T_A2_NewOrder()
+        {// TODO: 購買商品(轉帳)
+            if (currentCustomerAccount == null) T_A1_CreateAccount();
+            var prodId = "IBM NB099";
+            int quantity = 3;
+            var payMethod = OrderDetail.PayMethodMode.Bank;//銀行轉帳
+            currentOrder = new Order()
             {
-                Id= currentOrderId,
-                Detail=new OrderDetail(){ProductId= prodId ,Quantity= quantity }
+                Id = Guid.NewGuid().ToString(),
+                CustomerId = currentCustomerAccount.Id,
+                Detail = new OrderDetail() { ProductId = prodId, Quantity = quantity }
             };
-            order.Detail.PayMethod = (payMethod ==0) ? OrderDetail.PayMethodMode.Bank : OrderDetail.PayMethodMode.Wire;
-            if (order.Detail.PayMethod == OrderDetail.PayMethodMode.Bank)
-                order.Detail.PaymentAccout = currentCustomerAccount.Id;
+            currentOrder.Detail.PayMethod = (payMethod == 0) ? OrderDetail.PayMethodMode.Bank : OrderDetail.PayMethodMode.Wire;
+            if (currentOrder.Detail.PayMethod == OrderDetail.PayMethodMode.Bank)
+                currentOrder.Detail.PaymentAccout = currentCustomerAccount.Id;
             var proxy = CreateProxy<IOrderingService>();
-            proxy.Svc.IssueOrder(order);
+            proxy.Svc.IssueOrder(currentOrder);
+            print("已送出訂單!");
         }
         [UMethod]
-        public void T_A1_QueryOrder()
-        {// TODO: Add Testing logic here
+        public Order T_A3_QueryOrder()
+        {// TODO: 定單查詢
+            if (currentOrder == null)
+            {
+                print($"未曾下單");
+                return null;
+            }
             var proxy = CreateProxy<IOrderingService>();
-            var order=proxy.Svc.QueryOrder(currentOrderId);
-            print($"Status={order.Status} {order.Comment}");
+            var order=proxy.Svc.QueryOrder(currentOrder.Id);
+            if(order==null) print($"查無訂單");
+            else
+                print($"Status={order.Status} {order.Comment}");
+            return order;
         }
         [UMethod]
-        public void T_CaseA3()
-        {// TODO: Add Testing logic here
-
+        public void T_A4_Deposit()
+        {// TODO:存款
+            decimal amount = 5000;
+            var proxy = CreateProxy<IDepositService>();
+            currentCustomerAccount=proxy.Svc.Deposit(currentCustomerAccount.Id,amount);
+            print($"Id={currentCustomerAccount.Id} $={currentCustomerAccount.AccountBalance}");
         }
         [UMethod]
-        public void T_CaseA4()
-        {// TODO: Add Testing logic here
-
+        public void T_A5_NewOrder()
+        {// TODO: 購買商品(轉帳)
+            T_A2_NewOrder();
+        }
+        [UMethod]
+        public void T_A6_QueryOrder()
+        {// TODO: 定單查詢
+            T_A3_QueryOrder();
+        }
+        [UMethod]
+        public void T_B1_NewOrder()
+        {// TODO: 購買商品(電匯)
+            if (currentCustomerAccount == null) T_A1_CreateAccount();
+            var prodId = "Acer NB06";
+            int quantity = 10;
+            var payMethod = OrderDetail.PayMethodMode.Wire;//銀行轉帳
+            
+            currentOrder = new Order()
+            {
+                Id = Guid.NewGuid().ToString(),
+                CustomerId = currentCustomerAccount.Id,
+                Detail = new OrderDetail() { ProductId = prodId, Quantity = quantity }
+            };
+            currentOrder.Detail.PayMethod = (payMethod == 0) ? OrderDetail.PayMethodMode.Bank : OrderDetail.PayMethodMode.Wire;
+            if (currentOrder.Detail.PayMethod == OrderDetail.PayMethodMode.Bank)
+                currentOrder.Detail.PaymentAccout = currentCustomerAccount.Id;
+            var proxy = CreateProxy<IOrderingService>();
+            proxy.Svc.IssueOrder(currentOrder);
+            print("已送出訂單!");
+        }
+        [UMethod]
+        public void T_B2_QueryOrder()
+        {// TODO: 定單查詢
+            T_A3_QueryOrder();
+        }
+        [UMethod]
+        public void T_B3_WireDeposit()
+        {// TODO: 電匯
+            print("查詢訂單:");
+            Order order= T_A3_QueryOrder();
+            var proxy = CreateProxy<IDepositService>();
+            bool rlt=proxy.Svc.WireDepositForPayment(order.Detail.PaymentAccout,order.PaymentDetailRecord);
+            print($"電匯結果={rlt}");
+        }
+        [UMethod]
+        public void T_B4_QueryOrder2()
+        {// TODO: 定單查詢
+            T_A3_QueryOrder();
         }
         private static BankAccount currentCustomerAccount;
-        private static string currentOrderId;
+        private static Order currentOrder;
         private readonly Uri host = new Uri("http://localhost:88");
     }
 }

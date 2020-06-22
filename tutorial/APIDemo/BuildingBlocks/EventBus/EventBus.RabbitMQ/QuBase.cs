@@ -3,6 +3,7 @@
 // Description: MQBase.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Common.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -13,7 +14,7 @@ using System.Text;
 
 namespace EventBus.RabbitMQ
 {
-    public class QuBase:IDisposable
+    public class QuBase
     {
         public QuBase(string host, IServiceProvider serviceProvider)
             :this((ConnectionFactory)null, serviceProvider)
@@ -57,9 +58,6 @@ namespace EventBus.RabbitMQ
         protected IServiceScopeFactory TheServiceScopeFactory { get; }
         protected ILogger TheLogger { get; }
         protected DisposableAdapter<QuConn> Conn { get; }
-        
-        private bool disposed;
-        
-
+        private bool disposed;        
     }
 }

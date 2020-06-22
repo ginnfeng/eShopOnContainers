@@ -15,6 +15,7 @@ namespace Service.Banking.Contract.Service
     public interface IDepositService
     {
         bool WireDepositForPayment(string accountId, PaymentDetail detail);//電存
+        BankAccount Deposit(string accountId, decimal amount);//電存
         BankAccount CreateBankAccount(string cid);
     }
 }

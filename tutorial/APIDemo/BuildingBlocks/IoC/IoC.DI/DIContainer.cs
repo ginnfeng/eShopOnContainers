@@ -18,42 +18,45 @@ using System;
 using System.IO;
 using Sid.Bss.Ordering;
 
-public static class DIContainer
+namespace IoC.DI
 {
-    public static void ResgisterServices(IServiceCollection services)
+    public static class DIContainer
     {
-        //Domain Bus
-        services.AddMediatR(typeof(IMediator));
-        services.AddSingleton<IEventBus, RabbitMQBus>(sp => new RabbitMQBus(sp));
+        public static void ResgisterServices(IServiceCollection services)
+        {
+            //Domain Bus
+            services.AddMediatR(typeof(IMediator));
+            services.AddSingleton<IEventBus, RabbitMQBus>(sp => new RabbitMQBus(sp));
 
-        //Service
-        services.AddTransient<IOrderingService, OrderingService>();
+            //Service
+            services.AddTransient<IOrderingService, OrderingService>();
 
-        //Event
-        services.AddTransient<IEventHandler<IssueOrderEvent>, IssueOrderEventHandler>();
+            //Event
+            services.AddTransient<IEventHandler<IssueOrderEvent>, IssueOrderEventHandler>();
 
-        //Command
-        services.AddTransient<IRequestHandler<IssueOrderCmd, bool>, IssueOrderCmdHandler>();
-        services.AddTransient<IRequestHandler<QueryOrderCmd, Order>, QueryOrderCmdHandler>();
+            //Command
+            services.AddTransient<IRequestHandler<IssueOrderCmd, bool>, IssueOrderCmdHandler>();
+            services.AddTransient<IRequestHandler<QueryOrderCmd, Order>, QueryOrderCmdHandler>();
 
-        //others
-        services.AddLogging(builder => builder.AddConsole().AddDebug().AddFilter(level => level >= LogLevel.Debug));
-        services.AddSingleton<IConfiguration>(
-               sp =>
-               {
-                   var basePath = Directory.GetCurrentDirectory();
-                   var builder = new ConfigurationBuilder()
-                       .SetFileProvider(new PhysicalFileProvider(basePath))
-                       //.AddEnvironmentVariables()
-                       .AddJsonFile("appsettings.json")
-                       .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
-                           optional: true);
-                   return builder.Build();
-               }
-               );
+            //others
+            services.AddLogging(builder => builder.AddConsole().AddDebug().AddFilter(level => level >= LogLevel.Debug));
+            services.AddSingleton<IConfiguration>(
+                   sp =>
+                   {
+                       var basePath = Directory.GetCurrentDirectory();
+                       var builder = new ConfigurationBuilder()
+                           .SetFileProvider(new PhysicalFileProvider(basePath))
+                           //.AddEnvironmentVariables()
+                           .AddJsonFile("appsettings.json")
+                           .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+                               optional: true);
+                       return builder.Build();
+                   }
+                   );
 
-    }
-    public static void TakeServicDefinitions()
-    {
+        }
+        public static void TakeServicDefinitions()
+        {
+        }
     }
 }

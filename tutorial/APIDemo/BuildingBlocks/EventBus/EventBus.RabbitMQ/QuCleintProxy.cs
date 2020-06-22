@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace EventBus.RabbitMQ
 {
-    public class QuCleintProxy<TService>: QuBase,IServiceProxy<TService>
+    public class QuCleintProxy<TService>: QuBase, IQuServiceProxy<TService>
         where TService:class
     {
         public QuCleintProxy(string host, IServiceProvider serviceProvider=null)

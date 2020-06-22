@@ -87,8 +87,10 @@ namespace ApiGw.ClientProxy
                     }                    
                 }
             }
-            var response = client.Execute(req);            
-            JsonToObjectGerericMethod??= typeof(IRestResponseExt).GetMethod($"{nameof(IRestResponseExt.Json2Object)}");
+            var response = client.Execute(req);
+            bool noReturn = methodInfo.ReturnType.Equals(typeof(void));
+            if (noReturn) return null;
+            JsonToObjectGerericMethod ??= typeof(IRestResponseExt).GetMethod($"{nameof(IRestResponseExt.Json2Object)}");
             MethodInfo exevcMethodInfo = JsonToObjectGerericMethod.MakeGenericMethod(methodInfo.ReturnType);            
             var rlt = exevcMethodInfo.Invoke(typeof(IRestResponseExt), new object[] { response,null });
             return rlt;

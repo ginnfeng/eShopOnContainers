@@ -32,7 +32,7 @@ namespace UTool.Test
         [UMethod]
         public void T_Publish(string id1)
         {
-            using (var mqProxy = new QuCleintProxy<IHelloWorldService>("localhost"))
+            using (var mqProxy = new QuProxy<IHelloWorldService>("localhost"))
             {
                 var id4 = new HelloInput() { UserName = "Lee", Date = DateTime.Today };
                 
@@ -45,7 +45,7 @@ namespace UTool.Test
         [UMethod]
         public void T_Publish2(string id1)
         {
-            using (var mqProxy = new QuCleintProxy<IHelloWorldService>("localhost"))
+            using (var mqProxy = new QuProxy<IHelloWorldService>("localhost"))
             {
                 var id4 = new HelloInput() { UserName = "Lee", Date = DateTime.Today };
                 long id2 = 99;
@@ -63,7 +63,7 @@ namespace UTool.Test
         public void T_PublishTwoWay(string id1)
         {// TODO: Add Testing logic here
             
-            using (var mqProxy = new QuCleintProxy<IHelloQuService>("localhost"))
+            using (var mqProxy = new QuProxy<IHelloQuService>("localhost"))
             {                
                 var quRlt=mqProxy.Svc.TwoWayCall(id1);
                 var obj=mqProxy.WaitResult(quRlt);                
@@ -74,7 +74,7 @@ namespace UTool.Test
         async public void T_PublishTwoWayAsync(string id1)
         {// TODO: Add Testing logic here
 
-            using (var mqProxy = new QuCleintProxy<IHelloQuService>("localhost"))
+            using (var mqProxy = new QuProxy<IHelloQuService>("localhost"))
             {
                 var quRlt = mqProxy.Svc.TwoWayCall(id1);
                 var obj = await mqProxy.AsyncWaitResult(quRlt);

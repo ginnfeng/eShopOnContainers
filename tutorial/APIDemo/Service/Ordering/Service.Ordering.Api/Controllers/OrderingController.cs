@@ -16,6 +16,10 @@ namespace Service.Ordering.Api.Controllers
     [ApiController]
     public class OrderingController : ControllerBase
     {
+        public OrderingController(IOrderingService svc)
+        {
+            this.svc = svc;
+        }
         [ApiSpec(HTTP.POST, typeof(IOrderingService), nameof(IOrderingService.IssueOrder))]
         public async Task<IActionResult> IssueOrder([FromBody] Order order)
         {
@@ -36,6 +40,6 @@ namespace Service.Ordering.Api.Controllers
         {
             return new string[] { "Hello", "Ordering API" };
         }
-        private IOrderingService svc= new OrderingService();
+        private IOrderingService svc;//= new OrderingService();
     }
 }

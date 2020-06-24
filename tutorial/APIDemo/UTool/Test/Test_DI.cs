@@ -15,6 +15,9 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
+using Common.Contract;
+using ApiGw.ClientProxy;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace UTool.Test
 {
@@ -44,6 +47,7 @@ namespace UTool.Test
             serviceCollection.AddTransient<INotificationHandler<SampleCommand>, SampleNotificationHandler1>();
             serviceCollection.AddTransient<INotificationHandler<SampleCommand>, SampleNotificationHandler2>();
             serviceCollection.AddMediatR(typeof(IMediator));
+            
             //serviceCollection.AddMediatR(typeof(Test_DI)); //以此可自動註冊所有Handler class
 
             serviceCollection.AddSingleton<IConfiguration>(

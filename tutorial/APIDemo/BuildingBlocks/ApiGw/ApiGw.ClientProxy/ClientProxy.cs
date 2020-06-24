@@ -22,7 +22,7 @@ using System.Text;
 namespace ApiGw.ClientProxy
 {
     
-    public class ClientProxy<TService>: IServiceProxy<TService>
+    public class ClientProxy<TService>: IClientProxy<TService>
         where TService:class
     {
         public ClientProxy(IConfiguration cfg)

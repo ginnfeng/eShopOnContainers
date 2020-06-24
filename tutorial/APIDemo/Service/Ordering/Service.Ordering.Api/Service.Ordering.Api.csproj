@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Common\Common.Policy\Common.Policy.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\IoC\IoC.DI.Ordering\IoC.DI.Ordering.csproj" />
     <ProjectReference Include="..\Service.Ordering.ApiImp\Service.Ordering.ApiImp.csproj" />
     <ProjectReference Include="..\Service.Ordering.Contract\Service.Ordering.Contract.csproj" />
   </ItemGroup>

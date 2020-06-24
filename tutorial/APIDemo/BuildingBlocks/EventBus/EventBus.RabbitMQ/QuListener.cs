@@ -17,21 +17,22 @@ using Support.Net.Util;
 using System.Reflection;
 using Common.Contract;
 using Support.Net.Proxy;
+using Microsoft.Extensions.Configuration;
 
 namespace EventBus.RabbitMQ
 {
     public class QuListener: QuBase
-    {
-        public QuListener(string host, IServiceProvider serviceProvider = null)
-            : base(host, serviceProvider)
-        {
-        }
-        public QuListener(ConnectionFactory connFactory, IServiceProvider serviceProvider)
-            : base(connFactory, serviceProvider)
-        {
-            
-        }
+    {        
         
+        [ActivatorUtilitiesConstructor]//Default Constructor for DI
+        public QuListener(IConnectionFactory connFactory, ILoggerFactory loggerFactory)
+            : base(connFactory, loggerFactory)
+        {            
+        }
+        public QuListener(string host, ILoggerFactory loggerFactory = null)
+            : base(host, loggerFactory)
+        {
+        }
         public void Subscribe<TService>()
            where TService : class
         {

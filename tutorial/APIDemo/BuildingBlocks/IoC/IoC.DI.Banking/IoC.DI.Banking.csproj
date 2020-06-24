@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Service\Banking\Service.Banking.ApiImp\Service.Banking.ApiImp.csproj" />
     <ProjectReference Include="..\IoC.DI\IoC.DI.csproj" />
   </ItemGroup>
 

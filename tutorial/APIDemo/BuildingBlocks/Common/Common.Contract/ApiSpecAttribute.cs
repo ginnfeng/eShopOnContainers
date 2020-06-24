@@ -97,8 +97,9 @@ namespace Common.Contract
         public static ApiSpecAttribute TakeFrom(Type interfaceType, string methodName)
         {
             if (string.IsNullOrEmpty(methodName)) return null;
-            var method = FindIncludBaseType<MethodInfo>(interfaceType, t => t.GetMethod(methodName));
-            if (methodName==null) throw new NullReferenceException(nameof(TakeFrom));
+            var method = FindIncludBaseType<MethodInfo>(interfaceType, t => t.GetMethod(methodName))
+                ?? throw new NullReferenceException(nameof(TakeFrom));
+            
             var attris = method.GetCustomAttributes(typeof(ApiSpecAttribute), true);
             return (attris.Length > 0) ? (ApiSpecAttribute)attris[0] : null;
         }

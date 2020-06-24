@@ -15,7 +15,10 @@ namespace Service.Banking.Api.Controllers
     [ApiController]
     public class DepositController : ControllerBase, IDepositService
     {
-
+        public DepositController(IDepositService svc)
+        {
+            this.svc = svc;
+        }
         // GET: api/Banking
         [HttpGet]
         public IEnumerable<string> Get()
@@ -41,7 +44,7 @@ namespace Service.Banking.Api.Controllers
             return svc.Deposit(accountId, amount);
         }
 
-        IDepositService svc = new PaymentService();
+        IDepositService svc;//= new PaymentService();
     }
         
 }

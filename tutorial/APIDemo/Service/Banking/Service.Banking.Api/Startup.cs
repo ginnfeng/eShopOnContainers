@@ -31,8 +31,8 @@ namespace Service.Banking.Api
         {
             services.AddControllers();
             // ****STD***Register the Swagger generator, defining 1 or more Swagger documents  
-            services.AddChtSwagger(apiVersion, "Banking API example");            
-
+            services.AddChtSwagger(apiVersion, "Banking API example");
+            IoC.DI.Banking.DIContainer.ResgisterServices(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,18 +62,11 @@ namespace Service.Banking.Api
 
         private void ConfigureEventBus(IApplicationBuilder app)
         {
-            try
-            {
-                var svcHandler = new QuListener("service.rabbitmq");
-                var qSvc = new PaymentService();
-                svcHandler.Subscribe<IPaymentService>(qSvc);
-            }
-            catch (Exception)
-            {
-
-                
-            }
-                        
+            //var svcHandler = new QuListener("rabbitmq");
+            //var qSvc = new PaymentService();
+            var svcHandler = app.ApplicationServices.GetRequiredService<QuListener>();            
+            var qSvc = app.ApplicationServices.GetRequiredService<IPaymentService>();
+            svcHandler.Subscribe<IPaymentService>(qSvc);
         }
     }
 }

@@ -5,6 +5,9 @@
 // **************************************************************************** 
 using Common.Contract;
 using EventBus.RabbitMQ;
+
+using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
 using Service.Banking.Application.Data.Context;
 
 using Service.Banking.Contract.Service;
@@ -18,7 +21,16 @@ namespace Service.Banking.ApiImp
 {
     public class PaymentService : IPaymentService, IDepositService
     {
-       
+        private IConnectionFactory connFactory;
+        private ILoggerFactory loggerFactory;
+        private ILogger TheLogger { get; }
+        public PaymentService(IConnectionFactory connFactory, ILoggerFactory loggerFactory)
+        {
+            this.connFactory = connFactory;
+            this.loggerFactory = loggerFactory;
+            if (loggerFactory != null)
+                TheLogger = loggerFactory.CreateLogger<QuListener>();
+        }
         public QuResult<TransferRecord> BankTransfers(string from, string to, PaymentDetail detail)
         {
             var rd = new TransferRecord()
@@ -91,7 +103,8 @@ namespace Service.Banking.ApiImp
                     Detail = toPaymentDetail,
                     Succes = true
                 };
-                using (var mqProxy = new QuCleintProxy<IPaymentCallbackService>("service.rabbitmq"))//host暫時
+                //using (var mqProxy = new QuProxy<IPaymentCallbackService>("service.rabbitmq"))//host暫時
+                using (var mqProxy = new QuProxy<IPaymentCallbackService>(connFactory,loggerFactory))//host暫時
                 {
                     mqProxy.Svc.WireTransferCommit(rd);
                 }

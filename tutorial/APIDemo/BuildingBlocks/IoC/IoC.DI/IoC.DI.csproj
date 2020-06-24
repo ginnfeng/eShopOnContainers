@@ -20,6 +20,7 @@
     <ProjectReference Include="..\..\..\Service\Banking\Service.Banking.Contract\Service.Banking.Contract.csproj" />
     <ProjectReference Include="..\..\..\Service\Ordering\Service.Ordering.ApiImp\Service.Ordering.ApiImp.csproj" />
     <ProjectReference Include="..\..\..\Service\Ordering\Service.Ordering.Application\Service.Ordering.Application.csproj" />
+    <ProjectReference Include="..\..\ApiGw\ApiGw.ClientProxy\ApiGw.ClientProxy.csproj" />
     <ProjectReference Include="..\..\EventBus\EventBus.RabbitMQ\EventBus.RabbitMQ.csproj" />
   </ItemGroup>
 

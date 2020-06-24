@@ -3,6 +3,7 @@
 // Description: PaymentCallbackService.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Microsoft.Extensions.Logging;
 using Service.Ordering.Application.Data.Context;
 using Service.Ordering.Contract.Servic;
 using Sid.Bss.Banking;
@@ -15,6 +16,11 @@ namespace Service.Ordering.ApiImp
 {
     public class PaymentCallbackService : IPaymentCallbackService
     {
+        private ILogger TheLogger { get; }
+        public PaymentCallbackService(ILogger<PaymentCallbackService> logger)
+        {
+            TheLogger = logger;
+        }
         public void WireTransferCommit(TransferRecord detail)
         {
             OrderContext.Instance.FindAndDo(

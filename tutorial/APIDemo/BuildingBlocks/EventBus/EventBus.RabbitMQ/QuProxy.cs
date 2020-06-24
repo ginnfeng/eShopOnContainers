@@ -5,6 +5,7 @@
 // https://www.rabbitmq.com/dotnet-api-guide.html
 // **************************************************************************** 
 using Common.Contract;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,21 +20,23 @@ using System.Threading.Tasks;
 
 namespace EventBus.RabbitMQ
 {
-    public class QuCleintProxy<TService>: QuBase, IQuServiceProxy<TService>
+    public class QuProxy<TService>: QuBase, IQuProxy<TService>
         where TService:class
     {
-        public QuCleintProxy(string host, IServiceProvider serviceProvider=null)
-            : base(host, serviceProvider)
+        [ActivatorUtilitiesConstructor]//Default Constructor for DI
+        public QuProxy(IConnectionFactory connFactory, ILoggerFactory loggerFactory)
+            : base(connFactory, loggerFactory)
         {
             realProxy.InvokeMethodEvent += RealProxyInvokeMethodEvent;
-            ResultListener = new QuListener(host, serviceProvider);
+            ResultListener = new QuListener(connFactory, loggerFactory);
         }
-        public QuCleintProxy(ConnectionFactory connFactory, IServiceProvider serviceProvider)
-            : base(connFactory, serviceProvider)
+        public QuProxy(string host, ILoggerFactory loggerFactory = null)
+            : base(host, loggerFactory)
         {
             realProxy.InvokeMethodEvent += RealProxyInvokeMethodEvent;
-            ResultListener = new QuListener(connFactory, serviceProvider);
+            ResultListener = new QuListener(host, loggerFactory);
         }
+        
         private TimeSpan defaultWaitTimeout = new TimeSpan(0, 0, 120);
         public T WaitResult<T>(QuResult<T> rltStamp)
         {

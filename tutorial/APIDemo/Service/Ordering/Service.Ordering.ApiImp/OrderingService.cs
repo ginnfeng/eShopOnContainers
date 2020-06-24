@@ -6,6 +6,8 @@
 
 using EventBus.Domain;
 using EventBus.RabbitMQ;
+using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
 using Service.Banking.Contract.Service;
 using Service.Ordering.Application.Data.Context;
 using Service.Ordering.Contract.Command;
@@ -19,6 +21,17 @@ namespace Service.Ordering.ApiImp
     public class OrderingService : IOrderingService
     {
         private string storePaymentAccount = "B0001";
+        private IConnectionFactory connFactory;
+        private ILoggerFactory loggerFactory;
+        private ILogger TheLogger { get; }
+        public OrderingService(IConnectionFactory connFactory, ILoggerFactory loggerFactory)
+        {
+            this.connFactory = connFactory;
+            this.loggerFactory = loggerFactory;
+            if (loggerFactory != null)
+                TheLogger = loggerFactory.CreateLogger<QuListener>();
+        }
+        
         async public void IssueOrder(Order order)
         {
             var paymentDetail = new PaymentDetail() 
@@ -31,7 +44,8 @@ namespace Service.Ordering.ApiImp
             order.Status = Order.OrderStatus.Create;
             order.Comment = "訂單成立!";
             OrderContext.Instance.Insert(order);
-            using (var mqProxy = new QuCleintProxy<IPaymentService>("service.rabbitmq"))//host暫時
+            //using (var mqProxy = new QuProxy<IPaymentService>("service.rabbitmq"))//host暫時
+            using (var mqProxy = new QuProxy<IPaymentService>(connFactory, loggerFactory))
             {
                 switch (order.Detail.PayMethod)
                 {

@@ -5,17 +5,23 @@
 // **************************************************************************** 
 using ApiGw.ClientProxy;
 using ApiGw.ClientProxy.Ext;
+using Common.Contract;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using Service.HelloWorld.ApiImp;
 using Service.HelloWorld.Contract.Entity;
 using Service.HelloWorld.Contract.Servic;
-
+using Support;
 using Support.Net.Util;
 using Support.Open.RestSharp;
 using System;
 using System.Collections.Generic;
-
+using System.Configuration;
+using System.IO;
 using System.Threading.Tasks;
 using UTDll;
 namespace UTool.Test
@@ -44,12 +50,29 @@ namespace UTool.Test
 
     class Test_ClientProxy : UTest
     {
-        public Test_ClientProxy()
+        public Test_ClientProxy()        
         {
-            //
             // TODO: Add constructor logic here
-            //      
+            serviceCollection = new ServiceCollection();
+            serviceCollection.TryAdd(ServiceDescriptor.Transient(typeof(IClientProxy<>), typeof(ClientProxy<>)));
+           
+            serviceCollection.AddSingleton<IConfiguration>(
+                sp =>
+                {
+                    var basePath = Directory.GetCurrentDirectory();
+                    var builder = new ConfigurationBuilder()
+                        .SetFileProvider(new PhysicalFileProvider(basePath))
+                        //.AddEnvironmentVariables()
+                        .AddJsonFile("appsettings.json")
+                        .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+                            optional: true);
+                    return builder.Build();
+                }
+                );
+            serviceProvider = serviceCollection.BuildServiceProvider();
         }
+        private IServiceProvider serviceProvider;
+        private IServiceCollection serviceCollection;
         [UMethod]
         public void T_HttpSpecFactory(string swaggerDocUrl)
         {
@@ -74,6 +97,7 @@ namespace UTool.Test
         [UMethod]
         public void T_ClientProxy(string apiUrl,string swaggerDocUrl)
         {
+            var p=serviceProvider.GetRequiredService <IClientProxy<IHelloWorldService>>();
             var proxy = new ClientProxy<IHelloWorldService>(new Uri(apiUrl));
             proxy.ApiVersion = "1";
             proxy.RegisterSwaggerDoc(new Uri(swaggerDocUrl));

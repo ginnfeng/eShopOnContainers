@@ -3,7 +3,7 @@ version: '3.4'
 services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: service.rabbitmq
+    #container_name: service.rabbitmq
     networks:
       - dev_network
 
@@ -13,6 +13,8 @@ services:
       context: .
       dockerfile: Service/Ordering/Service.Ordering.Api/Dockerfile
     container_name: service.ordering.api # 
+    depends_on:      
+      - rabbitmq
     networks:
       - dev_network  
 
@@ -22,6 +24,8 @@ services:
       context: .
       dockerfile: Service/Banking/Service.Banking.Api/Dockerfile
     container_name: service.banking.api
+    depends_on:      
+      - rabbitmq
     networks:
       - dev_network
 

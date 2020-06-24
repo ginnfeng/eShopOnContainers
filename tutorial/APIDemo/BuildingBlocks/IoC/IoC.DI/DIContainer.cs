@@ -17,42 +17,30 @@ using Service.Ordering.Contract.Service;
 using System;
 using System.IO;
 using Sid.Bss.Ordering;
+using ApiGw.ClientProxy;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Common.Contract;
+using RabbitMQ.Client;
 
 namespace IoC.DI
 {
     public static class DIContainer
     {
-        public static void ResgisterServices(IServiceCollection services)
+        public static void ResgisterServices(IServiceCollection services, IConfiguration cfg)
         {
             //Domain Bus
-            services.AddMediatR(typeof(IMediator));
-            services.AddSingleton<IEventBus, RabbitMQBus>(sp => new RabbitMQBus(sp));
+            //services.AddMediatR(typeof(IMediator));
+            //services.AddSingleton<IEventBus, RabbitMQBus>(sp => new RabbitMQBus(sp)); 
+            services.TryAdd(ServiceDescriptor.Transient(typeof(IClientProxy<>), typeof(ClientProxy<>)));
+            services.TryAdd(ServiceDescriptor.Transient(typeof(IQuProxy<>), typeof(QuProxy<>)));
+            services.AddTransient<QuListener>();
 
-            //Service
-            services.AddTransient<IOrderingService, OrderingService>();
-
-            //Event
-            services.AddTransient<IEventHandler<IssueOrderEvent>, IssueOrderEventHandler>();
-
-            //Command
-            services.AddTransient<IRequestHandler<IssueOrderCmd, bool>, IssueOrderCmdHandler>();
-            services.AddTransient<IRequestHandler<QueryOrderCmd, Order>, QueryOrderCmdHandler>();
-
+            if (cfg == null) return;
+            string qHost = cfg.GetValue<string>("EventBusConnection");
+            services.AddSingleton<IConnectionFactory>(sp => QuBase.TakeDefaultIConnectionFactory(qHost) );
             //others
             services.AddLogging(builder => builder.AddConsole().AddDebug().AddFilter(level => level >= LogLevel.Debug));
-            services.AddSingleton<IConfiguration>(
-                   sp =>
-                   {
-                       var basePath = Directory.GetCurrentDirectory();
-                       var builder = new ConfigurationBuilder()
-                           .SetFileProvider(new PhysicalFileProvider(basePath))
-                           //.AddEnvironmentVariables()
-                           .AddJsonFile("appsettings.json")
-                           .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
-                               optional: true);
-                       return builder.Build();
-                   }
-                   );
+           
 
         }
         public static void TakeServicDefinitions()

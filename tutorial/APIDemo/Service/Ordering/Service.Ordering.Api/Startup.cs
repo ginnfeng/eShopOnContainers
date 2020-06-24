@@ -34,7 +34,8 @@ namespace Service.Ordering.Api
         {
             services.AddControllers();
             // ****STD***Register the Swagger generator, defining 1 or more Swagger documents            
-            services.AddChtSwagger(apiVersion,"Ordering API example");            
+            services.AddChtSwagger(apiVersion,"Ordering API example");
+            IoC.DI.Ordering.DIContainer.ResgisterServices(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,18 +67,11 @@ namespace Service.Ordering.Api
         // ****STD***
         private void ConfigureEventBus(IApplicationBuilder app)
         {
-            try
-            {
-                var svcHandler = new QuListener("service.rabbitmq");
-                var qSvc = new PaymentCallbackService();
-                svcHandler.Subscribe<IPaymentCallbackService>(qSvc);
-            }
-            catch (Exception)
-            {
-
-               
-            }
-            
+            //var svcHandler = new QuListener("rabbitmq");
+            //var qSvc = new PaymentCallbackService();
+            var svcHandler = app.ApplicationServices.GetRequiredService<QuListener>();            
+            var qSvc = app.ApplicationServices.GetRequiredService<IPaymentCallbackService>();
+            svcHandler.Subscribe<IPaymentCallbackService>(qSvc);
         }
     }
 }

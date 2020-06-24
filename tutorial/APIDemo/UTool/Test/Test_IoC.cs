@@ -4,6 +4,7 @@
 // Revisions  :            		
 // **************************************************************************** 
 using EventBus.Domain;
+using IoC.DI;
 using Microsoft.Extensions.DependencyInjection;
 using Service.Banking.Application.EventHandler;
 using Service.Banking.Contract.Event;
@@ -28,7 +29,7 @@ namespace UTool.Test
         private void Init()
         {
             var serviceCollection = new ServiceCollection();
-            DIContainer.ResgisterServices(serviceCollection);
+            DIContainer.ResgisterServices(serviceCollection,null);
             SP=serviceCollection.BuildServiceProvider();
         }
         public IServiceProvider SP { get; private set; }

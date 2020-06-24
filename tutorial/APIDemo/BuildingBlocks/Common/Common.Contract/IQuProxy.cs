@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Common.Contract
 {
-    public interface IQuServiceProxy<TService> :IDisposable, IServiceProxy<TService>
+    public interface IQuProxy<TService> :IDisposable, IClientProxy<TService>
          where TService : class
     {
     }

@@ -16,22 +16,26 @@ namespace EventBus.RabbitMQ
 {
     public class QuBase
     {
-        public QuBase(string host, IServiceProvider serviceProvider)
-            :this((ConnectionFactory)null, serviceProvider)
+        public QuBase(string host, ILoggerFactory loggerFactory)
+            :this(TakeDefaultIConnectionFactory(host), loggerFactory)
         {
-            Conn=QuConnPool.Instance.Create(host);            
         }
-        public QuBase(ConnectionFactory connFactory, IServiceProvider serviceProvider)           
+        public QuBase(IConnectionFactory connFactory, ILoggerFactory loggerFactory)           
         {
             if(connFactory!=null)
-                Conn = QuConnPool.Instance.Create(connFactory);            
-            if (serviceProvider == null) return;
-            TheServiceScopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
-            ILoggerFactory loggerFactory = serviceProvider.GetService<ILoggerFactory>();
+                Conn = QuConnPool.Instance.Create(connFactory); 
             if (loggerFactory != null)
                 TheLogger = loggerFactory.CreateLogger<QuListener>();
         }
-        
+        static public IConnectionFactory TakeDefaultIConnectionFactory(string host)
+        {
+            return new ConnectionFactory
+            {
+                HostName = host,
+                DispatchConsumersAsync = true,
+                AutomaticRecoveryEnabled = true
+            };
+        }
         public void Dispose()
         {
             Dispose(true);

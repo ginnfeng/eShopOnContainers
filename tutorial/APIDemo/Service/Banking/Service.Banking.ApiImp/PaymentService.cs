@@ -21,12 +21,12 @@ namespace Service.Banking.ApiImp
 {
     public class PaymentService : IPaymentService, IDepositService
     {
-        private IConnectionFactory connFactory;
+        private IQuSource connSrc;
         private ILoggerFactory loggerFactory;
         private ILogger TheLogger { get; }
-        public PaymentService(IConnectionFactory connFactory, ILoggerFactory loggerFactory)
+        public PaymentService(IQuSource src, ILoggerFactory loggerFactory)
         {
-            this.connFactory = connFactory;
+            this.connSrc = src;
             this.loggerFactory = loggerFactory;
             if (loggerFactory != null)
                 TheLogger = loggerFactory.CreateLogger<QuListener>();
@@ -104,7 +104,7 @@ namespace Service.Banking.ApiImp
                     Succes = true
                 };
                 //using (var mqProxy = new QuProxy<IPaymentCallbackService>("service.rabbitmq"))//host暫時
-                using (var mqProxy = new QuProxy<IPaymentCallbackService>(connFactory,loggerFactory))//host暫時
+                using (var mqProxy = new QuProxy<IPaymentCallbackService>(connSrc,loggerFactory))//host暫時
                 {
                     mqProxy.Svc.WireTransferCommit(rd);
                 }

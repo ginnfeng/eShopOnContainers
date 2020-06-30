@@ -3,17 +3,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Service.Banking.ApiImp;
 using Service.Banking.Contract.Service;
+using Support;
 using System;
 
 namespace IoC.DI.Banking
 {
-    public static class DIContainer
+    public class DIContainer: DIContainerBase
     {
-        public static void ResgisterServices(IServiceCollection services,IConfiguration cfg)
+        static public DIContainer Instance => Singleton<DIContainer>.Instance;
+        protected override void DoResgisterServices(IServiceCollection services, IConfiguration cfg)
         {
-            IoC.DI.DIContainer.ResgisterServices(services,cfg);
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<IDepositService, PaymentService>();
         }
+        
     }
 }

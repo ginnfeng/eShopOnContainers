@@ -35,7 +35,7 @@ namespace Service.Ordering.Api
             services.AddControllers();
             // ****STD***Register the Swagger generator, defining 1 or more Swagger documents            
             services.AddChtSwagger(apiVersion,"Ordering API example");
-            IoC.DI.Ordering.DIContainer.ResgisterServices(services, Configuration);
+            IoC.DI.Ordering.DIContainer.Instance.ResgisterServices(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

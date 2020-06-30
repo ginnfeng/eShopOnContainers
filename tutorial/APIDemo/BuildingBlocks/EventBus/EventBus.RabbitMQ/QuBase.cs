@@ -20,16 +20,16 @@ namespace EventBus.RabbitMQ
             :this(TakeDefaultIConnectionFactory(host), loggerFactory)
         {
         }
-        public QuBase(IConnectionFactory connFactory, ILoggerFactory loggerFactory)           
+        public QuBase(IQuSource src, ILoggerFactory loggerFactory)           
         {
-            if(connFactory!=null)
-                Conn = QuConnPool.Instance.Create(connFactory); 
+            if(src!=null)
+                Conn = QuConnPool.Instance.Create(src); 
             if (loggerFactory != null)
                 TheLogger = loggerFactory.CreateLogger<QuListener>();
         }
-        static public IConnectionFactory TakeDefaultIConnectionFactory(string host)
-        {
-            return new ConnectionFactory
+        static public IQuSource TakeDefaultIConnectionFactory(string host)
+        {            
+            return new QuSource
             {
                 HostName = host,
                 DispatchConsumersAsync = true,

@@ -22,14 +22,14 @@ using System.Text;
 namespace ApiGw.ClientProxy
 {
     
-    public class ClientProxy<TService>: IClientProxy<TService>
+    public class ApiProxy<TService>: IApiProxy<TService>
         where TService:class
     {
-        public ClientProxy(IConfiguration cfg)
+        public ApiProxy(IConfiguration cfg)
         {
             realProxy.InvokeMethodEvent += RealProxyInvokeMethodEvent;                        
         }
-        public ClientProxy(Uri apiEndpoint)
+        public ApiProxy(Uri apiEndpoint)
         {
             ApiEndpoint = apiEndpoint;
             //SwaggerDocEndpoint = swaggerDocEndpoint;

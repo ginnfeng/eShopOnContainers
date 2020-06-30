@@ -24,11 +24,11 @@ namespace EventBus.RabbitMQ
         where TService:class
     {
         [ActivatorUtilitiesConstructor]//Default Constructor for DI
-        public QuProxy(IConnectionFactory connFactory, ILoggerFactory loggerFactory)
-            : base(connFactory, loggerFactory)
+        public QuProxy(IQuSource src, ILoggerFactory loggerFactory)
+            : base(src, loggerFactory)
         {
             realProxy.InvokeMethodEvent += RealProxyInvokeMethodEvent;
-            ResultListener = new QuListener(connFactory, loggerFactory);
+            ResultListener = new QuListener(src, loggerFactory);
         }
         public QuProxy(string host, ILoggerFactory loggerFactory = null)
             : base(host, loggerFactory)

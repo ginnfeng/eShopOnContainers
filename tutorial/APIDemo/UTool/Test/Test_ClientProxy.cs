@@ -54,7 +54,7 @@ namespace UTool.Test
         {
             // TODO: Add constructor logic here
             serviceCollection = new ServiceCollection();
-            serviceCollection.TryAdd(ServiceDescriptor.Transient(typeof(IClientProxy<>), typeof(ClientProxy<>)));
+            serviceCollection.TryAdd(ServiceDescriptor.Transient(typeof(IApiProxy<>), typeof(ApiProxy<>)));
            
             serviceCollection.AddSingleton<IConfiguration>(
                 sp =>
@@ -78,7 +78,7 @@ namespace UTool.Test
         {
             HttpSpecFactory<HelloWorldService>.Instance.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
         }
-        private void CallApi(ClientProxy<IHelloWorldService> proxy)
+        private void CallApi(ApiProxy<IHelloWorldService> proxy)
         {
             IHelloWorldService helloSvc = proxy.Svc;
             string id1 = "*abc*";
@@ -97,8 +97,8 @@ namespace UTool.Test
         [UMethod]
         public void T_ClientProxy(string apiUrl,string swaggerDocUrl)
         {
-            var p=serviceProvider.GetRequiredService <IClientProxy<IHelloWorldService>>();
-            var proxy = new ClientProxy<IHelloWorldService>(new Uri(apiUrl));
+            var p=serviceProvider.GetRequiredService <IApiProxy<IHelloWorldService>>();
+            var proxy = new ApiProxy<IHelloWorldService>(new Uri(apiUrl));
             proxy.ApiVersion = "1";
             proxy.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
             CallApi(proxy);
@@ -107,7 +107,7 @@ namespace UTool.Test
         [UMethod]
         public void T_ClientProxyByGW(string apiUrl)
         {
-            var proxy = new ClientProxy<IHelloWorldService>(new Uri(apiUrl));
+            var proxy = new ApiProxy<IHelloWorldService>(new Uri(apiUrl));
             proxy.ApiVersion = "1";
             proxy.RegisterChtSwaggerDoc(useApiGateway: true);
             CallApi(proxy);            
@@ -115,7 +115,7 @@ namespace UTool.Test
         [UMethod]
         async public void T_ClientProxyAsync(string apiUrl)
         {
-            var proxy = new ClientProxy<IHelloWorldService>(new Uri(apiUrl));
+            var proxy = new ApiProxy<IHelloWorldService>(new Uri(apiUrl));
             proxy.ApiVersion = "1";// 
             //proxy.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
             proxy.RegisterChtSwaggerDoc(useApiGateway: false);

@@ -1,4 +1,4 @@
-version: '3.4'
+﻿version: '3.4'
 
 services:
   rabbitmq:
@@ -12,7 +12,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development      
       #- ASPNETCORE_URLS=https://+:443;http://+:80 #*** 443 don't work ***
-      - EventBusConnection=${EVENT_BUS:-rabbitmq}
+      ## ${EVENT_BUS} from .env file, if undefined then 'rabbitmq' is default.
+      - EventBusConnection=${EVENT_BUS:-rabbitmq} 
     ports:
       - "80"
       - "443"
@@ -25,6 +26,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development  
       #- ASPNETCORE_URLS=https://+:443;http://+:80
+      ## ${EVENT_BUS} from .env file, if undefined then 'rabbitmq' is default.
       - EventBusConnection=${EVENT_BUS:-rabbitmq}
     ports:
       - "80"

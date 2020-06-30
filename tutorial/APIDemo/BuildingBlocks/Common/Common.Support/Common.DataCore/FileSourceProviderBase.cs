@@ -10,6 +10,7 @@ using Common.DataContract;
 using System.IO;
 using Support.Net.Util;
 using System.Linq;
+using Support;
 using Support.DataTransaction;
 
 namespace Common.DataCore
@@ -518,7 +519,7 @@ namespace Common.DataCore
 
         static public string TakeFilePath(string storeDirectory, string ns, string tableName, Type transferType)
         {
-            return Support.CommonExtension.StringFormat(
+            return CommonExtension.StringFormat(
                 "{0}/{1}/{2}.{3}"
                 , storeDirectory
                 , ns

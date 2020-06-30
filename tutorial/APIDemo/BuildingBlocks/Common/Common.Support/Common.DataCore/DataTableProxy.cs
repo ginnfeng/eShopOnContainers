@@ -39,7 +39,7 @@ namespace Common.DataCore
 
         public bool ContainRow(string filterExpression, params object[] parameters)
         {
-            string expression = Support.CommonExtension.StringFormat(filterExpression, parameters);
+            string expression = CommonExtension.StringFormat(filterExpression, parameters);
             return Table.Select(expression).Length != 0;
         }
 

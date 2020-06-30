@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using Common.DataContract;
+using Support;
 
 namespace Common.DataCore
 {
@@ -45,7 +46,7 @@ namespace Common.DataCore
             {
                 foreach (Capture item in match.Groups[2].Captures)
                 {
-                    items.Add(Support.CommonExtension.ToObject<T>(item.Value));
+                    items.Add(CommonExtension.ToObject<T>(item.Value));
                 }
             }
         }

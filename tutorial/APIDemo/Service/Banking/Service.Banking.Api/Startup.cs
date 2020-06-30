@@ -32,7 +32,7 @@ namespace Service.Banking.Api
             services.AddControllers();
             // ****STD***Register the Swagger generator, defining 1 or more Swagger documents  
             services.AddChtSwagger(apiVersion, "Banking API example");
-            IoC.DI.Banking.DIContainer.ResgisterServices(services, Configuration);
+            IoC.DI.Banking.DIContainer.Instance.ResgisterServices(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -11,5 +11,7 @@
     <T_StrLength>"abc","edf"
 "1345","67890"</T_StrLength>
     <T_IpLogParser>"spy14&gt;140.227.74.14rtyu;iiop118.27.10.125&lt;\ adr=10.144.92.88"</T_IpLogParser>
+    <T6>
+    </T6>
   </TestCase>
 </UTest>

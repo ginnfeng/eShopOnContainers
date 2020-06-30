@@ -21,12 +21,12 @@ namespace Service.Ordering.ApiImp
     public class OrderingService : IOrderingService
     {
         private string storePaymentAccount = "B0001";
-        private IConnectionFactory connFactory;
+        private IQuSource connSrc;
         private ILoggerFactory loggerFactory;
         private ILogger TheLogger { get; }
-        public OrderingService(IConnectionFactory connFactory, ILoggerFactory loggerFactory)
+        public OrderingService(IQuSource src, ILoggerFactory loggerFactory)
         {
-            this.connFactory = connFactory;
+            this.connSrc = src;
             this.loggerFactory = loggerFactory;
             if (loggerFactory != null)
                 TheLogger = loggerFactory.CreateLogger<QuListener>();
@@ -45,7 +45,7 @@ namespace Service.Ordering.ApiImp
             order.Comment = "訂單成立!";
             OrderContext.Instance.Insert(order);
             //using (var mqProxy = new QuProxy<IPaymentService>("service.rabbitmq"))//host暫時
-            using (var mqProxy = new QuProxy<IPaymentService>(connFactory, loggerFactory))
+            using (var mqProxy = new QuProxy<IPaymentService>(connSrc, loggerFactory))
             {
                 switch (order.Detail.PayMethod)
                 {

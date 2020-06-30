@@ -1,16 +1,21 @@
 ﻿////*************************Copyright © 2020 Feng 豐**************************	
-// Created    : 6/22/2020 1:43:26 PM 
-// Description: IQuServiceProxy.cs  
+// Created    : 6/30/2020 10:05:53 AM 
+// Description: IConnSource.cs  
 // Revisions  :            		
 // **************************************************************************** 
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Contract
+namespace Common.DataContract
 {
-    public interface IQuProxy<TService> :IDisposable, IApiProxy<TService>
-         where TService : class
+    public interface IConnSource
     {
+        public string ConnString { get;}
+        
+    }
+    public interface IConnSource<T>: IConnSource
+    {
+        T Entity { get; }
     }
 }

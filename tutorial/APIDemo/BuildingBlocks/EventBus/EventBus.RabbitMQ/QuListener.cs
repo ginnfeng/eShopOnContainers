@@ -25,8 +25,8 @@ namespace EventBus.RabbitMQ
     {        
         
         [ActivatorUtilitiesConstructor]//Default Constructor for DI
-        public QuListener(IConnectionFactory connFactory, ILoggerFactory loggerFactory)
-            : base(connFactory, loggerFactory)
+        public QuListener(IQuSource src, ILoggerFactory loggerFactory)
+            : base(src, loggerFactory)
         {            
         }
         public QuListener(string host, ILoggerFactory loggerFactory = null)

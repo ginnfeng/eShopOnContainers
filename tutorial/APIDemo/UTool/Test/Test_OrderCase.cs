@@ -24,10 +24,10 @@ namespace UTool.Test
             // TODO: Add constructor logic here
             //      
         }
-        private ClientProxy<TService> CreateProxy<TService>()
+        private ApiProxy<TService> CreateProxy<TService>()
             where TService : class
         {
-            var proxy = new ClientProxy<TService>(host);
+            var proxy = new ApiProxy<TService>(host);
             proxy.ApiVersion = "1";
             proxy.RegisterChtSwaggerDoc(useApiGateway: true);
             return proxy;

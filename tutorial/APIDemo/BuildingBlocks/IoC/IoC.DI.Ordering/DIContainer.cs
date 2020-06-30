@@ -6,18 +6,21 @@ using Microsoft.Extensions.DependencyInjection;
 using Service.Ordering.ApiImp;
 using Service.Ordering.Contract.Servic;
 using Service.Ordering.Contract.Service;
+using Support;
 using System;
 
 namespace IoC.DI.Ordering
 {
-    public static class DIContainer
+   
+    public class DIContainer : DIContainerBase
     {
-        public static void ResgisterServices(IServiceCollection services, IConfiguration cfg)
+        static public DIContainer Instance => Singleton<DIContainer>.Instance;
+        protected override void DoResgisterServices(IServiceCollection services, IConfiguration cfg)
         {
-            IoC.DI.DIContainer.ResgisterServices(services,cfg);        
             services.AddTransient<IOrderingService, OrderingService>();
             services.AddTransient<IPaymentCallbackService, PaymentCallbackService>();
         }
+        
     }
 }
 

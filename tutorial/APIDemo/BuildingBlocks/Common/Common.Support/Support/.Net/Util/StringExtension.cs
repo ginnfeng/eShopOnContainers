@@ -187,9 +187,10 @@ namespace Support.Net.Util
         static string trimSideSymbolDef = @"^[{0}]+|[{1}]+$";
         static readonly Regex trimSideQuoteRegex = GenSideReplaceRegex("\"'", "\"'");
         //([^=,\s\t]*)[\s\t]{0,}=[\s\t]{0,}([^,\s\t]*)
-        const string keyValueRegexDef = @"([^{0}{1}\s\t]*)[\s\t]{{0,}}=[\s\t]{{0,}}([^{1}\s\t]*)";
+        //const string keyValueRegexDef = @"([^{0}{1}\s\t]*)[\s\t]{{0,}}=[\s\t]{{0,}}([^{1}\s\t]*)";
 
-
+        //[\s\t]*([^=;\t]*)[\s\t]*=[\t\s]*([^=;\t]*)[\s\t]*
+        const string keyValueRegexDef = @"[\s\t]*([^{0}{1}\t]*)[\s\t]*{0}[\t\s]*([^{0}{1}\t]*)[\s\t]*";
         static public  char DefaultSeparatorSymbol = ',';
         static public char DefaultPairSymbol = '=';
         static public StringBuilder AddKeyValue(this StringBuilder it, string key, object value)

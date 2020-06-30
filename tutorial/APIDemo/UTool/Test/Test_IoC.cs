@@ -29,7 +29,7 @@ namespace UTool.Test
         private void Init()
         {
             var serviceCollection = new ServiceCollection();
-            DIContainer.ResgisterServices(serviceCollection,null);
+            MyDIContainer.Instance.ResgisterServices(serviceCollection,null);
             SP=serviceCollection.BuildServiceProvider();
         }
         public IServiceProvider SP { get; private set; }

@@ -83,6 +83,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Common.DataContract\IConnSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Util\RC.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

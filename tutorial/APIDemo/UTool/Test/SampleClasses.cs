@@ -5,12 +5,17 @@
 // **************************************************************************** 
 
 
+using EventBus.Domain;
+using EventBus.RabbitMQ;
+using IoC.DI;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Service.HelloWorld.Contract.Entity;
 using Service.HelloWorld.Contract.Servic;
+using Support;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -120,7 +125,20 @@ namespace UTool.Test
         }
     }
 
-    #endregion  
+    #endregion
+
+    #region ****DI Container classes****
+    class MyDIContainer : DIContainerBase
+    {
+        static public MyDIContainer Instance => Singleton<MyDIContainer>.Instance;
+        
+        protected override void DoResgisterServices(IServiceCollection services, IConfiguration cfg)
+        {
+            services.AddMediatR(typeof(IMediator));
+            services.AddSingleton<IEventBus, RabbitMQBus>(sp => new RabbitMQBus(sp)); 
+        }
+    }
+    #endregion
 
     #region ****AppSettings****
     public class ClientInfo

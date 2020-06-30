@@ -5,14 +5,13 @@
 // **************************************************************************** 
 using System;
 using System.Text;
-
+using Support.Net.Proxy;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using Support.Net.Util;
+using Support;
 namespace Common.DataCore
 {
-
-    using Support.Net.Proxy;
-    using System.Reflection;
-    using System.Text.RegularExpressions;
-    using Support.Net.Util;
 
     public class StringPairProxy
     {
@@ -77,7 +76,7 @@ namespace Common.DataCore
 
         private Regex GenRegex(string key)
         {
-            string matchString = Support.CommonExtension.StringFormat("(({1}|^){0}=)([^{1}{2}]{{0,}})", key, separatorSymbol, pairSymbol);
+            string matchString = CommonExtension.StringFormat("(({1}|^){0}=)([^{1}{2}]{{0,}})", key, separatorSymbol, pairSymbol);
             return new Regex(matchString);
         }
 

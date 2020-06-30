@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Common.Contract
 {
-    public interface IClientProxy<TService>
+    public interface IApiProxy<TService>
         where TService:class
     {
         TService Svc { get; }

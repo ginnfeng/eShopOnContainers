@@ -25,9 +25,9 @@ namespace EventBus.RabbitMQ
             connPool.PoolMaxCount = 1;
         }       
         
-        public DisposableAdapter<QuConn> Create(IConnectionFactory connectionFactory)
+        public DisposableAdapter<QuConn> Create(IQuSource src)
         {
-            return connPool.Create(connectionFactory);
+            return connPool.Create(src.ConnFactory);
         }        
 
         public void Dispose()

@@ -68,7 +68,7 @@ namespace Common.DataCore
                 return null;
             var tableAttri = table.GetAttributesEntity();
             long keyIndex = tableAttri.KeyCount + 1;
-            var key = Support.CommonExtension.StringFormat(keyGen, keyIndex);
+            var key = CommonExtension.StringFormat(keyGen, keyIndex);
             tableAttri.KeyCount = keyIndex;
             row.SetValue(table.PrimaryKey, key, true);
             return key;
@@ -114,7 +114,7 @@ namespace Common.DataCore
 
         static public void AddColumn( ref EntityTable table,Type orignailType,Func<Type,EntityColumn> CreateColumn)
         {
-            Type dataType = (Support.CommonExtension.IsPrimitiveXmlType(orignailType))
+            Type dataType = (CommonExtension.IsPrimitiveXmlType(orignailType))
                     ? orignailType : typeof(object);
             var column = CreateColumn(dataType);
             table.Columns.Add(column);

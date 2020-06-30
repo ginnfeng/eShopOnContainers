@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using CodeExpression = System.Linq.Dynamic.DynamicExpression;
 using Support.Net.LINQ;
 using Support.DataTransaction;
+using Support;
 
 namespace Common.DataCore
 {
@@ -71,7 +72,7 @@ namespace Common.DataCore
         }
         public bool Contain(string lambdaExpression, params object[] parameters)
         {
-            string expression = Support.CommonExtension.StringFormat(lambdaExpression, parameters);
+            string expression = CommonExtension.StringFormat(lambdaExpression, parameters);
             ParameterExpression api = Expression.Parameter(typeof(TEntity), "entity");
             LambdaExpression e = CodeExpression.ParseLambda(
                 new ParameterExpression[] { api }, typeof(bool), expression);

@@ -14,7 +14,7 @@ namespace ApiGw.ClientProxy.Ext
 {
     static public class ClientProxyExt
     {
-        static public void RegisterChtSwaggerDoc<TService>(this ClientProxy<TService> it, bool useApiGateway)
+        static public void RegisterChtSwaggerDoc<TService>(this ApiProxy<TService> it, bool useApiGateway)
             where TService:class
         {
             //Ordering/api/v1/HelloWorld

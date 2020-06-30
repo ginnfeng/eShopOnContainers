@@ -4,6 +4,7 @@ using UTDll;
 using System.Xml;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using Support.Net.Util;
 
 namespace UTool.Test
 {
@@ -116,8 +117,14 @@ namespace UTool.Test
 			this.assert(s.Length > 3);
 
 		}
+		[UMethod]
+		public void T6()
+		{
+			string s = "Provider=MSDataShape;Data Provider=SQLOLEDB;Data Source=(local);Initial Catalog=pubs;Integrated Security=SSPI;";
+			var rlt=s.ReadPairs('=', ';');
 
-	
+		}
+
 	}
 
 

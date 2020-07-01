@@ -8,13 +8,14 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 using ApiGw.ClientProxy;
+using Common.Contract;
 using Common.Policy;
 
 namespace ApiGw.ClientProxy.Ext
 {
     static public class ClientProxyExt
     {
-        static public void RegisterChtSwaggerDoc<TService>(this ApiProxy<TService> it, bool useApiGateway)
+        static public void RegisterChtSwaggerDoc<TService>(this IApiProxy<TService> it, bool useApiGateway)
             where TService:class
         {
             //Ordering/api/v1/HelloWorld

@@ -3,6 +3,7 @@
 // Description: QuConnPool.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Common.DataContract;
 using RabbitMQ.Client;
 using Support;
 using Support.Net.Container;
@@ -25,9 +26,10 @@ namespace EventBus.RabbitMQ
             connPool.PoolMaxCount = 1;
         }       
         
-        public DisposableAdapter<QuConn> Create(IQuSource src)
+        public DisposableAdapter<QuConn> Create(IConnSource src)
         {
-            return connPool.Create(src.ConnFactory);
+            var connFactory=src.TakeCache<ConnectionFactory>();            
+            return connPool.Create(connFactory);
         }        
 
         public void Dispose()

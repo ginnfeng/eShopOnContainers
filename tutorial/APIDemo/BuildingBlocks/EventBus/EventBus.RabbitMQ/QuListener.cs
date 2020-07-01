@@ -18,6 +18,7 @@ using System.Reflection;
 using Common.Contract;
 using Support.Net.Proxy;
 using Microsoft.Extensions.Configuration;
+using Common.DataContract;
 
 namespace EventBus.RabbitMQ
 {
@@ -25,7 +26,7 @@ namespace EventBus.RabbitMQ
     {        
         
         [ActivatorUtilitiesConstructor]//Default Constructor for DI
-        public QuListener(IQuSource src, ILoggerFactory loggerFactory)
+        public QuListener(IConnSource<IQuSetting> src, ILoggerFactory loggerFactory)
             : base(src, loggerFactory)
         {            
         }

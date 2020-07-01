@@ -1,17 +1,15 @@
 ﻿////*************************Copyright © 2020 Feng 豐**************************	
-// Created    : 6/22/2020 1:43:26 PM 
-// Description: IQuServiceProxy.cs  
+// Created    : 7/1/2020 2:05:00 PM 
+// Description: IQuConnSetting.cs  
 // Revisions  :            		
 // **************************************************************************** 
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Contract
+namespace EventBus.RabbitMQ
 {
-    public interface IQuProxy<TService> :IDisposable//, IApiProxy<TService>
-         where TService : class
+    public interface IQuSetting
     {
-        TService Svc { get; }
     }
 }

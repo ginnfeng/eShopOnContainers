@@ -5,6 +5,7 @@
 // https://www.rabbitmq.com/dotnet-api-guide.html
 // **************************************************************************** 
 using Common.Contract;
+using Common.DataContract;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -24,7 +25,7 @@ namespace EventBus.RabbitMQ
         where TService:class
     {
         [ActivatorUtilitiesConstructor]//Default Constructor for DI
-        public QuProxy(IQuSource src, ILoggerFactory loggerFactory)
+        public QuProxy(IConnSource<IQuSetting> src, ILoggerFactory loggerFactory)
             : base(src, loggerFactory)
         {
             realProxy.InvokeMethodEvent += RealProxyInvokeMethodEvent;

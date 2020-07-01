@@ -3,12 +3,15 @@
 // Description: Test_EventBus.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using ApiGw.ClientProxy;
+using ApiGw.ClientProxy.Ext;
+using Common.Contract;
 using EventBus.Domain;
 using IoC.DI;
 using Microsoft.Extensions.DependencyInjection;
 using Service.Banking.Application.EventHandler;
 using Service.Banking.Contract.Event;
-
+using Service.HelloWorld.Contract.Servic;
 using Service.Ordering.Contract.Service;
 using Sid.Bss.Ordering;
 using System;
@@ -56,6 +59,26 @@ namespace UTool.Test
             var bus = SP.GetService<IEventBus>();
             bus.SubscribeEvent<IssueOrderEvent,IssueOrderEventHandler>();
         }
+        [UMethod]
+        public void T_ClientProxyByGW(string apiUrl)
+        {
+            var proxy = SP.GetService<IApiProxy<IHelloWorldService>>();            
+            proxy.ApiVersion = "1";
+            proxy.RegisterChtSwaggerDoc(useApiGateway: true);
+            CallApi(proxy);
+        }
+        private void CallApi(IApiProxy<IHelloWorldService> proxy)
+        {
+            IHelloWorldService helloSvc = proxy.Svc;
+            string id1 = "*abc*";
+            int id2 = 99;
+            DateTime id3 = DateTime.Today;
+            
+            var postrlt = helloSvc.HelloPost("CCC", "DDD");
+            print($"API={nameof(IHelloWorldService.HelloPost)} result={postrlt}");
 
+            var getrlt = proxy.Svc.HelloGet("EEE", "FFF");
+            print($"API={nameof(IHelloWorldService.HelloGet)} result={getrlt}");
+        }
     }
 }

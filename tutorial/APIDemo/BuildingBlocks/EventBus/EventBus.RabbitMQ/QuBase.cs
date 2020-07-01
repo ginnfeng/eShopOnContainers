@@ -4,6 +4,8 @@
 // Revisions  :            		
 // **************************************************************************** 
 using Common.Contract;
+using Common.DataContract;
+using Common.Support.Common.DataCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -20,21 +22,17 @@ namespace EventBus.RabbitMQ
             :this(TakeDefaultIConnectionFactory(host), loggerFactory)
         {
         }
-        public QuBase(IQuSource src, ILoggerFactory loggerFactory)           
+        public QuBase(IConnSource src, ILoggerFactory loggerFactory)           
         {
             if(src!=null)
                 Conn = QuConnPool.Instance.Create(src); 
             if (loggerFactory != null)
                 TheLogger = loggerFactory.CreateLogger<QuListener>();
         }
-        static public IQuSource TakeDefaultIConnectionFactory(string host)
-        {            
-            return new QuSource
-            {
-                HostName = host,
-                DispatchConsumersAsync = true,
-                AutomaticRecoveryEnabled = true
-            };
+        static public IConnSource TakeDefaultIConnectionFactory(string host)
+        {
+            var connStr = $"HostName={host};DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest";
+            return new ConnSourceProxy(connStr);            
         }
         public void Dispose()
         {

@@ -1,17 +1,16 @@
 ﻿////*************************Copyright © 2020 Feng 豐**************************	
-// Created    : 6/22/2020 1:43:26 PM 
-// Description: IQuServiceProxy.cs  
+// Created    : 7/1/2020 4:22:22 PM 
+// Description: IApiSetting.cs  
 // Revisions  :            		
 // **************************************************************************** 
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Common.Contract
+namespace ApiGw.ClientProxy
 {
-    public interface IQuProxy<TService> :IDisposable//, IApiProxy<TService>
-         where TService : class
+    public interface IApiSetting
     {
-        TService Svc { get; }
+        string Enpoint { get; set; }
     }
 }

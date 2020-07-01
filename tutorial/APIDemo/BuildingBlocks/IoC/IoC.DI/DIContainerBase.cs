@@ -12,6 +12,8 @@ using Common.Contract;
 
 using Support;
 using System;
+using Common.DataContract;
+using Common.Support.Common.DataCore;
 
 namespace IoC.DI
 {
@@ -26,11 +28,20 @@ namespace IoC.DI
             services.TryAdd(ServiceDescriptor.Transient(typeof(IQuProxy<>), typeof(QuProxy<>)));
             services.AddTransient<QuListener>();
 
-            if (cfg == null) return;
-            string qHost = cfg.GetValue<string>("EventBusConnection");
-            services.AddSingleton<IQuSource>(sp => QuBase.TakeDefaultIConnectionFactory(qHost) );
-            //others
             services.AddLogging(builder => builder.AddConsole().AddDebug().AddFilter(level => level >= LogLevel.Debug));
+            
+            if (cfg == null) return;            
+            var quConnString= cfg.GetValue<string>("EventBusConnection");
+            if (!string.IsNullOrEmpty(quConnString))
+            {
+                services.AddSingleton<IConnSource<IQuSetting>>(new ConnSourceProxy<IQuSetting>(quConnString));                
+            }
+
+            var apiConnString = cfg.GetValue<string>("ApiGatewayConnection");
+            if (!string.IsNullOrEmpty(apiConnString))
+            {
+                services.AddSingleton<IConnSource<IApiSetting>>(new ConnSourceProxy<IApiSetting>(quConnString));
+            }
 
             DoResgisterServices(services,cfg);
         }

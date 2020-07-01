@@ -13,5 +13,8 @@ namespace Common.Contract
         where TService:class
     {
         TService Svc { get; }
+        string ApiVersion { get; set; }
+        void RegisterSwaggerDoc(Uri endpoint, bool lazyDo = true);
+        Uri ApiEndpoint { get; set; }
     }
 }

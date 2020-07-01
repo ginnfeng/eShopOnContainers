@@ -11,11 +11,14 @@ namespace Common.DataContract
 {
     public interface IConnSource
     {
-        public string ConnString { get;}
-        
+        string ConnString { get;}
+        TEntity TakeCache<TEntity>() where TEntity : class,new();
+        TEntity GenEntityProxy<TEntity>() where TEntity : class;
+        public void ForEachSet<TEntity>(TEntity it) where TEntity : class;
     }
-    public interface IConnSource<T>: IConnSource
+    public interface IConnSource<TEntity> : IConnSource
+        where TEntity : class
     {
-        T Entity { get; }
+        TEntity Entity { get; }
     }
 }

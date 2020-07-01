@@ -5,6 +5,10 @@ using System.Xml;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Support.Net.Util;
+using Common.Support.Common.DataCore;
+using Support.Helper;
+using System.Reflection;
+using Common.DataContract;
 
 namespace UTool.Test
 {
@@ -120,15 +124,34 @@ namespace UTool.Test
 		[UMethod]
 		public void T6()
 		{
-			string s = "Provider=MSDataShape;Data Provider=SQLOLEDB;Data Source=(local);Initial Catalog=pubs;Integrated Security=SSPI;";
-			var rlt=s.ReadPairs('=', ';');
+			string s = "Provider=MSDataShape;Data Provider=SQLOLEDB;Data Source=(local);Initial Catalog=pubs;Integrated Security=SSPI;MaxConnection=10";
+			//var rlt=s.ReadPairs('=', ';');
+			var proxy=new ConnSourceProxy<IDbCfg>(s);
+			var cfg = proxy.Entity;
+			print($"Provider={cfg.Provider} DataSource={cfg.DataSource} MaxConnection={cfg.MaxConnection}");
+
+			cfg = new DbCfg();
+			proxy.ForEachSet(cfg);
+			print($"Provider={cfg.Provider} DataSource={cfg.DataSource} MaxConnection={cfg.MaxConnection}");
 
 		}
 
 	}
 
+	public interface IDbCfg
+    {
+        public string Provider { get; set; }
+		[Indexing(Id= "Data Source")]
+        public string DataSource { get; set; }
+        public int MaxConnection { get; set; }
+    }
+	public class DbCfg : IDbCfg
+    {
+        public string Provider { get; set; }
+        public string DataSource { get; set; }
+		public int MaxConnection { get; set; }
+	}
 
-	
 }
 
 

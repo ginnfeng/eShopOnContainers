@@ -4,8 +4,12 @@
 // Revisions  :            		
 // **************************************************************************** 
 using Common.Contract;
+using Common.DataContract;
+using Common.Support.Common.DataCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using Support.Net.Proxy;
@@ -25,7 +29,9 @@ namespace ApiGw.ClientProxy
     public class ApiProxy<TService>: IApiProxy<TService>
         where TService:class
     {
-        public ApiProxy(IConfiguration cfg)
+        [ActivatorUtilitiesConstructor]//Default Constructor for DI
+        public ApiProxy(IConnSource<IApiSetting> src, ILoggerFactory loggerFactory)
+            :this(new Uri(src.Entity.Enpoint))
         {
             realProxy.InvokeMethodEvent += RealProxyInvokeMethodEvent;                        
         }

@@ -4,6 +4,7 @@
 // Revisions  :            		
 // **************************************************************************** 
 
+using Common.DataContract;
 using EventBus.Domain;
 using EventBus.RabbitMQ;
 using Microsoft.Extensions.Logging;
@@ -21,10 +22,10 @@ namespace Service.Ordering.ApiImp
     public class OrderingService : IOrderingService
     {
         private string storePaymentAccount = "B0001";
-        private IQuSource connSrc;
+        private IConnSource<IQuSetting> connSrc;
         private ILoggerFactory loggerFactory;
         private ILogger TheLogger { get; }
-        public OrderingService(IQuSource src, ILoggerFactory loggerFactory)
+        public OrderingService(IConnSource<IQuSetting> src, ILoggerFactory loggerFactory)
         {
             this.connSrc = src;
             this.loggerFactory = loggerFactory;

@@ -4,6 +4,7 @@
 // Revisions  :            		
 // **************************************************************************** 
 using Common.Contract;
+using Common.DataContract;
 using EventBus.RabbitMQ;
 
 using Microsoft.Extensions.Logging;
@@ -21,10 +22,10 @@ namespace Service.Banking.ApiImp
 {
     public class PaymentService : IPaymentService, IDepositService
     {
-        private IQuSource connSrc;
+        private IConnSource<IQuSetting> connSrc;
         private ILoggerFactory loggerFactory;
         private ILogger TheLogger { get; }
-        public PaymentService(IQuSource src, ILoggerFactory loggerFactory)
+        public PaymentService(IConnSource<IQuSetting> src, ILoggerFactory loggerFactory)
         {
             this.connSrc = src;
             this.loggerFactory = loggerFactory;

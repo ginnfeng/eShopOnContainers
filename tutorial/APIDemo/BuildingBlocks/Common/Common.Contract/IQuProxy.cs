@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Common.Contract
 {
@@ -13,5 +14,9 @@ namespace Common.Contract
          where TService : class
     {
         TService Svc { get; }
+        T WaitResult<T>(QuResult<T> rltStamp);
+        T WaitResult<T>(QuResult<T> rltStamp, TimeSpan timeOut);
+        Task<T> AsyncWaitResult<T>(QuResult<T> rltStamp);
+        Task<T> AsyncWaitResult<T>(QuResult<T> rltStamp, TimeSpan timeOut);        
     }
 }

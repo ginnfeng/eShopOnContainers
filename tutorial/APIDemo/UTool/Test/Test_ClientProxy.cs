@@ -78,7 +78,7 @@ namespace UTool.Test
         {
             HttpSpecFactory<HelloWorldService>.Instance.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
         }
-        private void CallApi(ApiProxy<IHelloWorldService> proxy)
+        private void CallApi(IApiProxy<IHelloWorldService> proxy)
         {
             IHelloWorldService helloSvc = proxy.Svc;
             string id1 = "*abc*";
@@ -97,7 +97,7 @@ namespace UTool.Test
         [UMethod]
         public void T_ClientProxy(string apiUrl,string swaggerDocUrl)
         {
-            var p=serviceProvider.GetRequiredService <IApiProxy<IHelloWorldService>>();
+            //var p=serviceProvider.GetRequiredService <IApiProxy<IHelloWorldService>>();
             var proxy = new ApiProxy<IHelloWorldService>(new Uri(apiUrl));
             proxy.ApiVersion = "1";
             proxy.RegisterSwaggerDoc(new Uri(swaggerDocUrl));
@@ -107,7 +107,7 @@ namespace UTool.Test
         [UMethod]
         public void T_ClientProxyByGW(string apiUrl)
         {
-            var proxy = new ApiProxy<IHelloWorldService>(new Uri(apiUrl));
+            IApiProxy<IHelloWorldService> proxy = new ApiProxy<IHelloWorldService>(new Uri(apiUrl));
             proxy.ApiVersion = "1";
             proxy.RegisterChtSwaggerDoc(useApiGateway: true);
             CallApi(proxy);            

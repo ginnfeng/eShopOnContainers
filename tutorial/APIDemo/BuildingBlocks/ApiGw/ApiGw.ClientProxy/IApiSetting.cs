@@ -11,6 +11,6 @@ namespace ApiGw.ClientProxy
 {
     public interface IApiSetting
     {
-        string Enpoint { get; set; }
+        string Endpoint { get; set; }
     }
 }

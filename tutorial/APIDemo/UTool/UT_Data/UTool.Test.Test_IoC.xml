@@ -6,5 +6,6 @@
     </T_method>
     <T_IssueOrderEventHandler>
     </T_IssueOrderEventHandler>
+    <T_ClientProxyByGW>""</T_ClientProxyByGW>
   </TestCase>
 </UTest>

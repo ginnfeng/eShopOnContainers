@@ -31,7 +31,7 @@ namespace ApiGw.ClientProxy
     {
         [ActivatorUtilitiesConstructor]//Default Constructor for DI
         public ApiProxy(IConnSource<IApiSetting> src, ILoggerFactory loggerFactory)
-            :this(new Uri(src.Entity.Enpoint))
+            :this(new Uri(src.Entity.Endpoint))
         {
             realProxy.InvokeMethodEvent += RealProxyInvokeMethodEvent;                        
         }

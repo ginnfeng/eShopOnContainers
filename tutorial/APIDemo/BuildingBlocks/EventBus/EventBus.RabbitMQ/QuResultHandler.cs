@@ -16,8 +16,7 @@ namespace EventBus.RabbitMQ
     internal class QuResultHandler : IQuCorrleation,IDisposable
     {
         public QuResultHandler(string cid)
-        {
-            
+        {            
             CorrleationId = cid;
         }        
         private object Rlt { get; set; }
@@ -35,8 +34,7 @@ namespace EventBus.RabbitMQ
         }
         
         public object Wait(TimeSpan timeOut)
-        {
-            
+        {            
             bool isTrue = returnEvent.WaitOne(timeOut);
             if (!isTrue)
                 throw new TimeoutException(nameof(Wait));

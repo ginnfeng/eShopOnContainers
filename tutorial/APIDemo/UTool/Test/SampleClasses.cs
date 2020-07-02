@@ -127,10 +127,10 @@ namespace UTool.Test
 
     #endregion
 
-    #region ****DI Container classes****
-    class MyDIContainer : DIContainerBase
+    #region ****DI Container classes模擬UI/Web端DIContainer****
+    class UtoolDIContainer : DIContainerBase
     {
-        static public MyDIContainer Instance => Singleton<MyDIContainer>.Instance;
+        static public UtoolDIContainer Instance => Singleton<UtoolDIContainer>.Instance;
         
         protected override void DoResgisterServices(IServiceCollection services, IConfiguration cfg)
         {

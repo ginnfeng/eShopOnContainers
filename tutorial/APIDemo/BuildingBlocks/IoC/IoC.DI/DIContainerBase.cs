@@ -31,16 +31,16 @@ namespace IoC.DI
             services.AddLogging(builder => builder.AddConsole().AddDebug().AddFilter(level => level >= LogLevel.Debug));
             
             if (cfg == null) return;            
-            var quConnString= cfg.GetValue<string>("EventBusConnection");
-            if (!string.IsNullOrEmpty(quConnString))
+            var connString= cfg.GetValue<string>("EventBusConnection");
+            if (!string.IsNullOrEmpty(connString))
             {
-                services.AddSingleton<IConnSource<IQuSetting>>(new ConnSourceProxy<IQuSetting>(quConnString));                
+                services.AddSingleton<IConnSource<IQuSetting>>(new ConnSourceProxy<IQuSetting>(connString));                
             }
 
-            var apiConnString = cfg.GetValue<string>("ApiGatewayConnection");
-            if (!string.IsNullOrEmpty(apiConnString))
+            connString = cfg.GetValue<string>("ApiGatewayConnection");
+            if (!string.IsNullOrEmpty(connString))
             {
-                services.AddSingleton<IConnSource<IApiSetting>>(new ConnSourceProxy<IApiSetting>(quConnString));
+                services.AddSingleton<IConnSource<IApiSetting>>(new ConnSourceProxy<IApiSetting>(connString));
             }
 
             DoResgisterServices(services,cfg);

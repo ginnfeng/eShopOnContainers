@@ -8,34 +8,45 @@ using ApiGw.ClientProxy.Ext;
 using Common.Contract;
 using EventBus.Domain;
 using IoC.DI;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Service.Banking.Application.EventHandler;
 using Service.Banking.Contract.Event;
 using Service.HelloWorld.Contract.Servic;
 using Service.Ordering.Contract.Service;
 using Sid.Bss.Ordering;
 using System;
-
+using System.IO;
 using UTDll;
 namespace UTool.Test
 {
     class Test_IoC : UTest
     {
-        private IServiceProvider serviceProvider;
+        
         public Test_IoC()
         {
             //
             // TODO: Add constructor logic here
             //     
-            Init();
+            
         }
-        private void Init()
+        static internal IServiceProvider InitSP()
         {
+            var basePath = Directory.GetCurrentDirectory();
+            var builder = new ConfigurationBuilder()
+                .SetFileProvider(new PhysicalFileProvider(basePath))
+                //.AddEnvironmentVariables()
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+                    optional: true);
+            var cfg= builder.Build();
             var serviceCollection = new ServiceCollection();
-            MyDIContainer.Instance.ResgisterServices(serviceCollection,null);
-            SP=serviceCollection.BuildServiceProvider();
+            UtoolDIContainer.Instance.ResgisterServices(serviceCollection, cfg);
+            return serviceCollection.BuildServiceProvider();
         }
-        public IServiceProvider SP { get; private set; }
+        static private IServiceProvider serviceProvider;
+        public IServiceProvider SP => serviceProvider??= InitSP();
         static long orderIdNum = 1000;
         [UMethod]
         public void T_IssueOrder(string customerId, string adr)
@@ -59,10 +70,11 @@ namespace UTool.Test
             var bus = SP.GetService<IEventBus>();
             bus.SubscribeEvent<IssueOrderEvent,IssueOrderEventHandler>();
         }
+        //static IApiProxy<IHelloWorldService> proxy;
         [UMethod]
         public void T_ClientProxyByGW(string apiUrl)
         {
-            var proxy = SP.GetService<IApiProxy<IHelloWorldService>>();            
+            var proxy= SP.GetRequiredService<IApiProxy<IHelloWorldService>>();            
             proxy.ApiVersion = "1";
             proxy.RegisterChtSwaggerDoc(useApiGateway: true);
             CallApi(proxy);

@@ -3,7 +3,9 @@
 // Description: Test_MQProxy.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Common.Contract;
 using EventBus.RabbitMQ;
+using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 using Service.HelloWorld.ApiImp;
 using Service.HelloWorld.Contract.Entity;
@@ -82,23 +84,17 @@ namespace UTool.Test
             }
         }
 
+        static private IServiceProvider serviceProvider;
+        public IServiceProvider SP => serviceProvider ??= Test_IoC.InitSP();
         [UMethod]
-        public void T_Test()
+        public void T_PublishTwoWay2(string id1)
         {// TODO: Add Testing logic here
-            ConnectionFactory connFactory1 = new ConnectionFactory
+            using (var mqProxy = SP.GetService<IQuProxy<IHelloQuService>>())
             {
-                HostName = "localhost",
-                DispatchConsumersAsync = true,
-                AutomaticRecoveryEnabled = true
-            };
-            ConnectionFactory connFactory2 = new ConnectionFactory
-            {
-                HostName = "localhost",
-                DispatchConsumersAsync = true,
-                AutomaticRecoveryEnabled = true
-            };
-
-            var t = connFactory1.Equals(connFactory2);
+                var quRlt = mqProxy.Svc.TwoWayCall(id1);                
+                var obj = mqProxy.WaitResult(quRlt);
+                print(obj.Summary);
+            }
         }
 
     }

@@ -9,5 +9,7 @@
     <T_Publish2>"555"</T_Publish2>
     <T_Test>
     </T_Test>
+    <T_T_PublishTwoWay2>"123"</T_T_PublishTwoWay2>
+    <T_PublishTwoWay2>"By ServiceProvider"</T_PublishTwoWay2>
   </TestCase>
 </UTest>

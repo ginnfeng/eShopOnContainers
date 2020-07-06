@@ -21,15 +21,15 @@ namespace EventBus.RabbitMQ
         
         public QuConnPool()
         {
-            Func<IConnectionFactory, QuConn> method = (connFactory) => { return new QuConn(connFactory.CreateConnection()); };
-            connPool = new SmartPool<QuConn,IConnectionFactory>(method,(connfactory)=>$"{connfactory.GetType().Name}{connfactory.GetHashCode()}");
+            Func<IConnSource, QuConn> method = (connSource) => { return new QuConn(connSource); };
+            connPool = new SmartPool<IConnSource,QuConn>(method,threadShareResource:true);
             connPool.PoolMaxCount = 1;
         }       
         
-        public DisposableAdapter<QuConn> Create(IConnSource src)
+        public DisposableAdapter<QuConn> Create(IConnSource connSrc)
         {
-            var connFactory=src.TakeCache<ConnectionFactory>();            
-            return connPool.Create(connFactory);
+            //var connFactory=src.TakeCache<ConnectionFactory>();            
+            return connPool.Create(connSrc);
         }        
 
         public void Dispose()
@@ -54,7 +54,7 @@ namespace EventBus.RabbitMQ
             disposed = true;
         }
         private bool disposed;
-        private SmartPool<QuConn, IConnectionFactory> connPool;
+        private SmartPool<IConnSource,QuConn> connPool;
         //private Dictionary<string, IConnectionFactory> defaultIConnectionFactoryMap;
     }
     

@@ -3,6 +3,7 @@
 // Description: QuConn.cs  
 // Revisions  :            		
 // **************************************************************************** 
+using Common.DataContract;
 using RabbitMQ.Client;
 using Support.Net.Container;
 using Support.Net.Proxy;
@@ -14,22 +15,23 @@ namespace EventBus.RabbitMQ
 {
     public class QuConn : IDisposable
     {
-        internal QuConn(IConnection conn)
+        internal QuConn(IConnSource connSrc)
         {
-            Init(conn);
+            Init(connSrc);
         }
 
-        private void Init(IConnection conn)
+        private void Init(IConnSource connSrc)
         {
-            this.conn = conn ?? throw new NullReferenceException(nameof(Init));
-            ChannelPool = new SmartPool<IModel, string>(rckey => conn.CreateModel());
+            if(connSrc==null) throw new NullReferenceException(nameof(Init));
+            conn = connSrc.TakeCache<ConnectionFactory>().CreateConnection();            
+            ChannelPool = new SmartPool<string,IModel>(rckey => conn.CreateModel(),threadShareResource:false);
             ChannelPool.PoolMaxCount = 1;
         }
         public DisposableAdapter<IModel> Create()
         {
             return ChannelPool.Create(typeof(IModel).Name);
         }
-        public SmartPool<IModel, string> ChannelPool { get; private set; }
+        public SmartPool<string,IModel> ChannelPool { get; private set; }
         public void Dispose()
         {
             Dispose(true);

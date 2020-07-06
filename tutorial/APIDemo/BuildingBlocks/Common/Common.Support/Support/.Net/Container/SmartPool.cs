@@ -1,4 +1,5 @@
-﻿using Support.Net.Proxy;
+﻿using Common.DataContract;
+using Support.Net.Proxy;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -6,7 +7,7 @@ using System.Threading;
 namespace Support.Net.Container
 {
 
-    public class SmartPool<TResource, TKey> : IDisposable
+    public class SmartPool<TKey, TResource> : IDisposable
         where TResource : class,IDisposable
     {
         class RcInfo
@@ -18,13 +19,14 @@ namespace Support.Net.Container
             public string ResourceId { get; set; }
             public TKey OriginKey { get; set; }
         }
-
-        public SmartPool(Func<TKey,TResource> method,Func<TKey,string> rcKeyFunc=null)
+       
+        public SmartPool(Func<TKey,TResource> method,Func<TKey,string> rcKeyFunc=null,bool threadShareResource=false)
         {
             this.PoolMaxCount = 10;
             this.PoolTimeOut = TimeSpan.FromSeconds(60);//秒
             this.createMethod = method;
             this.rcKeyFunc = rcKeyFunc;
+            this.threadShareResource = threadShareResource;
             timer = new Timer(OnTimerElapsed, null, this.PoolTimeOut, this.PoolTimeOut);            
         }
         private Func<TKey, string> rcKeyFunc;
@@ -149,14 +151,13 @@ namespace Support.Net.Container
         }
         private string TakeResourceId(TKey oringalKey)
         {
-            return oringalKey.ToString();
+            var connSrc=oringalKey as IConnSource;
+            return (connSrc!=null)? connSrc.ConnString:oringalKey.ToString();
         }
         private string TakeUsingId(TKey oringalKey)
         {
-            var key = TakeResourceId(oringalKey);
-            return (rcKeyFunc==null)
-                ?string.Format("{0}#{1}", Thread.CurrentThread.ManagedThreadId,key)
-                : rcKeyFunc(oringalKey);
+            var key = (rcKeyFunc != null) ? rcKeyFunc(oringalKey) : TakeResourceId(oringalKey);
+            return (threadShareResource) ? key : $"{key}:{Thread.CurrentThread.ManagedThreadId}";
         }
 
         public void Dispose()
@@ -201,6 +202,7 @@ namespace Support.Net.Container
         private Dictionary<string, RcInfo> workingMap = new Dictionary<string, RcInfo>();
         private Dictionary<string, Queue<RcInfo>> poolMap = new Dictionary<string, Queue<RcInfo>>();
         private Func<TKey, TResource> createMethod;
+        private bool threadShareResource;
         private Timer timer;
         public int PoolMaxCount { get; set; }
         /// <summary>

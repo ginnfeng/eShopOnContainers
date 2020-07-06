@@ -47,29 +47,9 @@ namespace UTool.Test
         }
         static private IServiceProvider serviceProvider;
         public IServiceProvider SP => serviceProvider??= InitSP();
-        static long orderIdNum = 1000;
-        [UMethod]
-        public void T_IssueOrder(string customerId, string adr)
-        {// TODO: Add Testing logic here
-            var order = new Order() {Id= $"{orderIdNum++}",CustomerId= customerId, ShipAddress=adr };
-            var svc=SP.GetService<IOrderingService>();
-            svc.IssueOrder(order);
-        }
         
-        [UMethod]
-        public void T_QueryOrder(string orderId)
-        {// TODO: Add Testing logic here
-            var svc = SP.GetService<IOrderingService>();
-            var order = svc.QueryOrder(orderId);
-            print($"CustId={order.CustomerId} ShipAddres={order.ShipAddress}");
-        }
 
-        [UMethod]
-        public void T_IssueOrderEventHandler()
-        {// TODO: Add Testing logic here
-            var bus = SP.GetService<IEventBus>();
-            bus.SubscribeEvent<IssueOrderEvent,IssueOrderEventHandler>();
-        }
+        
         //static IApiProxy<IHelloWorldService> proxy;
         [UMethod]
         public void T_ClientProxyByGW(string apiUrl)
@@ -92,5 +72,28 @@ namespace UTool.Test
             var getrlt = proxy.Svc.HelloGet("EEE", "FFF");
             print($"API={nameof(IHelloWorldService.HelloGet)} result={getrlt}");
         }
+
+        //[UMethod]
+        //public void T_IssueOrderEventHandler()
+        //{// TODO: Add Testing logic here
+        //    var bus = SP.GetService<IEventBus>();
+        //    bus.SubscribeEvent<IssueOrderEvent,IssueOrderEventHandler>();
+        //}
+        //static long orderIdNum = 1000;
+        //[UMethod]
+        //public void T_IssueOrder(string customerId, string adr)
+        //{// TODO: Add Testing logic here
+        //    var order = new Order() { Id = $"{orderIdNum++}", CustomerId = customerId, ShipAddress = adr };
+        //    var svc = SP.GetService<IOrderingService>();
+        //    svc.IssueOrder(order);
+        //}
+
+        //[UMethod]
+        //public void T_QueryOrder(string orderId)
+        //{// TODO: Add Testing logic here
+        //    var svc = SP.GetService<IOrderingService>();
+        //    var order = svc.QueryOrder(orderId);
+        //    print($"CustId={order.CustomerId} ShipAddres={order.ShipAddress}");
+        //}
     }
 }

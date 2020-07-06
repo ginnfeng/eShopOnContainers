@@ -122,43 +122,43 @@ namespace UTool.Test
             var getrlt = await Task.Run<string>(() => proxy.Svc.HelloGet("EEE", "FFF"));
             printMsg($"API={nameof(IHelloWorldService.HelloGet)} result={getrlt}");
         }
-        [UMethod]
-        public void T_ParseSwaggerJson(int port)
-        {// TODO: Add Testing logic here
-            //https://localhost:44363/swagger/v1/swagger.json
-            //Uri r = new Uri("https://localhost:44363/swagger/v1/swagger.json");
-            RestClient client = new RestClient($"https://localhost:{port}");
-            var req = client.TakeRequest<JObject>("/swagger/v1/swagger.json");
-            var content = client.Execute(req);            
-            foreach (JProperty prop in content["paths"])
-            {
-                print($"routePath={prop.Name}");
-                foreach (JProperty method in prop.Values())
-                {
-                    print($"httpMethod={method.Name}");
-                    var tags = method.Value["tags"] as JArray;
-                    var parameters = method.Value["parameters"];
-                    var parameterSpecArray = (parameters != null) ? parameters.Value<JArray>() : null;
-                    if (parameterSpecArray != null)
-                    {
-                        var y = parameterSpecArray.ToObject<List<HttpMethodParameterSpec>>();
-                        foreach (JObject item in parameterSpecArray.Children())
-                        {
-                            //item.ToObject
-                            //var x=item.Value<JObject>();
-                            var x1 = item.ToObject<HttpMethodParameterSpec>();
-                        }
-                    }
-                    bool b = method.Exists(it => it["requestBody"] != null);
-                    if (b)
-                    {
-                        var requestBodyContent = method.Value["requestBody"]["content"]["application/json"].ToObject<HttpMethodParameterSpec>();
+        //[UMethod]
+        //public void T_ParseSwaggerJson(int port)
+        //{// TODO: Add Testing logic here
+        //    //https://localhost:44363/swagger/v1/swagger.json
+        //    //Uri r = new Uri("https://localhost:44363/swagger/v1/swagger.json");
+        //    RestClient client = new RestClient($"https://localhost:{port}");
+        //    var req = client.TakeRequest<JObject>("/swagger/v1/swagger.json");
+        //    var content = client.Execute(req);            
+        //    foreach (JProperty prop in content["paths"])
+        //    {
+        //        print($"routePath={prop.Name}");
+        //        foreach (JProperty method in prop.Values())
+        //        {
+        //            print($"httpMethod={method.Name}");
+        //            var tags = method.Value["tags"] as JArray;
+        //            var parameters = method.Value["parameters"];
+        //            var parameterSpecArray = (parameters != null) ? parameters.Value<JArray>() : null;
+        //            if (parameterSpecArray != null)
+        //            {
+        //                var y = parameterSpecArray.ToObject<List<HttpMethodParameterSpec>>();
+        //                foreach (JObject item in parameterSpecArray.Children())
+        //                {
+        //                    //item.ToObject
+        //                    //var x=item.Value<JObject>();
+        //                    var x1 = item.ToObject<HttpMethodParameterSpec>();
+        //                }
+        //            }
+        //            bool b = method.Exists(it => it["requestBody"] != null);
+        //            if (b)
+        //            {
+        //                var requestBodyContent = method.Value["requestBody"]["content"]["application/json"].ToObject<HttpMethodParameterSpec>();
 
-                    }
-                }
-            }
+        //            }
+        //        }
+        //    }
 
 
-        }
+        //}
     }
 }

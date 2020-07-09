@@ -21,6 +21,7 @@
     <UTool.Test.Test_ThreadAwait src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_ThreadAwait.cs" />
     <UTool.Test.Test_UnitTest src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_UnitTest.cs" />
     <UTool.Test.Test_OrderCase src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_OrderCase.cs" />
+    <UTool.Test.Test_Exception src="C:\ProgOpen\Demo\eShopOnContainers\tutorial\APIDemo\UTool\Test\Test_Exception.cs" />
   </Cache>
   <CacheDir>
     <F_344>d:\Dev\UTool\UTool\Test</F_344>

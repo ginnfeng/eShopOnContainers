@@ -83,7 +83,40 @@ namespace UTool.Test
             print(rlt);
            
         }
+        //**************************************
+        static Task<string> AsyncEcho(string str)
+        {
+            var task = new Task<string>(
+                    () => {
+                        Debug.WriteLine($"  ➥ Task_{str}  threadId:{Thread.CurrentThread.ManagedThreadId}");
+                        return ($"Echo{str}");
+                    }
+                );
+            task.Start(); // invoke another thread ➠
+            return task;
+        }
+        [UMethod]
+        public async void T_AwaitEcho()
+        {
+            Debug.WriteLine($"  UI ➽ threadId:{Thread.CurrentThread.ManagedThreadId}");
+            
+            string rlt = await AsyncEcho("HELLO");
+            print(rlt);
 
+            Debug.WriteLine($"  ➥ rlt_{rlt}  threadId:{Thread.CurrentThread.ManagedThreadId}");
+        }
+        [UMethod]
+        public void T_TaskWaitEcho()
+        {
+            Debug.WriteLine($"  UI ➽ threadId:{Thread.CurrentThread.ManagedThreadId}");
+
+            Task<string> task = AsyncEcho("HELLO");            
+            string rlt = task.Result;
+            print(rlt);
+
+            Debug.WriteLine($"  ➥ rlt_{rlt}  threadId:{Thread.CurrentThread.ManagedThreadId}");
+        }
+        //**************************************
         private static readonly SmartThreadPool threadPool = new SmartThreadPool(3);
         [UMethod]
         public void T_ThreadPool()

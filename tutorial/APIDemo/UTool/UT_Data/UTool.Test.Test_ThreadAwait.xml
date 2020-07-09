@@ -4,5 +4,11 @@
     </T_ThreadTask>
     <T_ThreadPool>
     </T_ThreadPool>
+    <T_AwaitEcho>
+    </T_AwaitEcho>
+    <T_TaskWaitEcho>
+    </T_TaskWaitEcho>
+    <T_UI>
+    </T_UI>
   </TestCase>
 </UTest>

@@ -35,11 +35,11 @@ namespace Service.Ordering.Api.Controllers
             return Ok(order);
         }
 
-        [ApiSpec(HTTP.GET, typeof(IOrderingService), "")]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "Hello", "Ordering API" };
-        }
+        //[ApiSpec(HTTP.GET, typeof(IOrderingService), "")]
+        //public IEnumerable<string> Get()
+        //{
+        //    return new string[] { "Hello", "Ordering API" };
+        //}
         private IOrderingService svc;//= new OrderingService();
     }
 }

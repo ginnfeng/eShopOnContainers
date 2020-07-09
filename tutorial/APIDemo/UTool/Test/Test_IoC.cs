@@ -7,12 +7,14 @@ using ApiGw.ClientProxy;
 using ApiGw.ClientProxy.Ext;
 using Common.Contract;
 using EventBus.Domain;
+using EventBus.RabbitMQ;
 using IoC.DI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Service.Banking.Application.EventHandler;
 using Service.Banking.Contract.Event;
+using Service.HelloWorld.ApiImp;
 using Service.HelloWorld.Contract.Servic;
 using Service.Ordering.Contract.Service;
 using Sid.Bss.Ordering;
@@ -47,25 +49,21 @@ namespace UTool.Test
         }
         static private IServiceProvider serviceProvider;
         public IServiceProvider SP => serviceProvider??= InitSP();
-        
 
-        
+
+
         //static IApiProxy<IHelloWorldService> proxy;
         [UMethod]
-        public void T_ClientProxyByGW(string apiUrl)
+        public void T_ClientProxyByGW()
         {
-            var proxy= SP.GetRequiredService<IApiProxy<IHelloWorldService>>();            
+            var proxy = SP.GetRequiredService<IApiProxy<IHelloWorldService>>();
             proxy.ApiVersion = "1";
             proxy.RegisterChtSwaggerDoc(useApiGateway: true);
-            CallApi(proxy);
-        }
-        private void CallApi(IApiProxy<IHelloWorldService> proxy)
-        {
             IHelloWorldService helloSvc = proxy.Svc;
             string id1 = "*abc*";
             int id2 = 99;
             DateTime id3 = DateTime.Today;
-            
+
             var postrlt = helloSvc.HelloPost("CCC", "DDD");
             print($"API={nameof(IHelloWorldService.HelloPost)} result={postrlt}");
 
@@ -73,6 +71,25 @@ namespace UTool.Test
             print($"API={nameof(IHelloWorldService.HelloGet)} result={getrlt}");
         }
 
+        [UMethod]
+        public void T_StartSubscriber()
+        {// TODO: Add Testing logic here
+            var svcHandler = SP.GetService<QuListener>();
+            var holderSvc = new HelloWorldService();
+            svcHandler.Subscribe<IHelloWorldService>(holderSvc);
+            svcHandler.Subscribe<IHelloQuService>(holderSvc);
+        }
+        
+        [UMethod]
+        public void T_PublishTwoWay(string id1)
+        {// TODO: Add Testing logic here
+            using (var mqProxy = SP.GetService<IQuProxy<IHelloQuService>>())
+            {
+                var quRlt = mqProxy.Svc.TwoWayCall(id1);
+                var obj = mqProxy.WaitResult(quRlt);
+                print(obj.Summary);
+            }
+        }
         //[UMethod]
         //public void T_IssueOrderEventHandler()
         //{// TODO: Add Testing logic here

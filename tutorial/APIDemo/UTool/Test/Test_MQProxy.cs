@@ -84,18 +84,5 @@ namespace UTool.Test
             }
         }
 
-        static private IServiceProvider serviceProvider;
-        public IServiceProvider SP => serviceProvider ??= Test_IoC.InitSP();
-        [UMethod]
-        public void T_PublishTwoWay2(string id1)
-        {// TODO: Add Testing logic here
-            using (var mqProxy = SP.GetService<IQuProxy<IHelloQuService>>())
-            {
-                var quRlt = mqProxy.Svc.TwoWayCall(id1);                
-                var obj = mqProxy.WaitResult(quRlt);
-                print(obj.Summary);
-            }
-        }
-
     }
 }

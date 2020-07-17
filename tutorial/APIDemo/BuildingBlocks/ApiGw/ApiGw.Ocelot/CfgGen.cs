@@ -7,6 +7,7 @@ using Common.Policy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Support;
+using Support.Net.Web;
 using Support.Serializer;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace ApiGw.Ocelot
         }
         public string GenOcelotJsonFile(List<ServiceDef> svcDefs)
         {
-            var rootCfg = new CfgRootobject() { GlobalConfiguration = new Globalconfiguration() {BaseUrl= "http://localhost" }};
+            var rootCfg = new CfgRootobject() { GlobalConfiguration = new Globalconfiguration() {BaseUrl= "http://localhost", RequestIdKey= LogHeaderMiddleware.CorrelationHeader } };
             var reroutes = new List<Reroute>();
             var swaggerendpoints = new List<Swaggerendpoint>();
             foreach (var svcDef in svcDefs)

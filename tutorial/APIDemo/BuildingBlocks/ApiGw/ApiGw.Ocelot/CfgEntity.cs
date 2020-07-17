@@ -19,6 +19,7 @@ namespace ApiGw.Ocelot
     public class Globalconfiguration
     {
         public string BaseUrl { get; set; }
+        public string RequestIdKey { get; set; }
     }
 
     public class Reroute

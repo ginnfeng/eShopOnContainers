@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Common.Policy;
+using Support.Net.Web;
 
 namespace Service.HelloWorld.Api
 {
@@ -44,6 +45,7 @@ namespace Service.HelloWorld.Api
 
             // ****STD*** Enable middleware to serve generated Swagger as a JSON endpoint.           
             app.UseChtSwagger(apiVersion);
+            app.UseMiddleware<LogHeaderMiddleware>();
 
             app.UseRouting();
 

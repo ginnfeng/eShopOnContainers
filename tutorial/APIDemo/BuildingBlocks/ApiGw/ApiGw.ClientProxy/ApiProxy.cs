@@ -14,6 +14,7 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using Support.Net.Proxy;
 using Support.Net.Util;
+using Support.Net.Web;
 using Support.Open.RestSharp;
 using System;
 using System.Collections.Generic;
@@ -93,6 +94,7 @@ namespace ApiGw.ClientProxy
                     }                    
                 }
             }
+            req.Node.AddHeader(LogHeaderMiddleware.CorrelationHeader, Guid.NewGuid().ToString());
             var response = client.Execute(req);
             bool noReturn = methodInfo.ReturnType.Equals(typeof(void));
             if (noReturn) return null;

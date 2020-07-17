@@ -41,7 +41,7 @@ namespace UTool.Test
             //LOGGING 
             //https://stackoverflow.com/questions/50849251/net-core-di-logger-on-console-app-not-logging-to-console
             //https://docs.microsoft.com/zh-tw/aspnet/core/fundamentals/logging/?view=aspnetcore-3.1
-            
+            //https://blog.yowko.com/asp-net-core-default-log-nlog-serilog/
             serviceCollection.AddLogging(builder => builder.AddConsole().AddDebug().AddFilter(level => level >= LogLevel.Debug));
             serviceCollection.AddTransient<IRequestHandler<SampleCommand, bool>, SampleCommandHandler>();
             serviceCollection.AddTransient<INotificationHandler<SampleCommand>, SampleNotificationHandler1>();
@@ -63,6 +63,7 @@ namespace UTool.Test
                     return builder.Build();
                 }
                 );
+            
         }
         [UMethod]
         public void T_MediatorR()

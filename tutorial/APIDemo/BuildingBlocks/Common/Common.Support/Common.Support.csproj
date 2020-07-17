@@ -34,6 +34,14 @@
     <Compile Include="Support\.Net\LINQ\MethodDelegate.cs" />
     <Compile Include="Support\.Net\LINQ\ObjectDelegate.cs" />
     <Compile Include="Support\.Net\LINQ\PropertyDelegate.cs" />
+    <Compile Include="Support\.Net\Logger\FileLoggerOptions.cs" />
+    <Compile Include="Support\.Net\Logger\BatchingLogger.cs" />
+    <Compile Include="Support\.Net\Logger\BatchingLoggerOptions.cs" />
+    <Compile Include="Support\.Net\Logger\BatchingLoggerProvider.cs" />
+    <Compile Include="Support\.Net\Logger\DailyLoggerProvider.cs" />
+    <Compile Include="Support\.Net\Logger\Extensions.cs" />
+    <Compile Include="Support\.Net\Logger\FileLoggerProvider.cs" />
+    <Compile Include="Support\.Net\Logger\LogMessage.cs" />
     <Compile Include="Support\.Net\Proxy\DisposableAdapter.cs" />
     <Compile Include="Support\.Net\Proxy\DynamicProperty.cs" />
     <Compile Include="Support\.Net\Proxy\DynamicTypeFactory.cs" />
@@ -62,6 +70,7 @@
     <Compile Include="Support\.Net\Util\StringExtension.cs" />
     <Compile Include="Support\.Net\Util\TypeExtension.cs" />
     <Compile Include="Support\.Net\Util\UtilEventHandler.cs" />
+    <Compile Include="Support\.Net\Web\LogHeaderMiddleware.cs" />
     <Compile Include="Support\.Net\Web\WebBrowserExtension.cs" />
     <Compile Include="Support\.Net\WPF\CondChecker.cs" />
     <Compile Include="Support\.Net\WPF\ControlWrap.cs" />
@@ -73,13 +82,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.41.1.1743" />
+    <PackageReference Include="Google.Apis.Sheets.v4" Version="1.48.0.2014" />
     <PackageReference Include="Google.Gdata.Client.Core" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.6" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.6" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="RestSharp" Version="106.11.4" />
-    <PackageReference Include="System.CodeDom" Version="4.6.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
-    <PackageReference Include="System.Threading.AccessControl" Version="4.6.0" />
+    <PackageReference Include="System.CodeDom" Version="4.7.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+    <PackageReference Include="System.Threading.AccessControl" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>

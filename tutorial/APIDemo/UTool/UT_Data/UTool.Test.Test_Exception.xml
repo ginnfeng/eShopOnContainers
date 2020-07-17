@@ -2,5 +2,7 @@
   <TestCase>
     <T_Retry>
     </T_Retry>
+    <T_DailyLoggerProvider>
+    </T_DailyLoggerProvider>
   </TestCase>
 </UTest>

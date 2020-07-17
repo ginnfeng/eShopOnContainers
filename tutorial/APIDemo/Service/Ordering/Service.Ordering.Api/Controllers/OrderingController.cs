@@ -31,8 +31,23 @@ namespace Service.Ordering.Api.Controllers
         [ApiSpec(HTTP.GET, typeof(IOrderingService), nameof(IOrderingService.QueryOrder))]
         public async Task<ActionResult<Order>> QueryOrder(string orderId)
         {
-            Order order = await Task.Run<Order>(() => svc.QueryOrder(orderId));
-            return Ok(order);
+            try
+            {
+                Order order = await Task.Run<Order>(() => svc.QueryOrder(orderId));
+                return Ok(order);
+            }
+            catch (Exception e)
+            {
+                var clientActId = string.Empty;
+                if (this.HttpContext.Request.Headers.TryGetValue("clientActId", out var traceValue))
+                {
+                    clientActId = traceValue;
+                    //write log,here!
+                }
+                throw;
+            }
+            
+            
         }
 
         //[ApiSpec(HTTP.GET, typeof(IOrderingService), "")]

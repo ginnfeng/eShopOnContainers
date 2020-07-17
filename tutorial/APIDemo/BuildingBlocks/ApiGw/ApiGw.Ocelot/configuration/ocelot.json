@@ -88,6 +88,7 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost"
+    "BaseUrl": "http://localhost",
+    "RequestIdKey": "x-correlation-id"
   }
 }

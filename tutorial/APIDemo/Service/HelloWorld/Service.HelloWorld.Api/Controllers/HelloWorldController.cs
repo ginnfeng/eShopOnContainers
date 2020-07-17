@@ -43,6 +43,16 @@ namespace Service.Ordering.Api.Controllers
         [ApiSpec(HTTP.GET, typeof(IHelloWorldService), nameof(IHelloWorldService.HelloGet))]
         public string HelloGet(string id1, string id2)//[QuieryBody]
         {
+            var clientActId = string.Empty;
+            if (this.HttpContext.Request.Headers.TryGetValue("x-correlation-id", out var traceValue))
+            {
+                //https://www.frakkingsweet.com/net-core-log-correlation-arbitrary-log-properties/
+                //https://www.c-sharpcorner.com/article/logging-and-tracing-in-multiple-microservice-with-correlation-using-net-core/
+                //https://www.frakkingsweet.com/net-core-log-correlation-easy-access-to-headers/
+                clientActId = traceValue;
+                //write log,here!
+            }
+            
             return svc.HelloGet(id1, id2);
         }
         [ApiSpec(HTTP.POST, typeof(IHelloWorldService), nameof(IHelloWorldService.HelloPost))]

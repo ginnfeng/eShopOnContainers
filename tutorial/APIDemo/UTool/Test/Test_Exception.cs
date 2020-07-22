@@ -34,8 +34,10 @@ namespace UTool.Test
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",optional: true);
             var cfg = builder.Build();
             var sc = new ServiceCollection();
-            sc.AddLogging(builder => builder.AddDailyFile(opt => { opt.FileName = "MyLog_"; }).AddConsole().AddFilter(level => level >= LogLevel.Debug));
-            //sc.AddLogging(builder => builder.AddDailyFile("LoggerSetting",  o=> { } ).AddConsole().AddFilter(level => level >= LogLevel.Debug));
+            sc.AddOptions();
+            sc.Configure<FileLoggerOptions>(options => cfg.GetSection("Logging:DailyFile").Bind(options));
+            //sc.AddLogging(builder => builder.AddDailyFile(opt => { opt.FileName = "MyLog_"; }).AddConsole().AddFilter(level => level >= LogLevel.Debug));
+            sc.AddLogging(builder => builder.AddDailyFile( o=> { } ).AddConsole().AddFilter(level => level >= LogLevel.Debug));
             
             return sc.BuildServiceProvider();
         }

@@ -19,9 +19,7 @@ using Microsoft.Extensions.Options;
 namespace Support.Net.Logger
 
 {
-    /// <summary>
-    /// A <see cref="BatchingLoggerProvider"/> which writes out to a file.
-    /// </summary>
+   
     [ProviderAlias("DailyFile")]
     public class DailyLoggerProvider : BatchingLoggerProvider
     {

@@ -25,9 +25,8 @@ namespace Support.Net.Logger
     public abstract class BatchingLoggerProvider : ILoggerProvider, ISupportExternalScope
     {
         private readonly List<LogMessage> _currentBatch = new List<LogMessage>();
-        private readonly TimeSpan _interval;
-        private readonly int? _queueSize;
-        private readonly int? _batchSize;
+        private BatchingLoggerOptions _options;
+       
         private readonly IDisposable _optionsChangeToken;
 
         private int _messagesDropped;
@@ -36,29 +35,14 @@ namespace Support.Net.Logger
         private Task _outputTask;
         private CancellationTokenSource _cancellationTokenSource;
 
-        private bool _includeScopes;
+        //private bool _includeScopes;
         private IExternalScopeProvider _scopeProvider;
 
-        internal IExternalScopeProvider ScopeProvider => _includeScopes ? _scopeProvider : null;
+        internal IExternalScopeProvider ScopeProvider => _options.IncludeScopes ? _scopeProvider : null;
 
         internal BatchingLoggerProvider(IOptionsMonitor<BatchingLoggerOptions> options)
         {
             // NOTE: Only IsEnabled is monitored
-
-            var loggerOptions = options.CurrentValue;
-            if (loggerOptions.BatchSize <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(loggerOptions.BatchSize), $"{nameof(loggerOptions.BatchSize)} must be a positive number.");
-            }
-            if (loggerOptions.FlushPeriod <= TimeSpan.Zero)
-            {
-                throw new ArgumentOutOfRangeException(nameof(loggerOptions.FlushPeriod), $"{nameof(loggerOptions.FlushPeriod)} must be longer than zero.");
-            }
-
-            _interval = loggerOptions.FlushPeriod;
-            _batchSize = loggerOptions.BatchSize;
-            _queueSize = loggerOptions.BackgroundQueueSize;
-
             _optionsChangeToken = options.OnChange(UpdateOptions);
             UpdateOptions(options.CurrentValue);
         }
@@ -66,26 +50,25 @@ namespace Support.Net.Logger
         /// <summary>
         /// Checks if the queue is enabled.
         /// </summary>
-        public bool IsEnabled { get; private set; }
-
-        private void UpdateOptions(BatchingLoggerOptions options)
+        public bool IsEnabled => _options?.IsEnabled??false;
+        
+        virtual protected void UpdateOptions(BatchingLoggerOptions options)
         {
-            var oldIsEnabled = IsEnabled;
-            IsEnabled = options.IsEnabled;
-            _includeScopes = options.IncludeScopes;
-
-            if (oldIsEnabled != IsEnabled)
+            if (options.BatchSize <= 0)
             {
-                if (IsEnabled)
-                {
-                    Start();
-                }
-                else
-                {
-                    Stop();
-                }
+                if (_options==null) throw new ArgumentOutOfRangeException(nameof(options.BatchSize), $"{nameof(options.BatchSize)} must be a positive number.");
+                return;
             }
-
+            if (options.FlushPeriod <= TimeSpan.Zero)
+            {
+                if (_options == null) throw new ArgumentOutOfRangeException(nameof(options.FlushPeriod), $"{nameof(options.FlushPeriod)} must be longer than zero.");
+                return;
+            }
+            var oldIsEnabled = IsEnabled;
+            _options = options;
+            if (oldIsEnabled == IsEnabled) return;
+            if (IsEnabled) Start();
+            else Stop();
         }
 
         internal abstract Task WriteMessagesAsync(IEnumerable<LogMessage> messages, CancellationToken token);
@@ -94,7 +77,7 @@ namespace Support.Net.Logger
         {
             while (!_cancellationTokenSource.IsCancellationRequested)
             {
-                var limit = _batchSize ?? int.MaxValue;
+                var limit = _options.BatchSize ?? int.MaxValue;
 
                 while (limit > 0 && _messageQueue.TryTake(out var message))
                 {
@@ -123,7 +106,7 @@ namespace Support.Net.Logger
                 }
                 else
                 {
-                    await IntervalAsync(_interval, _cancellationTokenSource.Token);
+                    await IntervalAsync(_options.FlushPeriod, _cancellationTokenSource.Token);
                 }
             }
         }
@@ -159,9 +142,9 @@ namespace Support.Net.Logger
 
         private void Start()
         {
-            _messageQueue = _queueSize == null ?
+            _messageQueue = _options.BackgroundQueueSize == null ?
                 new BlockingCollection<LogMessage>(new ConcurrentQueue<LogMessage>()) :
-                new BlockingCollection<LogMessage>(new ConcurrentQueue<LogMessage>(), _queueSize.Value);
+                new BlockingCollection<LogMessage>(new ConcurrentQueue<LogMessage>(), _options.BackgroundQueueSize.Value);
 
             _cancellationTokenSource = new CancellationTokenSource();
             _outputTask = Task.Run(ProcessLogQueue);
@@ -174,7 +157,7 @@ namespace Support.Net.Logger
 
             try
             {
-                _outputTask.Wait(_interval);
+                _outputTask.Wait(_options.FlushPeriod);
             }
             catch (TaskCanceledException)
             {

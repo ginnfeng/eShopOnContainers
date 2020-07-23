@@ -21,9 +21,8 @@ namespace IoC.DI
     {
         public void ResgisterServices(IServiceCollection services, IConfiguration cfg)
         {
-            //Domain Bus
-            //services.AddMediatR(typeof(IMediator));
-            //services.AddSingleton<IEventBus, RabbitMQBus>(sp => new RabbitMQBus(sp)); 
+            //services.AddOptions();
+            
             services.TryAdd(ServiceDescriptor.Transient(typeof(IApiProxy<>), typeof(ApiProxy<>)));
             services.TryAdd(ServiceDescriptor.Transient(typeof(IQuProxy<>), typeof(QuProxy<>)));
             services.AddTransient<QuListener>();

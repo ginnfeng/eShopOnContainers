@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Support.ErrorHandling;
 using Support.Net.Logger;
 using System;
@@ -24,20 +26,21 @@ namespace UTool.Test
             // TODO: Add constructor logic here
             //      
         }
+        
         static internal IServiceProvider InitSP()
         {
             var basePath = Directory.GetCurrentDirectory();
             var builder = new ConfigurationBuilder()
                 .SetFileProvider(new PhysicalFileProvider(basePath))
                 //.AddEnvironmentVariables()
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",optional: true);
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true, reloadOnChange: true);
             var cfg = builder.Build();
-            var sc = new ServiceCollection();
-            sc.AddOptions();
-            sc.Configure<FileLoggerOptions>(options => cfg.GetSection("Logging:DailyFile").Bind(options));
+            var sc = new ServiceCollection();            
+            sc.Configure<FileLoggerOptions>(cfg.GetSection("Logging:DailyFile"));
+            //sc.Configure<FileLoggerOptions>(options => cfg.GetSection("Logging:DailyFile").Bind(options));//此IOptionsMonitor無法偵測appsettings.json更動
             //sc.AddLogging(builder => builder.AddDailyFile(opt => { opt.FileName = "MyLog_"; }).AddConsole().AddFilter(level => level >= LogLevel.Debug));
-            sc.AddLogging(builder => builder.AddDailyFile( o=> { } ).AddConsole().AddFilter(level => level >= LogLevel.Debug));
+            sc.AddLogging(builder => builder.AddDailyFile().AddConsole().AddFilter(level => level >= LogLevel.Debug));
             
             return sc.BuildServiceProvider();
         }
@@ -45,7 +48,7 @@ namespace UTool.Test
         public void T_Retry()
         {// TODO: Add Testing logic here
             var xo = new OutService();
-            var ts=new TimeSpan(0, 0, 3);//Retry 間隔時間
+            var ts = new TimeSpan(0, 0, 3);//Retry 間隔時間
             int retryNum = 2;//Retry 之次數限制
             try
             {
@@ -55,12 +58,13 @@ namespace UTool.Test
             {
                 //Here! To Log Error!
                 throw e;
-            }            
+            }
         }
+        static IServiceProvider sp;
         [UMethod]
         public void T_DailyLoggerProvider()
         {
-            var sp = InitSP();
+            sp ??= InitSP();
             //var loggerFactory = sp.GetService<ILoggerFactory>();
             //var logger= loggerFactory.CreateLogger<Test_Exception>();
             var logger = sp.GetService<ILogger<Test_Exception>>();
@@ -69,8 +73,18 @@ namespace UTool.Test
                 logger.LogDebug("DEBUG");
                 logger.LogError("ERROR!");
             }
-            
         }
+        [UMethod]
+        public void T_Options()
+        {
+            //ChangeToken
+            sp ??= InitSP();
+            //此範例config path為..APIDemo\UTool\bin\Debug\netcoreapp3.1\appsettings.json
+            var opt1 = sp.GetRequiredService<IOptions<FileLoggerOptions>>(); //option values不會因config更動而改變
+            var optM = sp.GetRequiredService<IOptionsMonitor<FileLoggerOptions>>();//option values不會因cconfig更動立即改變，為Singleton 
+            var optS = sp.GetRequiredService<IOptionsSnapshot<FileLoggerOptions>>();//option values不會因cconfig更動立即改變，但在一scoped內其值不變
+        }
+
     }
     class OutService
     {
@@ -78,5 +92,5 @@ namespace UTool.Test
         {
             //......呼叫介面，其可能throw Exception;
         }
-    }
+    }    
 }

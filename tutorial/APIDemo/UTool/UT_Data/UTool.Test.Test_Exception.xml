@@ -4,5 +4,7 @@
     </T_Retry>
     <T_DailyLoggerProvider>
     </T_DailyLoggerProvider>
+    <T_Options>
+    </T_Options>
   </TestCase>
 </UTest>

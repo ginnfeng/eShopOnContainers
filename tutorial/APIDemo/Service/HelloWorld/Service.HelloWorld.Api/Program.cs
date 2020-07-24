@@ -21,6 +21,12 @@ namespace Service.HelloWorld.Api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureLogging((context, logging) => {
+                    // If you want to override default sources, uncomment the next line
+                    //logging.ClearProviders();
+                    // Add new logger providers on top of the default ones
+                    //logging.AddEventSourceLogger();
                 });
     }
 }

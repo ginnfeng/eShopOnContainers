@@ -62,7 +62,7 @@ namespace Support.Net.Logger
 
 {
    
-    [ProviderAlias("DailyFile")]
+    [ProviderAlias("DailyLogger")]
     //https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging/?tabs=aspnetcore2x&view=aspnetcore-3.1#log-filtering
     //https://www.dotnetcurry.com/aspnet/1402/aspnet-core-2-new-features
     public class DailyLoggerProvider : BatchingLoggerProvider

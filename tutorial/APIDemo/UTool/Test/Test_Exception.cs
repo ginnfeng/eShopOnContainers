@@ -41,8 +41,20 @@ namespace UTool.Test
             //sc.Configure<FileLoggerOptions>(options => cfg.GetSection("Logging:DailyFile").Bind(options));//此IOptionsMonitor無法偵測appsettings.json更動
             //sc.AddLogging(builder => builder.AddDailyFile(opt => { opt.FileName = "MyLog_"; }).AddConsole().AddFilter(level => level >= LogLevel.Debug));
             sc.AddLogging(builder => builder.AddDailyFile().AddConsole().AddFilter(level => level >= LogLevel.Debug));
-            
-            return sc.BuildServiceProvider();
+
+            //https://docs.microsoft.com/en-gb/aspnet/core/fundamentals/logging/?tabs=aspnetcore2x&view=aspnetcore-3.1
+            //Trace = 0, Debug = 1, Information = 2, Warning = 3, Error = 4, Critical = 5, and None = 6.
+            sc.AddLogging(builder => builder.AddFilter((provider, category, logLevel) =>
+            {
+                if (provider.Contains("DailyLogger")// LoggerProvider or alias 
+                    && category.Contains("Test_Exception") 
+                    && logLevel >= LogLevel.Warning)
+                {
+                    return true;
+                }
+                return false;
+            }));
+           return sc.BuildServiceProvider();
         }
         [UMethod]
         public void T_Retry()
@@ -70,7 +82,10 @@ namespace UTool.Test
             var logger = sp.GetService<ILogger<Test_Exception>>();
             using (logger.BeginScope("START LOG"))
             {// APIDemo\UTool\bin\Debug\netcoreapp3.1\Log\MyLog_20200717.txt
+                logger.LogTrace("TRACE");
                 logger.LogDebug("DEBUG");
+                logger.LogInformation("INFOMATION");
+                logger.LogWarning("WARNING");
                 logger.LogError("ERROR!");
             }
         }

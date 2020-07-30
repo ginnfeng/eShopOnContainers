@@ -36,25 +36,28 @@ namespace UTool.Test
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true, reloadOnChange: true);
             var cfg = builder.Build();
-            var sc = new ServiceCollection();            
-            sc.Configure<FileLoggerOptions>(cfg.GetSection("Logging:DailyFile"));
+            var sc = new ServiceCollection(); 
+            
+            sc.Configure<FileLoggerOptions>(cfg.GetSection("Logging:DailyLogger"));
             //sc.Configure<FileLoggerOptions>(options => cfg.GetSection("Logging:DailyFile").Bind(options));//此IOptionsMonitor無法偵測appsettings.json更動
-            //sc.AddLogging(builder => builder.AddDailyFile(opt => { opt.FileName = "MyLog_"; }).AddConsole().AddFilter(level => level >= LogLevel.Debug));
-            sc.AddLogging(builder => builder.AddDailyFile().AddConsole().AddFilter(level => level >= LogLevel.Debug));
+
+            //sc.AddLogging(builder => builder.AddDailyFile(opt => { opt.FileName = "MyLog_"; }).AddDebug().AddFilter(level => level >= LogLevel.Debug));
+            sc.AddLogging(builder => builder.AddDailyFile().AddDebug().AddFilter(level => level >= LogLevel.Debug));
+            
 
             //https://docs.microsoft.com/en-gb/aspnet/core/fundamentals/logging/?tabs=aspnetcore2x&view=aspnetcore-3.1
             //Trace = 0, Debug = 1, Information = 2, Warning = 3, Error = 4, Critical = 5, and None = 6.
-            sc.AddLogging(builder => builder.AddFilter((provider, category, logLevel) =>
-            {
-                if (provider.Contains("DailyLogger")// LoggerProvider or alias 
-                    && category.Contains("Test_Exception") 
-                    && logLevel >= LogLevel.Warning)
-                {
-                    return true;
-                }
-                return false;
-            }));
-           return sc.BuildServiceProvider();
+            //sc.AddLogging(builder => builder.AddFilter((provider, category, logLevel) =>
+            //{
+            //    if (provider.Contains("DailyLogger")// LoggerProvider or alias 
+            //        && category.Contains("Test_Exception") 
+            //        && logLevel >= LogLevel.Warning)
+            //    {
+            //        return true;
+            //    }
+            //    return false;
+            //}));
+            return sc.BuildServiceProvider();
         }
         [UMethod]
         public void T_Retry()

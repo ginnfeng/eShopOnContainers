@@ -5,6 +5,7 @@
 // **************************************************************************** 
 
 
+using Google.Apis.Logging;
 using System;
 
 namespace Support.Net.Logger
@@ -84,5 +85,6 @@ namespace Support.Net.Logger
         /// Defaults to <c>false</c>.
         /// </summary>
         public bool IncludeScopes { get; set; } = false;
+        //public LogLevel LogLevel { get; set; } = LogLevel.Warning;
     }
 }

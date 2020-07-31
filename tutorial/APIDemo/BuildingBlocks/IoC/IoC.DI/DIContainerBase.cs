@@ -23,28 +23,33 @@ namespace IoC.DI
         {
             //services.AddOptions();
             
-            services.TryAdd(ServiceDescriptor.Transient(typeof(IApiProxy<>), typeof(ApiProxy<>)));
-            services.TryAdd(ServiceDescriptor.Transient(typeof(IQuProxy<>), typeof(QuProxy<>)));
-            services.AddTransient<QuListener>();
+            
 
             services.AddLogging(builder => builder.AddConsole().AddDebug().AddFilter(level => level >= LogLevel.Debug));
-            
-            if (cfg == null) return;            
-            var connString= cfg.GetValue<string>("EventBusConnection");
+            DoResgisterServices(services,cfg);
+        }
+        protected void ResgisterQuService(IServiceCollection services, IConfiguration cfg)
+        {
+            services.TryAdd(ServiceDescriptor.Transient(typeof(IQuProxy<>), typeof(QuProxy<>)));
+            services.AddTransient<QuListener>();
+            if (cfg == null) return;
+            var connString = cfg.GetValue<string>("EventBusConnection");
             if (!string.IsNullOrEmpty(connString))
             {
-                services.AddSingleton<IConnSource<IQuSetting>>(new ConnSourceProxy<IQuSetting>(connString));                
+                services.AddSingleton<IConnSource<IQuSetting>>(new ConnSourceProxy<IQuSetting>(connString));
             }
-
-            connString = cfg.GetValue<string>("ApiGatewayConnection");
+        }
+        protected void ResgisterApiService(IServiceCollection services, IConfiguration cfg)
+        {
+            services.TryAdd(ServiceDescriptor.Transient(typeof(IApiProxy<>), typeof(ApiProxy<>)));
+            var connString = cfg.GetValue<string>("ApiGatewayConnection");
             if (!string.IsNullOrEmpty(connString))
             {
                 services.AddSingleton<IConnSource<IApiSetting>>(new ConnSourceProxy<IApiSetting>(connString));
             }
-
-            DoResgisterServices(services,cfg);
         }
-        
+
+
         abstract protected void DoResgisterServices(IServiceCollection services, IConfiguration cfg);
         
     }

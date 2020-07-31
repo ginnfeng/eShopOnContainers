@@ -17,6 +17,8 @@ namespace IoC.DI.Ordering
         static public DIContainer Instance => Singleton<DIContainer>.Instance;
         protected override void DoResgisterServices(IServiceCollection services, IConfiguration cfg)
         {
+            base.ResgisterQuService(services, cfg);
+            //base.ResgisterApiService(services, cfg);
             services.AddTransient<IOrderingService, OrderingService>();
             services.AddTransient<IPaymentCallbackService, PaymentCallbackService>();
         }

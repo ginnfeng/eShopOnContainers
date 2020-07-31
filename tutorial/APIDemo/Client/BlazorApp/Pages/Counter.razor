@@ -1,0 +1,26 @@
+﻿@page "/counter"
+@using BlazorApp.Data
+@inject WeatherForecastService ForecastService
+
+<h1>Counter</h1>
+
+<p>Current count: @currentCount</p>
+<p>API Rlt: @rlt</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<button class="btn btn-primary" @onclick="OnCallHelloApi">Call Hello API</button>
+
+@code {
+    private int currentCount = 0;
+    private string rlt = "";
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+    private async Task OnCallHelloApi()
+    {
+        rlt = "等待結果.........";
+        rlt = await ForecastService.Hello();
+    }
+}

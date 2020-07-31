@@ -45,8 +45,16 @@ services:
     container_name: service.helloworld.api
     networks:
       - dev_network
+  blazorapp:
+    image: ${DOCKER_REGISTRY-}blazorapp
+    build:
+      context: .
+      dockerfile: Client/BlazorApp/Dockerfile
+    networks:
+      - dev_network
 networks:
   dev_network:
       driver: bridge
       #external:
       #    name: extnetwork #*** Manually create  using `docker network create extnetwork` first. ***#
+

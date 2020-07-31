@@ -13,6 +13,8 @@ namespace IoC.DI.Banking
         static public DIContainer Instance => Singleton<DIContainer>.Instance;
         protected override void DoResgisterServices(IServiceCollection services, IConfiguration cfg)
         {
+            base.ResgisterQuService(services,cfg);
+            //base.ResgisterApiService(services, cfg);
             services.AddTransient<IPaymentService, PaymentService>();
             services.AddTransient<IDepositService, PaymentService>();
         }

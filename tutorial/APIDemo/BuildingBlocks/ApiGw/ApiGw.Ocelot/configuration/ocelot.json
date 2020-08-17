@@ -5,7 +5,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "Service.Ordering.Api",
+          "Host": "serviceorderingapi",
           "Port": 80
         }
       ],
@@ -23,7 +23,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "Service.Banking.Api",
+          "Host": "servicebankingapi",
           "Port": 80
         }
       ],
@@ -41,7 +41,7 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "Service.HelloWorld.Api",
+          "Host": "servicehelloworldapi",
           "Port": 80
         }
       ],

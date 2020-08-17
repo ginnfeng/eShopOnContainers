@@ -81,9 +81,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoC.DI.Ordering", "Building
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoC.DI.Banking", "BuildingBlocks\IoC\IoC.DI.Banking\IoC.DI.Banking.csproj", "{05A63A9D-F105-4028-98D4-B71041E604AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp", "Client\BlazorApp\BlazorApp.csproj", "{E55828F0-B97A-4A2B-AD7E-8FE0D9C4D0B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp", "Client\BlazorApp\BlazorApp.csproj", "{E55828F0-B97A-4A2B-AD7E-8FE0D9C4D0B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoC.DI.Client", "BuildingBlocks\IoC\IoC.DI.Client\IoC.DI.Client.csproj", "{550DDF0B-7673-4053-99BF-53A8BFE51AA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IoC.DI.Client", "BuildingBlocks\IoC\IoC.DI.Client\IoC.DI.Client.csproj", "{550DDF0B-7673-4053-99BF-53A8BFE51AA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "Client\WebApp\WebApp.csproj", "{04052FB4-B61C-49FE-B9C1-5151F162C833}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -203,6 +205,10 @@ Global
 		{550DDF0B-7673-4053-99BF-53A8BFE51AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{550DDF0B-7673-4053-99BF-53A8BFE51AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{550DDF0B-7673-4053-99BF-53A8BFE51AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04052FB4-B61C-49FE-B9C1-5151F162C833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04052FB4-B61C-49FE-B9C1-5151F162C833}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04052FB4-B61C-49FE-B9C1-5151F162C833}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04052FB4-B61C-49FE-B9C1-5151F162C833}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -241,6 +247,7 @@ Global
 		{05A63A9D-F105-4028-98D4-B71041E604AF} = {A98F8F1C-D049-4D33-BD9E-3769A50C6A81}
 		{E55828F0-B97A-4A2B-AD7E-8FE0D9C4D0B2} = {4034DEEF-D015-4E77-B8DC-FC41FCA4E9E6}
 		{550DDF0B-7673-4053-99BF-53A8BFE51AA1} = {A98F8F1C-D049-4D33-BD9E-3769A50C6A81}
+		{04052FB4-B61C-49FE-B9C1-5151F162C833} = {4034DEEF-D015-4E77-B8DC-FC41FCA4E9E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EB5E539E-49D5-4A7A-8F44-2B31DAED129C}

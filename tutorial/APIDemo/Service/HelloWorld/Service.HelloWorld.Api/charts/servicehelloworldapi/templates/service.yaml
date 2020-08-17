@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "servicehelloworldapi.fullname" . }}
+  labels:
+    app: {{ template "servicehelloworldapi.name" . }}
+    chart: {{ template "servicehelloworldapi.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "servicehelloworldapi.name" . }}
+    release: {{ .Release.Name }}

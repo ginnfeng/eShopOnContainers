@@ -1,0 +1,21 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+blazorapp:
+  ingress:
+    #enabled: true 
+    annotations:
+      kubernetes.io/ingress.class: traefik-azds  # Dev Spaces-specific
+    hosts:
+      - dev.blazorapp.phrc75fn7b.sea.azds.io  # Assumes deployment to the 'dev' space， azds show-context
+
+rabbitmq:
+    fullnameOverride: rabbitmq # Values.fullnameOverride
+apigwocelot:
+    fullnameOverride: apigwocelot
+servicehelloworldapi:
+    fullnameOverride: servicehelloworldapi
+servicebankingapi:
+    fullnameOverride: servicebankingapi
+serviceorderingapi:
+    fullnameOverride: serviceorderingapi

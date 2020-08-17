@@ -1,0 +1,34 @@
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+ARG BUILD_CONFIGURATION=Debug
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=http://+:80
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+EXPOSE 80
+
+WORKDIR /src
+COPY ["BuildingBlocks/ApiGw/ApiGw.ClientProxy.Ext/ApiGw.ClientProxy.Ext.csproj", "BuildingBlocks/ApiGw/ApiGw.ClientProxy.Ext/"]
+COPY ["BuildingBlocks/ApiGw/ApiGw.ClientProxy/ApiGw.ClientProxy.csproj", "BuildingBlocks/ApiGw/ApiGw.ClientProxy/"]
+COPY ["BuildingBlocks/Common/Common.Contract/Common.Contract.csproj", "BuildingBlocks/Common/Common.Contract/"]
+COPY ["BuildingBlocks/Common/Common.Policy/Common.Policy.csproj", "BuildingBlocks/Common/Common.Policy/"]
+COPY ["BuildingBlocks/Common/Common.Support/Common.Support.csproj", "BuildingBlocks/Common/Common.Support/"]
+COPY ["BuildingBlocks/EventBus/EventBus.Domain/EventBus.Domain.csproj", "BuildingBlocks/EventBus/EventBus.Domain/"]
+COPY ["BuildingBlocks/EventBus/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj", "BuildingBlocks/EventBus/EventBus.RabbitMQ/"]
+COPY ["BuildingBlocks/IoC/IoC.DI.Client/IoC.DI.Client.csproj", "BuildingBlocks/IoC/IoC.DI.Client/"]
+COPY ["BuildingBlocks/IoC/IoC.DI/IoC.DI.csproj", "BuildingBlocks/IoC/IoC.DI/"]
+COPY ["Client/BlazorApp/BlazorApp.csproj", "Client/BlazorApp/"]
+COPY ["Service/Banking/Service.Banking.Application/Service.Banking.Application.csproj", "Service/Banking/Service.Banking.Application/"]
+COPY ["Service/Banking/Service.Banking.Contract/Service.Banking.Contract.csproj", "Service/Banking/Service.Banking.Contract/"]
+COPY ["Service/HelloWorld/Service.HelloWorld.Contract/Service.HelloWorld.Contract.csproj", "Service/HelloWorld/Service.HelloWorld.Contract/"]
+COPY ["Service/Ordering/Service.Ordering.ApiImp/Service.Ordering.ApiImp.csproj", "Service/Ordering/Service.Ordering.ApiImp/"]
+COPY ["Service/Ordering/Service.Ordering.Application/Service.Ordering.Application.csproj", "Service/Ordering/Service.Ordering.Application/"]
+COPY ["Service/Ordering/Service.Ordering.Contract/Service.Ordering.Contract.csproj", "Service/Ordering/Service.Ordering.Contract/"]
+COPY ["Sid/Sid.Bss/Sid.Bss.csproj", "Sid/Sid.Bss/"]
+
+RUN dotnet restore "Client/BlazorApp/BlazorApp.csproj"
+COPY . .
+WORKDIR "/src/Client/BlazorApp"
+RUN dotnet build --no-restore "BlazorApp.csproj" -c $BUILD_CONFIGURATION
+
+RUN echo "exec dotnet run --no-build --no-launch-profile -c $BUILD_CONFIGURATION --" > /entrypoint.sh
+
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]

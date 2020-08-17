@@ -12,7 +12,7 @@ services:
     build:
       context: .
       dockerfile: Service/Ordering/Service.Ordering.Api/Dockerfile
-    container_name: service.ordering.api # 
+    container_name: serviceorderingapi # 
     depends_on:      
       - rabbitmq
     networks:
@@ -23,7 +23,7 @@ services:
     build:
       context: .
       dockerfile: Service/Banking/Service.Banking.Api/Dockerfile
-    container_name: service.banking.api
+    container_name: servicebankingapi
     depends_on:      
       - rabbitmq
     networks:
@@ -42,7 +42,7 @@ services:
     build:
       context: .
       dockerfile: Service/HelloWorld/Service.HelloWorld.Api/Dockerfile
-    container_name: service.helloworld.api
+    container_name: servicehelloworldapi
     networks:
       - dev_network
   blazorapp:

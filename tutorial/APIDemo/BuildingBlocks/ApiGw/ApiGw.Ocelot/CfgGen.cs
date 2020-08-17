@@ -56,9 +56,10 @@ namespace ApiGw.Ocelot
             {
                 var svcAliasName = SwaggerExt.ResolveServiceName(svcDef.Host);
                 var everything = "{everything}";
+                var host = svcDef.Host.Replace(".", "").ToLower();//因K8S service name限制
                 var route = new Reroute()
                 {
-                    DownstreamHostAndPorts = new Downstreamhostandport[] { new Downstreamhostandport() { Host = svcDef.Host, Port = 80 } }
+                    DownstreamHostAndPorts = new Downstreamhostandport[] { new Downstreamhostandport() { Host = host, Port = 80 } }
                     ,DownstreamScheme = "http"
                     ,DownstreamPathTemplate = $"/api/{everything}"
                     ,UpstreamPathTemplate= $"/{svcAliasName}/api/{everything}"

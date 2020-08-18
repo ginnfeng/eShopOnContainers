@@ -8,7 +8,7 @@ services:
       - dev_network
 
   service.ordering.api:
-    image: ${DOCKER_REGISTRY-}/serviceorderingapi
+    image: ${REGISTRY:-eshop}/serviceorderingapi:${PLATFORM:-linux}-${TAG:-latest} #${DOCKER_REGISTRY-}serviceorderingapi
     build:
       context: .
       dockerfile: Service/Ordering/Service.Ordering.Api/Dockerfile
@@ -19,7 +19,7 @@ services:
       - dev_network  
 
   service.banking.api:
-    image: ${DOCKER_REGISTRY-}/servicebankingapi
+    image: ${DOCKER_REGISTRY-}servicebankingapi
     build:
       context: .
       dockerfile: Service/Banking/Service.Banking.Api/Dockerfile
@@ -30,7 +30,7 @@ services:
       - dev_network
 
   apigw.ocelot:
-    image: ${DOCKER_REGISTRY-}/apigwocelot
+    image: ${DOCKER_REGISTRY-}apigwocelot
     build:
       context: .
       dockerfile: BuildingBlocks/ApiGw/ApiGw.Ocelot/Dockerfile
@@ -38,7 +38,7 @@ services:
       - dev_network
 
   service.helloworld.api:
-    image: ${DOCKER_REGISTRY-}/servicehelloworldapi
+    image: ${DOCKER_REGISTRY-}servicehelloworldapi
     build:
       context: .
       dockerfile: Service/HelloWorld/Service.HelloWorld.Api/Dockerfile
@@ -46,7 +46,7 @@ services:
     networks:
       - dev_network
   blazorapp:
-    image: ${DOCKER_REGISTRY-}/blazorapp
+    image: ${DOCKER_REGISTRY-}blazorapp
     build:
       context: .
       dockerfile: Client/BlazorApp/Dockerfile

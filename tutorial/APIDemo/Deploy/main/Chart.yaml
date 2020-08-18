@@ -6,22 +6,22 @@ version: 0.1.0
 dependencies:  
   - name: blazorapp
     version: 0.1.0
-    repository: "file://../Client/BlazorApp/charts/blazorapp"
+    repository: "file://../charts/blazorapp"
   - name: apigwocelot
     version: 0.1.0
-    repository: "file://../BuildingBlocks/ApiGw/ApiGw.Ocelot/charts/apigwocelot"
+    repository: "file://../charts/apigwocelot"
   - name: rabbitmq
     version: 6.18.2
     repository: "@stable"
   - name: servicehelloworldapi
     version: 0.1.0
-    repository: "file://../Service/HelloWorld/Service.HelloWorld.Api/charts/servicehelloworldapi"
+    repository: "file://../charts/servicehelloworldapi"
   - name: servicebankingapi
     version: 0.1.0
-    repository: "file://../Service/Banking/Service.Banking.Api/charts/servicebankingapi"
+    repository: "file://../charts/servicebankingapi"
   - name: serviceorderingapi
     version: 0.1.0
-    repository: "file://../Service/Ordering/Service.Ordering.Api/charts/serviceorderingapi"
+    repository: "file://../charts/serviceorderingapi"
   
     
 

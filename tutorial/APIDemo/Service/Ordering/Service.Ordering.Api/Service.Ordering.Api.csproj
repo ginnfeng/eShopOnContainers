@@ -19,5 +19,9 @@
     <ProjectReference Include="..\Service.Ordering.Contract\Service.Ordering.Contract.csproj" />
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="xcopy /i /s /y  $(ProjectDir)charts $(SolutionDir)Deploy\charts" />
+  </Target>
+
 
 </Project>

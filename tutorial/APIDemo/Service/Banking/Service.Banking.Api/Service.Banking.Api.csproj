@@ -24,5 +24,9 @@
     <ProjectReference Include="..\Service.Banking.Contract\Service.Banking.Contract.csproj" />
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="xcopy /i /s /y  $(ProjectDir)charts $(SolutionDir)Deploy\charts" />
+  </Target>
+
 
 </Project>

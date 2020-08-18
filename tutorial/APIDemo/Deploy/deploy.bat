@@ -1,0 +1,1 @@
+helm install apidemo ./main --dependency-update --namespace dev 

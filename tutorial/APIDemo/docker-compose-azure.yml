@@ -1,57 +1,39 @@
 version: '3.4'
 
 services:
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    #container_name: service.rabbitmq
-    networks:
-      - dev_network
-
+ 
   service.ordering.api:
-    image: ${DOCKER_REGISTRY-}serviceorderingapi
+    image: ${REGISTRY:-apidemo}/serviceorderingapi:${PLATFORM:-linux}-${TAG:-latest} #${DOCKER_REGISTRY-}serviceorderingapi
     build:
       context: .
       dockerfile: Service/Ordering/Service.Ordering.Api/Dockerfile
     container_name: serviceorderingapi # 
     depends_on:      
       - rabbitmq
-    networks:
-      - dev_network  
-
+    
   service.banking.api:
-    image: ${DOCKER_REGISTRY-}servicebankingapi
+    image: ${REGISTRY:-apidemo}/servicebankingapi:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-}servicebankingapi
     build:
       context: .
       dockerfile: Service/Banking/Service.Banking.Api/Dockerfile
     container_name: servicebankingapi
     depends_on:      
       - rabbitmq
-    networks:
-      - dev_network
-
+    
   apigw.ocelot:
-    image: ${DOCKER_REGISTRY-}apigwocelot
+    image: ${REGISTRY:-apidemo}/apigwocelot:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-}apigwocelot
     build:
       context: .
       dockerfile: BuildingBlocks/ApiGw/ApiGw.Ocelot/Dockerfile
-    networks:
-      - dev_network
-
+    container_name: apigwocelot
+    
   service.helloworld.api:
-    image: ${DOCKER_REGISTRY-}servicehelloworldapi
+    image: ${REGISTRY:-apidemo}/servicehelloworldapi:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-}servicehelloworldapi
     build:
       context: .
       dockerfile: Service/HelloWorld/Service.HelloWorld.Api/Dockerfile
-    container_name: servicehelloworldapi
-    networks:
-      - dev_network
-  blazorapp:
-    image: ${DOCKER_REGISTRY-}blazorapp
-    build:
-      context: .
-      dockerfile: Client/BlazorApp/Dockerfile
-    networks:
-      - dev_network
+    container_name: servicehelloworldapi    
+  
 networks:
   dev_network:
       driver: bridge

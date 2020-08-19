@@ -15,14 +15,7 @@ services:
       dockerfile: Service/Banking/Service.Banking.Api/Dockerfile
     container_name: servicebankingapi
     
-    
-  apigw.ocelot:
-    image: ${REGISTRY:-apidemo}/apigwocelot:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-}apigwocelot
-    build:
-      context: .
-      dockerfile: BuildingBlocks/ApiGw/ApiGw.Ocelot/Dockerfile
-    container_name: apigwocelot
-    
+  
   service.helloworld.api:
     image: ${REGISTRY:-apidemo}/servicehelloworldapi:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-}servicehelloworldapi
     build:

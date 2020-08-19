@@ -1,25 +1,30 @@
 version: '3.4'
 
 services: 
+  blazorapp:
+    image: ${REGISTRY:-apidemo}/blazorapp:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-apidemo}/blazorapp
+    build:
+      context: .
+      dockerfile: Client/BlazorApp/Dockerfile
   apigw.ocelot:
     image: ${REGISTRY:-apidemo}/apigwocelot:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-}apigwocelot
     build:
       context: .
       dockerfile: BuildingBlocks/ApiGw/ApiGw.Ocelot/Dockerfile
-    container_name: apigwocelot
+    
   service.ordering.api:
     image: ${REGISTRY:-apidemo}/serviceorderingapi:${PLATFORM:-linux}-${TAG:-latest} #${DOCKER_REGISTRY-}serviceorderingapi
     build:
       context: .
       dockerfile: Service/Ordering/Service.Ordering.Api/Dockerfile
-    container_name: serviceorderingapi # 
+    
    
   service.banking.api:
     image: ${REGISTRY:-apidemo}/servicebankingapi:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-}servicebankingapi
     build:
       context: .
       dockerfile: Service/Banking/Service.Banking.Api/Dockerfile
-    container_name: servicebankingapi
+    
     
   
   service.helloworld.api:
@@ -27,5 +32,5 @@ services:
     build:
       context: .
       dockerfile: Service/HelloWorld/Service.HelloWorld.Api/Dockerfile
-    container_name: servicehelloworldapi    
+       
  

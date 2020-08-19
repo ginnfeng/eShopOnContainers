@@ -19,8 +19,8 @@
     <ProjectReference Include="..\Service.Ordering.Contract\Service.Ordering.Contract.csproj" />
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="xcopy /i /s /y  $(ProjectDir)charts $(SolutionDir)Deploy\charts" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if $(ConfigurationName) == Debug xcopy /i /s /y  $(ProjectDir)charts $(SolutionDir)Deploy\charts" />
   </Target>
 
 

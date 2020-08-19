@@ -1,15 +1,21 @@
 version: '3.4'
 
 services: 
+  apigw.ocelot:
+    image: ${REGISTRY:-apidemo}/apigwocelot:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-}apigwocelot
+    build:
+      context: .
+      dockerfile: BuildingBlocks/ApiGw/ApiGw.Ocelot/Dockerfile
+    container_name: apigwocelot
   service.ordering.api:
-    image: ${DOCKER-apidemo}/serviceorderingapi:${PLATFORM:-linux}-${TAG:-latest} #${DOCKER_REGISTRY-}serviceorderingapi
+    image: ${REGISTRY:-apidemo}/serviceorderingapi:${PLATFORM:-linux}-${TAG:-latest} #${DOCKER_REGISTRY-}serviceorderingapi
     build:
       context: .
       dockerfile: Service/Ordering/Service.Ordering.Api/Dockerfile
     container_name: serviceorderingapi # 
    
   service.banking.api:
-    image: ${DOCKER-apidemo}/servicebankingapi:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-}servicebankingapi
+    image: ${REGISTRY:-apidemo}/servicebankingapi:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-}servicebankingapi
     build:
       context: .
       dockerfile: Service/Banking/Service.Banking.Api/Dockerfile
@@ -17,7 +23,7 @@ services:
     
   
   service.helloworld.api:
-    image: ${DOCKER-apidemo}/servicehelloworldapi:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-}servicehelloworldapi
+    image: ${REGISTRY:-apidemo}/servicehelloworldapi:${PLATFORM:-linux}-${TAG:-latest}# ${DOCKER_REGISTRY-}servicehelloworldapi
     build:
       context: .
       dockerfile: Service/HelloWorld/Service.HelloWorld.Api/Dockerfile

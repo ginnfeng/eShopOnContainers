@@ -45,4 +45,8 @@
     </Reference>
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="$(ConfigurationName) == Debug (&#xD;&#xA;xcopy /i /s /y  $(SolutionDir)Client\BlazorApp\charts $(SolutionDir)Deploy\charts&#xD;&#xA;xcopy /i /s /y  $(SolutionDir)BuildingBlocks\ApiGw\ApiGw.Ocelot\charts $(SolutionDir)Deploy\charts&#xD;&#xA;xcopy /i /s /y  $(SolutionDir)Service\HelloWorld\Service.HelloWorld.Api\charts $(SolutionDir)Deploy\charts&#xD;&#xA;xcopy /i /s /y  $(SolutionDir)Service\Banking\Service.Banking.Api\charts $(SolutionDir)Deploy\charts&#xD;&#xA;xcopy /i /s /y  $(SolutionDir)Service\Ordering\Service.Ordering.Api\charts $(SolutionDir)Deploy\charts&#xD;&#xA;)" />
+  </Target>
+
 </Project>

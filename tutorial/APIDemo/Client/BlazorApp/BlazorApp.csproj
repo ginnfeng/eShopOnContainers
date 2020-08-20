@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -6,6 +6,7 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
     <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+	<SolutionDir>$(MSBuildThisFileDirectory)</SolutionDir>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,9 +23,5 @@
     <ProjectReference Include="..\..\Service\Ordering\Service.Ordering.Contract\Service.Ordering.Contract.csproj" />
     <ProjectReference Include="..\..\Sid\Sid.Bss\Sid.Bss.csproj" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Debug xcopy /i /s /y  $(ProjectDir)charts $(SolutionDir)Deploy\charts" />
-  </Target>
 
 </Project>

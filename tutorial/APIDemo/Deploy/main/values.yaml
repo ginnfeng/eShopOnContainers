@@ -8,14 +8,29 @@ blazorapp:
       kubernetes.io/ingress.class: traefik-azds  # Dev Spaces-specific
     hosts:
       - dev.blazorapp.phrc75fn7b.sea.azds.io  # Assumes deployment to the 'dev' space， azds show-context
-
+    image:
+      repository: acrsvr01.azurecr.io/apidemo/blazorapp
+      tag: linux-latest 
 rabbitmq:
     fullnameOverride: rabbitmq # Values.fullnameOverride
 apigwocelot:
     fullnameOverride: apigwocelot
+    image:
+      repository: acrsvr01.azurecr.io/apidemo/apigwocelot
+      tag: linux-latest 
+
 servicehelloworldapi:
     fullnameOverride: servicehelloworldapi
+    image:
+      repository: acrsvr01.azurecr.io/apidemo/servicehelloworldapi
+      tag: linux-latest 
 servicebankingapi:
     fullnameOverride: servicebankingapi
+    image:
+      repository: acrsvr01.azurecr.io/apidemo/servicebankingapi
+      tag: linux-latest 
 serviceorderingapi:
     fullnameOverride: serviceorderingapi
+    image:
+      repository: acrsvr01.azurecr.io/apidemo/serviceorderingapi
+      tag: linux-latest 

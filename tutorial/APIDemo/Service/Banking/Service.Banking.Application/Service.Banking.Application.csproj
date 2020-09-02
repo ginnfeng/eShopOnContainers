@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\Common\Common.Support\Common.Support.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Common\Common\Common.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.Domain\EventBus.Domain.csproj" />
     <ProjectReference Include="..\Service.Banking.Contract\Service.Banking.Contract.csproj" />
   </ItemGroup>

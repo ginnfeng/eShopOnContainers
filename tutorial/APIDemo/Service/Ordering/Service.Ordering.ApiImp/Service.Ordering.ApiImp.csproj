@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BuildingBlocks\Common\Common.Support\Common.Support.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\Common\Common\Common.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.Domain\EventBus.Domain.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.RabbitMQ\EventBus.RabbitMQ.csproj" />
     <ProjectReference Include="..\Service.Ordering.Application\Service.Ordering.Application.csproj" />

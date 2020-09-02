@@ -15,7 +15,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Service.HelloWorld.Contract.Entity;
 using Service.HelloWorld.Contract.Servic;
-using Support;
+using Common.Support;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

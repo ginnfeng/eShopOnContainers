@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Service.Ordering.ApiImp;
 using Service.Ordering.Contract.Servic;
 using Service.Ordering.Contract.Service;
-using Support;
+using Common.Support;
 using System;
 
 namespace IoC.DI.Ordering

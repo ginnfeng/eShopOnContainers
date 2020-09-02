@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Common.Policy;
-using Support.Net.Web;
+using Common.Support.Net.Web;
 
 namespace Service.HelloWorld.Api
 {

@@ -4,12 +4,9 @@
 // Revisions  :            		
 // **************************************************************************** 
 using Common.Contract;
-using Common.Policy;
-using Newtonsoft.Json.Linq;
-using RestSharp;
-using Support;
-using Support.Net.Util;
-using Support.Open.RestSharp;
+
+using Common.Support;
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;

@@ -9,10 +9,9 @@ using Service.Banking.Contract.Service;
 using Service.Ordering.Contract.Service;
 using Sid.Bss.Banking;
 using Sid.Bss.Ordering;
-using Support.Open.Google;
+
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 using UTDll;
 namespace UTool.Test
 {

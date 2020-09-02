@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Support;
+using Common.Support;
 using System;
 
 namespace IoC.DI.Client

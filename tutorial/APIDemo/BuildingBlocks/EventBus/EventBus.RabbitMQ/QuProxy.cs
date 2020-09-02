@@ -8,11 +8,10 @@ using Common.Contract;
 using Common.DataContract;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using Support.Net.Proxy;
+using Common.Support.Net.Proxy;
 using System;
 using System.Collections.Generic;
 using System.Reflection;

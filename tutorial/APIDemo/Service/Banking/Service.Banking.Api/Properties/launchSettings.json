@@ -33,6 +33,13 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "publishAllPorts": true,
       "useSSL": true
+    },
+    "Azure Dev Spaces": {
+      "commandName": "AzureDevSpaces",
+      "launchBrowser": true,
+      "resourceGroup": "AKSRG",
+      "aksName": "aksDev01",
+      "subscriptionId": "9ea26943-bc64-4351-9019-829dfd289fc2"
     }
   }
 }

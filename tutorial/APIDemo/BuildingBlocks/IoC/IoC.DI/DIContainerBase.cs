@@ -10,7 +10,7 @@ using ApiGw.ClientProxy;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Common.Contract;
 
-using Support;
+using Common.Support;
 using System;
 using Common.DataContract;
 using Common.Support.Common.DataCore;

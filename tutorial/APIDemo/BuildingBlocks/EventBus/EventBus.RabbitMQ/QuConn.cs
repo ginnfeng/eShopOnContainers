@@ -5,11 +5,10 @@
 // **************************************************************************** 
 using Common.DataContract;
 using RabbitMQ.Client;
-using Support.Net.Container;
-using Support.Net.Proxy;
+using Common.Support.Net.Container;
+using Common.Support.Net.Proxy;
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace EventBus.RabbitMQ
 {

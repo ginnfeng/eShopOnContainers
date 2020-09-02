@@ -5,13 +5,12 @@
 // **************************************************************************** 
 using Newtonsoft.Json.Linq;
 using RestSharp;
-using Support;
-using Support.Net.Util;
-using Support.Open.JsonNet;
-using Support.Open.RestSharp;
+using Common.Support;
+
+using Common.Open.RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Text;
+
 
 namespace ApiGw.ClientProxy
 {

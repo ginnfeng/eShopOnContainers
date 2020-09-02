@@ -5,10 +5,10 @@
 // **************************************************************************** 
 
 using Sid.Bss.Banking;
-using Support;
-using System;
+using Common.Support;
+
 using System.Collections.Generic;
-using System.Text;
+
 
 namespace Service.Banking.Application.Data.Context
 {

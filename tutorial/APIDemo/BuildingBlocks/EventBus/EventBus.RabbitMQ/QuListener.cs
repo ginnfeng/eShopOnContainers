@@ -13,11 +13,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Support.Net.Util;
+using Common.Support.Net.Util;
 using System.Reflection;
 using Common.Contract;
-using Support.Net.Proxy;
-using Microsoft.Extensions.Configuration;
+using Common.Support.Net.Proxy;
+
 using Common.DataContract;
 
 namespace EventBus.RabbitMQ

@@ -5,24 +5,21 @@
 // **************************************************************************** 
 using Common.Contract;
 using Common.DataContract;
-using Common.Support.Common.DataCore;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
+
 using RestSharp;
-using Support.Net.Proxy;
-using Support.Net.Util;
-using Support.Net.Web;
-using Support.Open.RestSharp;
+using Common.Support.Net.Proxy;
+using Common.Support.Net.Web;
+using Common.Open.RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Net;
+
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Security.Policy;
-using System.Text;
+
 
 namespace ApiGw.ClientProxy
 {

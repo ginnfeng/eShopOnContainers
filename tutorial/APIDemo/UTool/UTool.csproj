@@ -28,7 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\BuildingBlocks\ApiGw\ApiGw.ClientProxy.Ext\ApiGw.ClientProxy.Ext.csproj" />
     <ProjectReference Include="..\BuildingBlocks\ApiGw\ApiGw.ClientProxy\ApiGw.ClientProxy.csproj" />
-    <ProjectReference Include="..\BuildingBlocks\Common\Common.Support\Common.Support.csproj" />
     <ProjectReference Include="..\BuildingBlocks\EventBus\EventBus.Domain\EventBus.Domain.csproj" />
     <ProjectReference Include="..\BuildingBlocks\EventBus\EventBus.RabbitMQ\EventBus.RabbitMQ.csproj" />
     <ProjectReference Include="..\BuildingBlocks\IoC\IoC.DI\IoC.DI.csproj" />

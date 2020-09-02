@@ -15,12 +15,12 @@ using RestSharp;
 using Service.HelloWorld.ApiImp;
 using Service.HelloWorld.Contract.Entity;
 using Service.HelloWorld.Contract.Servic;
-using Support;
-using Support.Net.Util;
-using Support.Open.RestSharp;
+using Common.Support;
+using Common.Support.Net.Util;
+using Common.Open.RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
+
 using System.IO;
 using System.Threading.Tasks;
 using UTDll;

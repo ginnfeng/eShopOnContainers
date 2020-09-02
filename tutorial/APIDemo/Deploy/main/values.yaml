@@ -34,3 +34,4 @@ serviceorderingapi:
     image:
       repository: acrsvr01.azurecr.io/apidemo/serviceorderingapi
       tag: linux-latest 
+

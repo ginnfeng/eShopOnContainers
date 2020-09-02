@@ -1,0 +1,768 @@
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the "stable" chart repository
+Update Complete. ⎈Happy Helming!⎈
+Saving 6 charts
+Downloading rabbitmq from repo https://kubernetes-charts.storage.googleapis.com/
+Deleting outdated charts
+NAME: apidemo
+LAST DEPLOYED: Tue Sep  1 17:46:43 2020
+NAMESPACE: dev
+STATUS: pending-install
+REVISION: 1
+TEST SUITE: None
+HOOKS:
+MANIFEST:
+---
+# Source: bikesharingsampleapp/charts/rabbitmq/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-6.18.2
+    release: "apidemo"
+    heritage: "Helm"
+---
+# Source: bikesharingsampleapp/charts/blazorapp/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: blazorapp-cfg
+data:
+  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3Lm9jZWxvdDo4MA==
+---
+# Source: bikesharingsampleapp/charts/rabbitmq/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-6.18.2
+    release: "apidemo"
+    heritage: "Helm"
+type: Opaque
+data:
+  
+  rabbitmq-password: "YXdtRzByYklYag=="
+  
+  
+  rabbitmq-erlang-cookie: "RTExcng5VEJidXBtazFibldmZ05keGJRTWNSekpuWFU="
+---
+# Source: bikesharingsampleapp/charts/servicebankingapi/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: servicebankingapi-cfg
+data:
+  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3Lm9jZWxvdDo4MA==
+  EventBusConnection: SG9zdE5hbWU9cmFiYml0bXE7RGlzcGF0Y2hDb25zdW1lcnNBc3luYz10cnVlO0F1dG9tYXRpY1JlY292ZXJ5RW5hYmxlZD10cnVlO1VzZXJOYW1lPWd1ZXN0O1Bhc3N3b3JkPWd1ZXN0
+---
+# Source: bikesharingsampleapp/charts/servicehelloworldapi/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: servicehelloworldapi-cfg
+data:
+  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3Lm9jZWxvdDo4MA==
+  EventBusConnection: SG9zdE5hbWU9cmFiYml0bXE7RGlzcGF0Y2hDb25zdW1lcnNBc3luYz10cnVlO0F1dG9tYXRpY1JlY292ZXJ5RW5hYmxlZD10cnVlO1VzZXJOYW1lPWd1ZXN0O1Bhc3N3b3JkPWd1ZXN0
+---
+# Source: bikesharingsampleapp/charts/serviceorderingapi/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: serviceorderingapi-cfg
+data:
+  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3Lm9jZWxvdDo4MA==
+  EventBusConnection: SG9zdE5hbWU9cmFiYml0bXE7RGlzcGF0Y2hDb25zdW1lcnNBc3luYz10cnVlO0F1dG9tYXRpY1JlY292ZXJ5RW5hYmxlZD10cnVlO1VzZXJOYW1lPWd1ZXN0O1Bhc3N3b3JkPWd1ZXN0
+---
+# Source: bikesharingsampleapp/charts/rabbitmq/templates/configuration.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-config
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-6.18.2
+    release: "apidemo"
+    heritage: "Helm"
+data:
+  enabled_plugins: |-
+    [rabbitmq_management, rabbitmq_peer_discovery_k8s, rabbitmq_auth_backend_ldap].
+  rabbitmq.conf: |-
+    ##username and password
+    default_user=user
+    default_pass=CHANGEME
+    ## Clustering
+    cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
+    cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
+    cluster_formation.node_cleanup.interval = 10
+    cluster_formation.node_cleanup.only_log_warning = true
+    cluster_partition_handling = autoheal
+    # queue master locator
+    queue_master_locator=min-masters
+    # enable guest user
+    loopback_users.guest = false
+    #disk_free_limit.absolute = 50MB
+    #management.load_definitions = /app/load_definition.json
+---
+# Source: bikesharingsampleapp/charts/rabbitmq/templates/healthchecks.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rabbitmq-healthchecks
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-6.18.2
+    release: "apidemo"
+    heritage: "Helm"
+data:
+  rabbitmq-health-check: |-
+    #!/bin/sh
+    START_FLAG=/opt/bitnami/rabbitmq/var/lib/rabbitmq/.start
+    if [ -f ${START_FLAG} ]; then
+        rabbitmqctl node_health_check
+        RESULT=$?
+        if [ $RESULT -ne 0 ]; then
+          rabbitmqctl status
+          exit $?
+        fi
+        rm -f ${START_FLAG}
+        exit ${RESULT}
+    fi
+    rabbitmq-api-check $1 $2
+  rabbitmq-api-check: |-
+    #!/bin/sh
+    set -e
+    URL=$1
+    EXPECTED=$2
+    ACTUAL=$(curl --silent --show-error --fail "${URL}")
+    echo "${ACTUAL}"
+    test "${EXPECTED}" = "${ACTUAL}"
+---
+# Source: bikesharingsampleapp/charts/rabbitmq/templates/role.yaml
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: rabbitmq-endpoint-reader
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-6.18.2
+    release: "apidemo"
+    heritage: "Helm"
+rules:
+- apiGroups: [""]
+  resources: ["endpoints"]
+  verbs: ["get"]
+---
+# Source: bikesharingsampleapp/charts/rabbitmq/templates/rolebinding.yaml
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: rabbitmq-endpoint-reader
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-6.18.2
+    release: "apidemo"
+    heritage: "Helm"
+subjects:
+- kind: ServiceAccount
+  name: rabbitmq
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: rabbitmq-endpoint-reader
+---
+# Source: bikesharingsampleapp/charts/apigwocelot/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: apigwocelot
+  labels:
+    app: apigwocelot
+    chart: apigwocelot-0.1.0
+    release: apidemo
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: apigwocelot
+    release: apidemo
+---
+# Source: bikesharingsampleapp/charts/blazorapp/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blazorapp
+  labels:
+    app: blazorapp
+    chart: blazorapp-0.1.0
+    release: apidemo
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: blazorapp
+    release: apidemo
+---
+# Source: bikesharingsampleapp/charts/rabbitmq/templates/svc-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq-headless
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-6.18.2
+    release: "apidemo"
+    heritage: "Helm"
+spec:
+  clusterIP: None
+  ports:
+  - name: epmd
+    port: 4369
+    targetPort: epmd
+  - name: amqp
+    port: 5672
+    targetPort: amqp
+  - name: dist
+    port: 25672
+    targetPort: dist
+  - name: stats
+    port: 15672
+    targetPort: stats
+  selector:
+    app: rabbitmq
+    release: "apidemo"
+---
+# Source: bikesharingsampleapp/charts/rabbitmq/templates/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-6.18.2
+    release: "apidemo"
+    heritage: "Helm"
+spec:
+  type: ClusterIP
+  ports:
+  - name: epmd
+    port: 4369
+    targetPort: epmd
+    nodePort: null
+  - name: amqp
+    port: 5672
+    targetPort: amqp
+    nodePort: null
+  - name: dist
+    port: 25672
+    targetPort: dist
+    nodePort: null
+  - name: stats
+    port: 15672
+    targetPort: stats
+    nodePort: null
+  selector:
+    app: rabbitmq
+    release: "apidemo"
+---
+# Source: bikesharingsampleapp/charts/servicebankingapi/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicebankingapi
+  labels:
+    app: servicebankingapi
+    chart: servicebankingapi-0.1.0
+    release: apidemo
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: servicebankingapi
+    release: apidemo
+---
+# Source: bikesharingsampleapp/charts/servicehelloworldapi/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicehelloworldapi
+  labels:
+    app: servicehelloworldapi
+    chart: servicehelloworldapi-0.1.0
+    release: apidemo
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: servicehelloworldapi
+    release: apidemo
+---
+# Source: bikesharingsampleapp/charts/serviceorderingapi/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: serviceorderingapi
+  labels:
+    app: serviceorderingapi
+    chart: serviceorderingapi-0.1.0
+    release: apidemo
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: serviceorderingapi
+    release: apidemo
+---
+# Source: bikesharingsampleapp/charts/apigwocelot/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apigwocelot
+  labels:
+    app: apigwocelot
+    chart: apigwocelot-0.1.0
+    draft: draft-app
+    release: apidemo
+    heritage: Helm
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apigwocelot
+      release: apidemo
+  template:
+    metadata:
+      labels:
+        app: apigwocelot
+        draft: draft-app
+        release: apidemo
+      annotations:
+        buildID: ""
+    spec:
+      containers:
+        - name: apigwocelot
+          image: "acrsvr01.azurecr.io/apidemo/apigwocelot:linux-latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+          resources:
+            {}
+---
+# Source: bikesharingsampleapp/charts/blazorapp/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blazorapp
+  labels:
+    app: blazorapp
+    chart: blazorapp-0.1.0
+    draft: draft-app
+    release: apidemo
+    heritage: Helm
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blazorapp
+      release: apidemo
+  template:
+    metadata:
+      labels:
+        app: blazorapp
+        draft: draft-app
+        release: apidemo
+      annotations:
+        buildID: ""
+    spec:
+      containers:
+        - name: blazorapp
+          image: "blazorapp:stable"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: Cfg_ApiGatewayConnection
+              valueFrom:
+                secretKeyRef:
+                  name: blazorapp-cfg
+                  key: ApiGatewayConnection
+          resources:
+            {}
+---
+# Source: bikesharingsampleapp/charts/servicebankingapi/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicebankingapi
+  labels:
+    app: servicebankingapi
+    chart: servicebankingapi-0.1.0
+    draft: draft-app
+    release: apidemo
+    heritage: Helm
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servicebankingapi
+      release: apidemo
+  template:
+    metadata:
+      labels:
+        app: servicebankingapi
+        draft: draft-app
+        release: apidemo
+      annotations:
+        buildID: ""
+    spec:
+      containers:
+        - name: servicebankingapi
+          image: "acrsvr01.azurecr.io/apidemo/servicebankingapi:linux-latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: Cfg_ApiGatewayConnection
+              valueFrom:
+                secretKeyRef:
+                  name: servicebankingapi-cfg
+                  key: ApiGatewayConnection
+            - name: Cfg_EventBusConnection
+              valueFrom:
+                secretKeyRef:
+                  name: servicebankingapi-cfg
+                  key: EventBusConnection
+          resources:
+            {}
+---
+# Source: bikesharingsampleapp/charts/servicehelloworldapi/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicehelloworldapi
+  labels:
+    app: servicehelloworldapi
+    chart: servicehelloworldapi-0.1.0
+    draft: draft-app
+    release: apidemo
+    heritage: Helm
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servicehelloworldapi
+      release: apidemo
+  template:
+    metadata:
+      labels:
+        app: servicehelloworldapi
+        draft: draft-app
+        release: apidemo
+      annotations:
+        buildID: ""
+    spec:
+      containers:
+        - name: servicehelloworldapi
+          image: "acrsvr01.azurecr.io/apidemo/servicehelloworldapi:linux-latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: Cfg_ApiGatewayConnection
+              valueFrom:
+                secretKeyRef:
+                  name: servicehelloworldapi-cfg
+                  key: ApiGatewayConnection
+            - name: Cfg_EventBusConnection
+              valueFrom:
+                secretKeyRef:
+                  name: servicehelloworldapi-cfg
+                  key: EventBusConnection
+          resources:
+            {}
+---
+# Source: bikesharingsampleapp/charts/serviceorderingapi/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: serviceorderingapi
+  labels:
+    app: serviceorderingapi
+    chart: serviceorderingapi-0.1.0
+    draft: draft-app
+    release: apidemo
+    heritage: Helm
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: serviceorderingapi
+      release: apidemo
+  template:
+    metadata:
+      labels:
+        app: serviceorderingapi
+        draft: draft-app
+        release: apidemo
+      annotations:
+        buildID: ""
+    spec:
+      containers:
+        - name: serviceorderingapi
+          image: "acrsvr01.azurecr.io/apidemo/serviceorderingapi:linux-latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: Cfg_ApiGatewayConnection
+              valueFrom:
+                secretKeyRef:
+                  name: serviceorderingapi-cfg
+                  key: ApiGatewayConnection
+            - name: Cfg_EventBusConnection
+              valueFrom:
+                secretKeyRef:
+                  name: serviceorderingapi-cfg
+                  key: EventBusConnection
+          resources:
+            {}
+---
+# Source: bikesharingsampleapp/charts/rabbitmq/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-6.18.2
+    release: "apidemo"
+    heritage: "Helm"
+spec:
+  serviceName: rabbitmq-headless
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: rabbitmq
+      release: "apidemo"
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+        release: "apidemo"
+        chart: rabbitmq-6.18.2
+      annotations:
+        checksum/secret: e48989841217b41d33abe963a96099a669f69ba6306b52d3eec618c5780d2531
+    spec:      
+      serviceAccountName: rabbitmq
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: rabbitmq
+        image: docker.io/bitnami/rabbitmq:3.8.2-debian-10-r30
+        imagePullPolicy: "IfNotPresent"
+        command:
+         - bash
+         - -ec
+         - |
+            mkdir -p /opt/bitnami/rabbitmq/.rabbitmq/
+            mkdir -p /opt/bitnami/rabbitmq/etc/rabbitmq/
+            touch /opt/bitnami/rabbitmq/var/lib/rabbitmq/.start
+            #persist the erlang cookie in both places for server and cli tools
+            echo $RABBITMQ_ERL_COOKIE > /opt/bitnami/rabbitmq/var/lib/rabbitmq/.erlang.cookie
+            cp /opt/bitnami/rabbitmq/var/lib/rabbitmq/.erlang.cookie /opt/bitnami/rabbitmq/.rabbitmq/
+            #change permission so only the user has access to the cookie file
+            chmod 600 /opt/bitnami/rabbitmq/.rabbitmq/.erlang.cookie /opt/bitnami/rabbitmq/var/lib/rabbitmq/.erlang.cookie
+            #copy the mounted configuration to both places
+            cp  /opt/bitnami/rabbitmq/conf/* /opt/bitnami/rabbitmq/etc/rabbitmq
+            # Apply resources limits
+            ulimit -n "${RABBITMQ_ULIMIT_NOFILES}"
+            #replace the default password that is generated
+            sed -i "/CHANGEME/cdefault_pass=${RABBITMQ_PASSWORD//\\/\\\\}" /opt/bitnami/rabbitmq/etc/rabbitmq/rabbitmq.conf
+            exec rabbitmq-server
+        volumeMounts:
+          - name: config-volume
+            mountPath: /opt/bitnami/rabbitmq/conf
+          - name: healthchecks
+            mountPath: /usr/local/sbin/rabbitmq-api-check
+            subPath: rabbitmq-api-check
+          - name: healthchecks
+            mountPath: /usr/local/sbin/rabbitmq-health-check
+            subPath: rabbitmq-health-check
+          - name: data
+            mountPath: "/opt/bitnami/rabbitmq/var/lib/rabbitmq"
+        ports:
+        - name: epmd
+          containerPort: 4369
+        - name: amqp
+          containerPort: 5672
+        - name: dist
+          containerPort: 25672
+        - name: stats
+          containerPort: 15672
+        livenessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - rabbitmq-api-check "http://user:$RABBITMQ_PASSWORD@127.0.0.1:15672/api/healthchecks/node" '{"status":"ok"}'
+          initialDelaySeconds: 120
+          timeoutSeconds: 20
+          periodSeconds: 30
+          failureThreshold: 6
+          successThreshold: 1
+        readinessProbe:
+          exec:
+            command:
+              - sh
+              - -c
+              - rabbitmq-health-check "http://user:$RABBITMQ_PASSWORD@127.0.0.1:15672/api/healthchecks/node" '{"status":"ok"}'
+          initialDelaySeconds: 10
+          timeoutSeconds: 20
+          periodSeconds: 30
+          failureThreshold: 3
+          successThreshold: 1
+        env:
+          - name: BITNAMI_DEBUG
+            value: "false"
+          - name: MY_POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: MY_POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: K8S_SERVICE_NAME
+            value: "rabbitmq-headless"
+          - name: K8S_ADDRESS_TYPE
+            value: hostname
+          - name: RABBITMQ_NODENAME
+            value: "rabbit@$(MY_POD_NAME).$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local"
+          - name: K8S_HOSTNAME_SUFFIX
+            value: ".$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local"
+          - name: RABBITMQ_LOGS
+            value: "-"
+          - name: RABBITMQ_ULIMIT_NOFILES
+            value: "65536"
+          - name: RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS
+            value: +S 2:1
+          - name: RABBITMQ_USE_LONGNAME
+            value: "true"
+          - name: RABBITMQ_ERL_COOKIE
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmq
+                key: rabbitmq-erlang-cookie
+          - name: RABBITMQ_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: rabbitmq
+                key: rabbitmq-password
+      securityContext:
+        fsGroup: 1001
+        runAsUser: 1001
+      volumes:
+        - name: config-volume
+          configMap:
+            name: rabbitmq-config
+            items:
+            - key: rabbitmq.conf
+              path: rabbitmq.conf
+            - key: enabled_plugins
+              path: enabled_plugins
+        - name: healthchecks
+          configMap:
+            name: rabbitmq-healthchecks
+            items:
+            - key: rabbitmq-health-check
+              path: rabbitmq-health-check
+              mode: 111
+            - key: rabbitmq-api-check
+              path: rabbitmq-api-check
+              mode: 111
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels:
+          app: rabbitmq
+          release: "apidemo"
+          heritage: "Helm"
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+            requests:
+              storage: "8Gi"
+---
+# Source: bikesharingsampleapp/charts/blazorapp/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: blazorapp
+  labels:
+    app: blazorapp
+    chart: blazorapp-0.1.0
+    release: apidemo
+    heritage: Helm
+  annotations:
+    kubernetes.io/ingress.class: traefik-azds
+spec:
+  rules:
+    - host: dev.blazorapp.phrc75fn7b.sea.azds.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: blazorapp
+              servicePort: http
+

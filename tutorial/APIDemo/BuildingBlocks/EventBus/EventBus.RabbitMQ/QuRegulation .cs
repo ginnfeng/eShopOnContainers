@@ -4,12 +4,13 @@
 // Revisions  :            		
 // **************************************************************************** 
 using Common.Contract;
-using Support.Net.Util;
-using Support.Serializer;
+using Common.Open.Serializer;
+using Common.Support.Net.Util;
+using Common.Support.Serializer;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
+
 
 namespace EventBus.RabbitMQ
 {

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -11,7 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Common.Contract\Common.Contract.csproj" />
     <ProjectReference Include="..\..\Common\Common.Policy\Common.Policy.csproj" />
-    <ProjectReference Include="..\..\Common\Common.Support\Common.Support.csproj" />
+    <ProjectReference Include="..\..\Common\Common\Common.csproj" />
   </ItemGroup>
 
 </Project>

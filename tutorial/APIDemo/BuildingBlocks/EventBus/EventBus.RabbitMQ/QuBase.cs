@@ -3,16 +3,14 @@
 // Description: MQBase.cs  
 // Revisions  :            		
 // **************************************************************************** 
-using Common.Contract;
+
 using Common.DataContract;
 using Common.Support.Common.DataCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using RabbitMQ.Client;
-using Support.Net.Proxy;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
+using Common.Support.Net.Proxy;
+
 
 namespace EventBus.RabbitMQ
 {

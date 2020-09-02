@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BuildingBlocks\Common\Common.Support\Common.Support.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Common\Common\Common.csproj" />
     <ProjectReference Include="..\..\Service\HelloWorld\Service.HelloWorld.Contract\Service.HelloWorld.Contract.csproj" />
     <ProjectReference Include="..\..\Service\Ordering\Service.Ordering.Contract\Service.Ordering.Contract.csproj" />
   </ItemGroup>

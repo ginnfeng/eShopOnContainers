@@ -1,10 +1,10 @@
-﻿using Common.Contract;
+﻿
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Service.Banking.ApiImp;
 using Service.Banking.Contract.Service;
-using Support;
-using System;
+using Common.Support;
+
 
 namespace IoC.DI.Banking
 {

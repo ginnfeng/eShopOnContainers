@@ -1,5 +1,5 @@
 NAME: apidemo
-LAST DEPLOYED: Thu Sep  3 16:29:02 2020
+LAST DEPLOYED: Thu Sep  3 16:40:45 2020
 NAMESPACE: dev
 STATUS: pending-install
 REVISION: 1
@@ -391,10 +391,10 @@ metadata:
 type: Opaque
 data:
   
-  rabbitmq-password: "blZCNWNrc0ZLdA=="
+  rabbitmq-password: "c0tTOFM3d05aSA=="
   
   
-  rabbitmq-erlang-cookie: "NGtIN3luNjJNVjFlZXlyb2d1RnJFZE9BSEFZUnVPWGI="
+  rabbitmq-erlang-cookie: "TjFHYWh1b2x0OFFXYmdqSkwzeEhSc08wNEF2R3pwZ0s="
 ---
 # Source: bikesharingsampleapp/charts/servicebankingapi/templates/secrets.yaml
 apiVersion: v1
@@ -944,7 +944,7 @@ spec:
         release: "apidemo"
         chart: rabbitmq-6.18.2
       annotations:
-        checksum/secret: a56751a059cd8a4a8afd66902f292b5631eba12bc4fa01b0355e5a1eb28c60c9
+        checksum/secret: a7d29f8ea2a2f46c25a5a8781ba8d956ff5a0363b83f33576bfff0ae0efaee25
     spec:      
       serviceAccountName: rabbitmq
       terminationGracePeriodSeconds: 10

@@ -1,5 +1,5 @@
 NAME: apidemo
-LAST DEPLOYED: Thu Sep  3 13:57:12 2020
+LAST DEPLOYED: Thu Sep  3 15:52:00 2020
 NAMESPACE: dev
 STATUS: pending-install
 REVISION: 1
@@ -12,7 +12,7 @@ blazorapp:
 global:
   secrets:
     cfg:
-      ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
       EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
 servicebankingapi:
   secrets:
@@ -39,7 +39,7 @@ apigwocelot:
   global:
     secrets:
       cfg:
-        ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+        ApiGatewayConnection: Endpoint=http://apigwocelot:80
         EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
   image:
     pullPolicy: IfNotPresent
@@ -69,7 +69,7 @@ blazorapp:
   global:
     secrets:
       cfg:
-        ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+        ApiGatewayConnection: Endpoint=http://apigwocelot:80
         EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
   image:
     pullPolicy: IfNotPresent
@@ -99,7 +99,7 @@ blazorapp:
 global:
   secrets:
     cfg:
-      ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
       EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
 rabbitmq:
   affinity: {}
@@ -110,7 +110,7 @@ rabbitmq:
   global:
     secrets:
       cfg:
-        ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+        ApiGatewayConnection: Endpoint=http://apigwocelot:80
         EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
   image:
     debug: false
@@ -268,7 +268,7 @@ servicebankingapi:
   global:
     secrets:
       cfg:
-        ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+        ApiGatewayConnection: Endpoint=http://apigwocelot:80
         EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
   image:
     pullPolicy: IfNotPresent
@@ -300,7 +300,7 @@ servicehelloworldapi:
   global:
     secrets:
       cfg:
-        ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+        ApiGatewayConnection: Endpoint=http://apigwocelot:80
         EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
   image:
     pullPolicy: IfNotPresent
@@ -331,7 +331,7 @@ serviceorderingapi:
   global:
     secrets:
       cfg:
-        ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+        ApiGatewayConnection: Endpoint=http://apigwocelot:80
         EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
   image:
     pullPolicy: IfNotPresent
@@ -391,10 +391,10 @@ metadata:
 type: Opaque
 data:
   
-  rabbitmq-password: "dXRmaXU1SUJaVw=="
+  rabbitmq-password: "MTZPbjFwaTUxNw=="
   
   
-  rabbitmq-erlang-cookie: "QmxnMG1yekJEeFJqMllkMDJjY2FWR0Rlazg4MUptNG4="
+  rabbitmq-erlang-cookie: "aHgzSEdGaUlKcEVhbnc1SWZDdWZqY250bW9lVE5GOXY="
 ---
 # Source: bikesharingsampleapp/charts/servicebankingapi/templates/secrets.yaml
 apiVersion: v1
@@ -944,7 +944,7 @@ spec:
         release: "apidemo"
         chart: rabbitmq-6.18.2
       annotations:
-        checksum/secret: 28924604af0c4e66f2d0069889f703a64428d87205ec5e72eb69d45763241715
+        checksum/secret: 16f8b823de136fb27830f0bddd6d90ffa396268eee6db6c113ba7a29926590f0
     spec:      
       serviceAccountName: rabbitmq
       terminationGracePeriodSeconds: 10

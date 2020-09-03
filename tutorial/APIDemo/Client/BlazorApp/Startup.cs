@@ -31,9 +31,10 @@ namespace BlazorApp
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
+            services.AddTransient<WeatherForecast>();
 
             //services.AddSingleton<WeatherForecastService>(sp=>new WeatherForecastService(sp.GetService<IConnSource<IApiSetting>>()));
-           
+
             IoC.DI.Client.DIContainer.Instance.ResgisterServices(services, Configuration);
             WeatherForecast.Configuration = Configuration;
         }

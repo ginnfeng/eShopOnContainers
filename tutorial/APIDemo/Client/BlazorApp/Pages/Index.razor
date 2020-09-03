@@ -1,6 +1,9 @@
 ﻿@page "/"
-
+@using BlazorApp.Data
+@inject WeatherForecast weatherForecast
 <h1>Hello, world!</h1>
+<p>EventBusConnection:=> @weatherForecast.EventBusConnection</p>
+<p>ApiGatewayConnection:=> @weatherForecast.ApiGatewayConnection</p>
 
 Welcome to your new app.
 

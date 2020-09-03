@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Common.Support.Log
+namespace Common.Support.Logger
 {
     public class PerformanceLog : IDisposable
     {

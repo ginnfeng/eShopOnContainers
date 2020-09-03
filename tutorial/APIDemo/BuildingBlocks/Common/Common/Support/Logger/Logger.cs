@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Common.Support.Log
+namespace Common.Support.Logger
 {
     class Logger:ILogger,IDisposable
     {

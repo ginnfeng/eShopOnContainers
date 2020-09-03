@@ -2,7 +2,7 @@
 using Common.Support.ErrorHandling;
 using System.Diagnostics;
 
-namespace Common.Support.Log
+namespace Common.Support.Logger
 {
     [Serializable]    
     public class LogEntity : LogEntityBase

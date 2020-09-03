@@ -1,4 +1,4 @@
-﻿namespace Common.Support.Log
+﻿namespace Common.Support.Logger
 {
     internal class SystemSetting
     {

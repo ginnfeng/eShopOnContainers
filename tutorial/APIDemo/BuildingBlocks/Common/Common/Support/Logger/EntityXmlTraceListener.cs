@@ -6,7 +6,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Common.Support.Log
+namespace Common.Support.Logger
 {
     public class EntityXmlTraceListener : XmlWriterTraceListener
     {

@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.Globalization;
 
-namespace Common.Support.Log
+namespace Common.Support.Logger
 {
     [Serializable]    
     public class LogEntityBase:ILogEntity

@@ -11,7 +11,7 @@ using System.Globalization;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Common.Support.Log
+namespace Common.Support.Logger
 {
     public class EntityFileTraceListener : TraceListener//XmlWriterTraceListener //TraceListener//TextWriterTraceListener//TraceListener
     {

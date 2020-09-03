@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 
-namespace Common.Support.Log
+namespace Common.Support.Logger
 {
     public enum ActivityState
     {

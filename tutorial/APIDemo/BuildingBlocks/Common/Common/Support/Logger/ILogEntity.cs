@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-namespace Common.Support.Log
+namespace Common.Support.Logger
 {
 
     public interface ILogEntity : IDisposable

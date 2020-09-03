@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Threading;
 
 
-namespace Common.Support.Log
+namespace Common.Support.Logger
 {
     public interface ILogAgent
     {

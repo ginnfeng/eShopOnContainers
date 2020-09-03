@@ -11,7 +11,7 @@ using System.IO;
 using System.Security.Principal;
 using System.Text;
 
-namespace Common.Support.Log
+namespace Common.Support.Logger
 {
     public enum ActionType
     {
@@ -50,7 +50,7 @@ namespace Common.Support.Log
     public class DailyLogger : DailyLogger<ActionType>
     {
 
-        static public DailyLogger Instance { get { return Support.Singleton0<DailyLogger>.Instance; } }
+        static public DailyLogger Instance { get { return Singleton0<DailyLogger>.Instance; } }
         public void WriteStartupLog(string info)
         {
             var proc = Process.GetCurrentProcess();
@@ -152,7 +152,7 @@ namespace Common.Support.Log
         internal DailyLogger()
         {
 
-            defaultLogDir = Support.CommonExtension.StringFormat("{0}/Log/{1}"
+            defaultLogDir = CommonExtension.StringFormat("{0}/Log/{1}"
                 , Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
                 , AppDomain.CurrentDomain.FriendlyName);
 

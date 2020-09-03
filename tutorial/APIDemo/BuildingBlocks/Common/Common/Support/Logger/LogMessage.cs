@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Common.Support.Log
+namespace Common.Support.Logger
 {
     [Serializable]
     public class LogMessage

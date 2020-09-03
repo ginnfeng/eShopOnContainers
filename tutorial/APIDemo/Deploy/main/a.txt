@@ -1,15 +1,361 @@
-Hang tight while we grab the latest from your chart repositories...
-...Successfully got an update from the "stable" chart repository
-Update Complete. ⎈Happy Helming!⎈
-Saving 6 charts
-Downloading rabbitmq from repo https://kubernetes-charts.storage.googleapis.com/
-Deleting outdated charts
 NAME: apidemo
-LAST DEPLOYED: Tue Sep  1 17:46:43 2020
+LAST DEPLOYED: Thu Sep  3 13:57:12 2020
 NAMESPACE: dev
 STATUS: pending-install
 REVISION: 1
 TEST SUITE: None
+USER-SUPPLIED VALUES:
+blazorapp:
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+global:
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+servicebankingapi:
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+servicehelloworldapi:
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+serviceorderingapi:
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+
+COMPUTED VALUES:
+apigwocelot:
+  affinity: {}
+  deployment:
+    containerPort: 80
+  fullnameOverride: apigwocelot
+  global:
+    secrets:
+      cfg:
+        ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+        EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  image:
+    pullPolicy: IfNotPresent
+    repository: acrsvr01.azurecr.io/apidemo/apigwocelot
+    tag: linux-latest
+  imagePullSecrets: []
+  ingress:
+    annotations: {}
+    enabled: false
+    path: /
+    tls: []
+  nodeSelector: {}
+  probes:
+    enabled: false
+  replicaCount: 1
+  resources: {}
+  secrets: {}
+  service:
+    port: 80
+    type: ClusterIP
+  tolerations: []
+blazorapp:
+  affinity: {}
+  deployment:
+    containerPort: 80
+  fullnameOverride: blazorapp
+  global:
+    secrets:
+      cfg:
+        ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+        EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  image:
+    pullPolicy: IfNotPresent
+    repository: acrsvr01.azurecr.io/apidemo/blazorapp
+    tag: linux-latest
+  imagePullSecrets: []
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: traefik-azds
+    enabled: true
+    hosts:
+    - dev.blazorapp.r9qhhrc999.sea.azds.io
+    path: /
+    tls: []
+  nodeSelector: {}
+  probes:
+    enabled: false
+  replicaCount: 1
+  resources: {}
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+  service:
+    port: 80
+    type: ClusterIP
+  tolerations: []
+global:
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+rabbitmq:
+  affinity: {}
+  extraSecrets: {}
+  forceBoot:
+    enabled: false
+  fullnameOverride: rabbitmq
+  global:
+    secrets:
+      cfg:
+        ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+        EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  image:
+    debug: false
+    pullPolicy: IfNotPresent
+    registry: docker.io
+    repository: bitnami/rabbitmq
+    tag: 3.8.2-debian-10-r30
+  ingress:
+    annotations: {}
+    enabled: false
+    path: /
+    tls: false
+    tlsSecret: myTlsSecret
+  ldap:
+    enabled: false
+    port: "389"
+    server: ""
+    tls:
+      enabled: false
+    user_dn_pattern: cn=${username},dc=example,dc=org
+  livenessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 120
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 20
+  metrics:
+    annotations:
+      prometheus.io/port: "9419"
+      prometheus.io/scrape: "true"
+    capabilities: bert,no_sort
+    enabled: false
+    env: {}
+    image:
+      pullPolicy: IfNotPresent
+      registry: docker.io
+      repository: bitnami/rabbitmq-exporter
+      tag: 0.29.0-debian-10-r28
+    livenessProbe:
+      enabled: true
+      failureThreshold: 6
+      initialDelaySeconds: 15
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 5
+    port: 9419
+    prometheusRule:
+      additionalLabels: {}
+      enabled: false
+      namespace: ""
+      rules: []
+    rabbitmqAddress: localhost
+    readinessProbe:
+      enabled: true
+      failureThreshold: 3
+      initialDelaySeconds: 5
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 5
+    resources: {}
+    serviceMonitor:
+      additionalLabels: {}
+      enabled: false
+      honorLabels: false
+      interval: 30s
+  networkPolicy:
+    allowExternal: true
+    enabled: false
+  nodeSelector: {}
+  persistence:
+    accessMode: ReadWriteOnce
+    enabled: true
+    path: /opt/bitnami/rabbitmq/var/lib/rabbitmq
+    size: 8Gi
+  podAnnotations: {}
+  podDisruptionBudget: {}
+  podLabels: {}
+  podManagementPolicy: OrderedReady
+  rabbitmq:
+    advancedConfiguration: ""
+    clustering:
+      address_type: hostname
+      k8s_domain: cluster.local
+      rebalance: false
+    configuration: |-
+      ## Clustering
+      cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
+      cluster_formation.k8s.host = kubernetes.default.svc.cluster.local
+      cluster_formation.node_cleanup.interval = 10
+      cluster_formation.node_cleanup.only_log_warning = true
+      cluster_partition_handling = autoheal
+      # queue master locator
+      queue_master_locator=min-masters
+      # enable guest user
+      loopback_users.guest = false
+    env: {}
+    extraConfiguration: |-
+      #disk_free_limit.absolute = 50MB
+      #management.load_definitions = /app/load_definition.json
+    extraPlugins: rabbitmq_auth_backend_ldap
+    loadDefinition:
+      enabled: false
+      secretName: load-definition
+    logs: '-'
+    maxAvailableSchedulers: 2
+    onlineSchedulers: 1
+    plugins: rabbitmq_management rabbitmq_peer_discovery_k8s
+    setUlimitNofiles: true
+    tls:
+      caCertificate: ""
+      enabled: false
+      failIfNoPeerCert: true
+      serverCertificate: ""
+      serverKey: ""
+      sslOptionsVerify: verify_peer
+    ulimitNofiles: "65536"
+    username: user
+  rbacEnabled: true
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 20
+  replicas: 1
+  resources: {}
+  securityContext:
+    enabled: true
+    extra: {}
+    fsGroup: 1001
+    runAsUser: 1001
+  service:
+    annotations: {}
+    distPort: 25672
+    managerPort: 15672
+    port: 5672
+    tlsPort: 5671
+    type: ClusterIP
+  tolerations: []
+  updateStrategy:
+    type: RollingUpdate
+  volumePermissions:
+    enabled: false
+    image:
+      pullPolicy: Always
+      registry: docker.io
+      repository: bitnami/minideb
+      tag: buster
+    resources: {}
+servicebankingapi:
+  affinity: {}
+  fullnameOverride: servicebankingapi
+  global:
+    secrets:
+      cfg:
+        ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+        EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  image:
+    pullPolicy: IfNotPresent
+    repository: acrsvr01.azurecr.io/apidemo/servicebankingapi
+    tag: linux-latest
+  imagePullSecrets: []
+  ingress:
+    enabled: false
+    path: /
+    tls: []
+  nodeSelector: {}
+  probes:
+    enabled: false
+  replicaCount: 1
+  resources: {}
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  service:
+    port: 80
+    type: ClusterIP
+  tolerations: []
+servicehelloworldapi:
+  affinity: {}
+  deployment:
+    containerPort: 80
+  fullnameOverride: servicehelloworldapi
+  global:
+    secrets:
+      cfg:
+        ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+        EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  image:
+    pullPolicy: IfNotPresent
+    repository: acrsvr01.azurecr.io/apidemo/servicehelloworldapi
+    tag: linux-latest
+  imagePullSecrets: []
+  ingress:
+    annotations: {}
+    enabled: false
+    path: /
+    tls: []
+  nodeSelector: {}
+  probes:
+    enabled: false
+  replicaCount: 1
+  resources: {}
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  service:
+    port: 80
+    type: ClusterIP
+  tolerations: []
+serviceorderingapi:
+  affinity: {}
+  fullnameOverride: serviceorderingapi
+  global:
+    secrets:
+      cfg:
+        ApiGatewayConnection: Endpoint=http://apigw.ocelot:80
+        EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  image:
+    pullPolicy: IfNotPresent
+    repository: acrsvr01.azurecr.io/apidemo/serviceorderingapi
+    tag: linux-latest
+  imagePullSecrets: []
+  ingress:
+    enabled: false
+    path: /
+    tls: []
+  nodeSelector: {}
+  probes:
+    enabled: false
+  replicaCount: 1
+  resources: {}
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  service:
+    port: 80
+    type: ClusterIP
+  tolerations: []
+
 HOOKS:
 MANIFEST:
 ---
@@ -30,7 +376,7 @@ kind: Secret
 metadata:
   name: blazorapp-cfg
 data:
-  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3Lm9jZWxvdDo4MA==
+  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3b2NlbG90Ojgw
 ---
 # Source: bikesharingsampleapp/charts/rabbitmq/templates/secrets.yaml
 apiVersion: v1
@@ -45,10 +391,10 @@ metadata:
 type: Opaque
 data:
   
-  rabbitmq-password: "YXdtRzByYklYag=="
+  rabbitmq-password: "dXRmaXU1SUJaVw=="
   
   
-  rabbitmq-erlang-cookie: "RTExcng5VEJidXBtazFibldmZ05keGJRTWNSekpuWFU="
+  rabbitmq-erlang-cookie: "QmxnMG1yekJEeFJqMllkMDJjY2FWR0Rlazg4MUptNG4="
 ---
 # Source: bikesharingsampleapp/charts/servicebankingapi/templates/secrets.yaml
 apiVersion: v1
@@ -56,7 +402,7 @@ kind: Secret
 metadata:
   name: servicebankingapi-cfg
 data:
-  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3Lm9jZWxvdDo4MA==
+  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3b2NlbG90Ojgw
   EventBusConnection: SG9zdE5hbWU9cmFiYml0bXE7RGlzcGF0Y2hDb25zdW1lcnNBc3luYz10cnVlO0F1dG9tYXRpY1JlY292ZXJ5RW5hYmxlZD10cnVlO1VzZXJOYW1lPWd1ZXN0O1Bhc3N3b3JkPWd1ZXN0
 ---
 # Source: bikesharingsampleapp/charts/servicehelloworldapi/templates/secrets.yaml
@@ -65,7 +411,7 @@ kind: Secret
 metadata:
   name: servicehelloworldapi-cfg
 data:
-  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3Lm9jZWxvdDo4MA==
+  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3b2NlbG90Ojgw
   EventBusConnection: SG9zdE5hbWU9cmFiYml0bXE7RGlzcGF0Y2hDb25zdW1lcnNBc3luYz10cnVlO0F1dG9tYXRpY1JlY292ZXJ5RW5hYmxlZD10cnVlO1VzZXJOYW1lPWd1ZXN0O1Bhc3N3b3JkPWd1ZXN0
 ---
 # Source: bikesharingsampleapp/charts/serviceorderingapi/templates/secrets.yaml
@@ -74,7 +420,7 @@ kind: Secret
 metadata:
   name: serviceorderingapi-cfg
 data:
-  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3Lm9jZWxvdDo4MA==
+  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3b2NlbG90Ojgw
   EventBusConnection: SG9zdE5hbWU9cmFiYml0bXE7RGlzcGF0Y2hDb25zdW1lcnNBc3luYz10cnVlO0F1dG9tYXRpY1JlY292ZXJ5RW5hYmxlZD10cnVlO1VzZXJOYW1lPWd1ZXN0O1Bhc3N3b3JkPWd1ZXN0
 ---
 # Source: bikesharingsampleapp/charts/rabbitmq/templates/configuration.yaml
@@ -409,14 +755,14 @@ spec:
     spec:
       containers:
         - name: blazorapp
-          image: "blazorapp:stable"
+          image: "acrsvr01.azurecr.io/apidemo/blazorapp:linux-latest"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 80
               protocol: TCP
           env:
-            - name: Cfg_ApiGatewayConnection
+            - name: cfg_ApiGatewayConnection
               valueFrom:
                 secretKeyRef:
                   name: blazorapp-cfg
@@ -460,12 +806,12 @@ spec:
               containerPort: 80
               protocol: TCP
           env:
-            - name: Cfg_ApiGatewayConnection
+            - name: cfg_ApiGatewayConnection
               valueFrom:
                 secretKeyRef:
                   name: servicebankingapi-cfg
                   key: ApiGatewayConnection
-            - name: Cfg_EventBusConnection
+            - name: cfg_EventBusConnection
               valueFrom:
                 secretKeyRef:
                   name: servicebankingapi-cfg
@@ -509,12 +855,12 @@ spec:
               containerPort: 80
               protocol: TCP
           env:
-            - name: Cfg_ApiGatewayConnection
+            - name: cfg_ApiGatewayConnection
               valueFrom:
                 secretKeyRef:
                   name: servicehelloworldapi-cfg
                   key: ApiGatewayConnection
-            - name: Cfg_EventBusConnection
+            - name: cfg_EventBusConnection
               valueFrom:
                 secretKeyRef:
                   name: servicehelloworldapi-cfg
@@ -558,12 +904,12 @@ spec:
               containerPort: 80
               protocol: TCP
           env:
-            - name: Cfg_ApiGatewayConnection
+            - name: cfg_ApiGatewayConnection
               valueFrom:
                 secretKeyRef:
                   name: serviceorderingapi-cfg
                   key: ApiGatewayConnection
-            - name: Cfg_EventBusConnection
+            - name: cfg_EventBusConnection
               valueFrom:
                 secretKeyRef:
                   name: serviceorderingapi-cfg
@@ -598,7 +944,7 @@ spec:
         release: "apidemo"
         chart: rabbitmq-6.18.2
       annotations:
-        checksum/secret: e48989841217b41d33abe963a96099a669f69ba6306b52d3eec618c5780d2531
+        checksum/secret: 28924604af0c4e66f2d0069889f703a64428d87205ec5e72eb69d45763241715
     spec:      
       serviceAccountName: rabbitmq
       terminationGracePeriodSeconds: 10
@@ -758,7 +1104,7 @@ metadata:
     kubernetes.io/ingress.class: traefik-azds
 spec:
   rules:
-    - host: dev.blazorapp.phrc75fn7b.sea.azds.io
+    - host: dev.blazorapp.r9qhhrc999.sea.azds.io
       http:
         paths:
           - path: /

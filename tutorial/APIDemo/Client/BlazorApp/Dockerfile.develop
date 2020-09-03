@@ -10,7 +10,7 @@ COPY ["BuildingBlocks/ApiGw/ApiGw.ClientProxy.Ext/ApiGw.ClientProxy.Ext.csproj",
 COPY ["BuildingBlocks/ApiGw/ApiGw.ClientProxy/ApiGw.ClientProxy.csproj", "BuildingBlocks/ApiGw/ApiGw.ClientProxy/"]
 COPY ["BuildingBlocks/Common/Common.Contract/Common.Contract.csproj", "BuildingBlocks/Common/Common.Contract/"]
 COPY ["BuildingBlocks/Common/Common.Policy/Common.Policy.csproj", "BuildingBlocks/Common/Common.Policy/"]
-COPY ["BuildingBlocks/Common/Common.Support/Common.Support.csproj", "BuildingBlocks/Common/Common.Support/"]
+COPY ["BuildingBlocks/Common/Common/Common.csproj", "BuildingBlocks/Common/Common/"]
 COPY ["BuildingBlocks/EventBus/EventBus.Domain/EventBus.Domain.csproj", "BuildingBlocks/EventBus/EventBus.Domain/"]
 COPY ["BuildingBlocks/EventBus/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj", "BuildingBlocks/EventBus/EventBus.RabbitMQ/"]
 COPY ["BuildingBlocks/IoC/IoC.DI.Client/IoC.DI.Client.csproj", "BuildingBlocks/IoC/IoC.DI.Client/"]

@@ -40,7 +40,7 @@ global: # 目前尚未用到
     {        
         "cfg":{
           "EventBusConnection": "HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest",
-          "ApiGatewayConnection": "Endpoint=http://apigw.ocelot:80"
+          "ApiGatewayConnection": "Endpoint=http://apigwocelot:80"
         }
     }
   

@@ -2,17 +2,20 @@
 # Declare variables to be passed into your templates.
 
 blazorapp:
+  fullnameOverride: blazorapp
+  image:
+      repository: acrsvr01.azurecr.io/apidemo/blazorapp
+      tag: linux-latest 
   ingress:
-    #enabled: true 
+    enabled: true 
     annotations:
       kubernetes.io/ingress.class: traefik-azds  # Dev Spaces-specific
     hosts:
-      - dev.blazorapp.phrc75fn7b.sea.azds.io  # Assumes deployment to the 'dev' space， azds show-context
-    image:
-      repository: acrsvr01.azurecr.io/apidemo/blazorapp
-      tag: linux-latest 
+      - dev.blazorapp.r9qhhrc999.sea.azds.io  # Assumes deployment to the 'dev' space， azds show-context
+    
 rabbitmq:
-    fullnameOverride: rabbitmq # Values.fullnameOverride
+    fullnameOverride: rabbitmq # Values.fullnameOverride 
+      
 apigwocelot:
     fullnameOverride: apigwocelot
     image:

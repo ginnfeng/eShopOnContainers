@@ -72,23 +72,26 @@ namespace Common.Support.Common.DataCore
             return settingValue;
         }
         private bool TryGetSettingValue(PropertyInfo propInfo, Type returnType,out object settingValue,bool isInBaseType=false)
-        {            
-            kvMap ??= Init(ConnString);
-            var idxAttribute = propInfo.GetCustomAttribute<IndexingAttribute>();
-            var key = (idxAttribute == null) ? propInfo.Name : idxAttribute.Id;
-            string value;
-            if (kvMap.TryGetValue(key, out value))
+        {
+            if (!string.IsNullOrEmpty(ConnString))
             {
-                settingValue=(returnType.Equals(typeof(string)))? value : CommonExtension.ToObject(value, returnType);
-                return true;
-            }else if (!isInBaseType)
-            {
-                Func<Type, PropertyInfo> cond = type => (!propInfo.DeclaringType.IsInterface)? null: type.GetProperty(propInfo.Name); 
-                propInfo = propInfo.DeclaringType.FindIncludBaseType<PropertyInfo>(cond);
-                if(propInfo!=null)
-                    return TryGetSettingValue(propInfo, returnType, out settingValue,true);
+                kvMap ??= Init(ConnString);
+                var idxAttribute = propInfo.GetCustomAttribute<IndexingAttribute>();
+                var key = (idxAttribute == null) ? propInfo.Name : idxAttribute.Id;
+                string value;
+                if (kvMap.TryGetValue(key, out value))
+                {
+                    settingValue = (returnType.Equals(typeof(string))) ? value : CommonExtension.ToObject(value, returnType);
+                    return true;
+                }
+                else if (!isInBaseType)
+                {
+                    Func<Type, PropertyInfo> cond = type => (!propInfo.DeclaringType.IsInterface) ? null : type.GetProperty(propInfo.Name);
+                    propInfo = propInfo.DeclaringType.FindIncludBaseType<PropertyInfo>(cond);
+                    if (propInfo != null)
+                        return TryGetSettingValue(propInfo, returnType, out settingValue, true);
+                }
             }
-            
             settingValue = null;
             return false;
         }

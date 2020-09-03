@@ -2,6 +2,7 @@ using ApiGw.ClientProxy;
 using ApiGw.ClientProxy.Ext;
 using Common.DataContract;
 using EventBus.RabbitMQ;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Service.HelloWorld.Contract.Servic;
 using System;
@@ -42,5 +43,6 @@ namespace BlazorApp.Data
             proxy.RegisterChtSwaggerDoc(useApiGateway: true);
             return await Task.Run<string>(() => proxy.Svc.HelloGet("EEE", "FFF"));            
         }
+        public WeatherForecast Data { get { return new WeatherForecast(); } }
     }
 }

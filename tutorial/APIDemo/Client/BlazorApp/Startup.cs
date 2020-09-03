@@ -33,7 +33,9 @@ namespace BlazorApp
             services.AddSingleton<WeatherForecastService>();
 
             //services.AddSingleton<WeatherForecastService>(sp=>new WeatherForecastService(sp.GetService<IConnSource<IApiSetting>>()));
+           
             IoC.DI.Client.DIContainer.Instance.ResgisterServices(services, Configuration);
+            WeatherForecast.Configuration = Configuration;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

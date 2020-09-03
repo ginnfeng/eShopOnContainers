@@ -43,7 +43,7 @@ namespace IoC.DI
         {
             services.TryAdd(ServiceDescriptor.Transient(typeof(IApiProxy<>), typeof(ApiProxy<>)));
             var connString = cfg.GetValue<string>("cfg_ApiGatewayConnection");
-            if (!string.IsNullOrEmpty(connString))
+            //if (!string.IsNullOrEmpty(connString))
             {
                 services.AddSingleton<IConnSource<IApiSetting>>(new ConnSourceProxy<IApiSetting>(connString));
             }

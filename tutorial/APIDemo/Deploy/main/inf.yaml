@@ -3,34 +3,34 @@
 blazorapp:
     secrets:
         {        
-            "Cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等              
-              "ApiGatewayConnection": "Endpoint=http://apigw.ocelot:80"
+            "cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等              
+              "ApiGatewayConnection": "Endpoint=http://apigwocelot:80"
             }
         }
 
 servicehelloworldapi:
     secrets:
         {        
-            "Cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等
+            "cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等
               "EventBusConnection": "HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest",
-              "ApiGatewayConnection": "Endpoint=http://apigw.ocelot:80"
+              "ApiGatewayConnection": "Endpoint=http://apigwocelot:80"
             }
         }
 serviceorderingapi:
     secrets:
         {        
-            "Cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等
+            "cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等
               "EventBusConnection": "HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest",
-              "ApiGatewayConnection": "Endpoint=http://apigw.ocelot:80"
+              "ApiGatewayConnection": "Endpoint=http://apigwocelot:80"
             }
         }
         
 servicebankingapi:
     secrets:
         {        
-            "Cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等
+            "cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等
               "EventBusConnection": "HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest",
-              "ApiGatewayConnection": "Endpoint=http://apigw.ocelot:80"
+              "ApiGatewayConnection": "Endpoint=http://apigwocelot:80"
             }
         }    
 
@@ -38,9 +38,9 @@ global: # 目前尚未用到
  
   secrets:
     {        
-        "Cfg":{
-          "all_EventBusConnection": "HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest",
-          "all_ApiGatewayConnection": "Endpoint=http://apigw.ocelot:80"
+        "cfg":{
+          "EventBusConnection": "HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest",
+          "ApiGatewayConnection": "Endpoint=http://apigw.ocelot:80"
         }
     }
   

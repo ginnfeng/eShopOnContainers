@@ -13,7 +13,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development      
       #- ASPNETCORE_URLS=https://+:443;http://+:80 #*** 443 don't work ***
       ## ${EVENT_BUS} from .env file, if undefined then 'rabbitmq' is default.
-      - EventBusConnection=${EVENT_BUS:-rabbitmq} 
+      - cfg_EventBusConnection=${EVENT_BUS:-rabbitmq} 
     ports:
       - "80"
       - "443"
@@ -27,7 +27,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development  
       #- ASPNETCORE_URLS=https://+:443;http://+:80
       ## ${EVENT_BUS} from .env file, if undefined then 'rabbitmq' is default.
-      - EventBusConnection=${EVENT_BUS:-rabbitmq}
+      - cfg_EventBusConnection=${EVENT_BUS:-rabbitmq}
     ports:
       - "80"
       - "443"
@@ -61,7 +61,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ApiGatewayConnection=${API_GATEWAY:-apigw.ocelot} 
+      - cfg_ApiGatewayConnection=${API_GATEWAY:-apigw.ocelot} 
     ports:
       - "66:80"
       - "443"

@@ -34,6 +34,7 @@ services:
     build:
       context: .
       dockerfile: BuildingBlocks/ApiGw/ApiGw.Ocelot/Dockerfile
+    container_name: apigwocelot
     networks:
       - dev_network
 

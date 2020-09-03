@@ -33,7 +33,7 @@ namespace IoC.DI
             services.TryAdd(ServiceDescriptor.Transient(typeof(IQuProxy<>), typeof(QuProxy<>)));
             services.AddTransient<QuListener>();
             if (cfg == null) return;
-            var connString = cfg.GetValue<string>("EventBusConnection");
+            var connString = cfg.GetValue<string>("cfg_EventBusConnection");
             if (!string.IsNullOrEmpty(connString))
             {
                 services.AddSingleton<IConnSource<IQuSetting>>(new ConnSourceProxy<IQuSetting>(connString));
@@ -42,7 +42,7 @@ namespace IoC.DI
         protected void ResgisterApiService(IServiceCollection services, IConfiguration cfg)
         {
             services.TryAdd(ServiceDescriptor.Transient(typeof(IApiProxy<>), typeof(ApiProxy<>)));
-            var connString = cfg.GetValue<string>("ApiGatewayConnection");
+            var connString = cfg.GetValue<string>("cfg_ApiGatewayConnection");
             if (!string.IsNullOrEmpty(connString))
             {
                 services.AddSingleton<IConnSource<IApiSetting>>(new ConnSourceProxy<IApiSetting>(connString));

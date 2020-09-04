@@ -39,7 +39,10 @@ namespace ApiGw.Ocelot
                     optional: true);
             var cfg= builder.Build();
             var registeredServices = cfg.GetSection("RegisteredServices").Get<List<string>>();
+            if (registeredServices == null)
+                return GetOcelotJsonPath();
             var svcDefs = new List<ServiceDef>();
+
             foreach (var svcTagName in registeredServices)
             {
                 svcDefs.Add(cfg.GetSection(svcTagName).Get<ServiceDef>());

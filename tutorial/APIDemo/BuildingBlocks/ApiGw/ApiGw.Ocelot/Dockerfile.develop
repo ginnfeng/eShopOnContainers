@@ -8,7 +8,7 @@ EXPOSE 80
 WORKDIR /src
 COPY ["BuildingBlocks/ApiGw/ApiGw.Ocelot/ApiGw.Ocelot.csproj", "BuildingBlocks/ApiGw/ApiGw.Ocelot/"]
 COPY ["BuildingBlocks/Common/Common.Policy/Common.Policy.csproj", "BuildingBlocks/Common/Common.Policy/"]
-COPY ["BuildingBlocks/Common/Common.Support/Common.Support.csproj", "BuildingBlocks/Common/Common.Support/"]
+COPY ["BuildingBlocks/Common/Common/Common.csproj", "BuildingBlocks/Common/Common/"]
 
 RUN dotnet restore "BuildingBlocks/ApiGw/ApiGw.Ocelot/ApiGw.Ocelot.csproj"
 COPY . .

@@ -3,7 +3,8 @@
 blazorapp:
     secrets:
         {        
-            "cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等              
+            "cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等
+              "EventBusConnection": "HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest",            
               "ApiGatewayConnection": "Endpoint=http://apigwocelot:80"
             }
         }

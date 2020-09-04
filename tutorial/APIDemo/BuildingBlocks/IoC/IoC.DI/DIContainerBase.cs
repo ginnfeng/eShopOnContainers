@@ -34,7 +34,7 @@ namespace IoC.DI
             services.AddTransient<QuListener>();
             if (cfg == null) return;
             var connString = cfg.GetValue<string>("cfg_EventBusConnection");
-            if (!string.IsNullOrEmpty(connString))
+            //if (!string.IsNullOrEmpty(connString))
             {
                 services.AddSingleton<IConnSource<IQuSetting>>(new ConnSourceProxy<IQuSetting>(connString));
             }

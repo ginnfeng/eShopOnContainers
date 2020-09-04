@@ -1,0 +1,677 @@
+NAME: apidemo
+LAST DEPLOYED: Fri Sep  4 10:25:05 2020
+NAMESPACE: dev
+STATUS: pending-install
+REVISION: 1
+TEST SUITE: None
+USER-SUPPLIED VALUES:
+blazorapp:
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+global:
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+servicebankingapi:
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+servicehelloworldapi:
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+serviceorderingapi:
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+
+COMPUTED VALUES:
+apigwocelot:
+  affinity: {}
+  deployment:
+    containerPort: 80
+  fullnameOverride: apigwocelot
+  global:
+    secrets:
+      cfg:
+        ApiGatewayConnection: Endpoint=http://apigwocelot:80
+        EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  image:
+    pullPolicy: IfNotPresent
+    repository: acrsvr01.azurecr.io/apidemo/apigwocelot
+    tag: linux-latest
+  imagePullSecrets: []
+  ingress:
+    annotations: {}
+    enabled: false
+    path: /
+    tls: []
+  nodeSelector: {}
+  probes:
+    enabled: false
+  pullPolicy: Always
+  replicaCount: 1
+  resources: {}
+  secrets: {}
+  service:
+    port: 80
+    type: ClusterIP
+  tolerations: []
+blazorapp:
+  affinity: {}
+  deployment:
+    containerPort: 80
+  fullnameOverride: blazorapp
+  global:
+    secrets:
+      cfg:
+        ApiGatewayConnection: Endpoint=http://apigwocelot:80
+        EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  image:
+    pullPolicy: Always
+    repository: acrsvr01.azurecr.io/apidemo/blazorapp
+    tag: linux-latest
+  imagePullSecrets: []
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: traefik-azds
+    enabled: true
+    hosts:
+    - dev.blazorapp.r9qhhrc999.sea.azds.io
+    path: /
+    tls: []
+  nodeSelector: {}
+  probes:
+    enabled: false
+  replicaCount: 1
+  resources: {}
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  service:
+    port: 80
+    type: ClusterIP
+  tolerations: []
+global:
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+rabbitmq:
+  affinity: {}
+  fullnameOverride: rabbitmq
+  global:
+    secrets:
+      cfg:
+        ApiGatewayConnection: Endpoint=http://apigwocelot:80
+        EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  image:
+    pullPolicy: IfNotPresent
+    repository: rabbitmq
+    tag: 3-management
+  nodeSelector: {}
+  replicaCount: 1
+  resources: {}
+  service:
+    port: 5672
+    type: ClusterIP
+  tolerations: []
+servicebankingapi:
+  affinity: {}
+  fullnameOverride: servicebankingapi
+  global:
+    secrets:
+      cfg:
+        ApiGatewayConnection: Endpoint=http://apigwocelot:80
+        EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  image:
+    pullPolicy: IfNotPresent
+    repository: acrsvr01.azurecr.io/apidemo/servicebankingapi
+    tag: linux-latest
+  imagePullSecrets: []
+  ingress:
+    enabled: false
+    path: /
+    tls: []
+  nodeSelector: {}
+  probes:
+    enabled: false
+  pullPolicy: Always
+  replicaCount: 1
+  resources: {}
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  service:
+    port: 80
+    type: ClusterIP
+  tolerations: []
+servicehelloworldapi:
+  affinity: {}
+  deployment:
+    containerPort: 80
+  fullnameOverride: servicehelloworldapi
+  global:
+    secrets:
+      cfg:
+        ApiGatewayConnection: Endpoint=http://apigwocelot:80
+        EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  image:
+    pullPolicy: IfNotPresent
+    repository: acrsvr01.azurecr.io/apidemo/servicehelloworldapi
+    tag: linux-latest
+  imagePullSecrets: []
+  ingress:
+    annotations: {}
+    enabled: false
+    path: /
+    tls: []
+  nodeSelector: {}
+  probes:
+    enabled: false
+  pullPolicy: Always
+  replicaCount: 1
+  resources: {}
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  service:
+    port: 80
+    type: ClusterIP
+  tolerations: []
+serviceorderingapi:
+  affinity: {}
+  fullnameOverride: serviceorderingapi
+  global:
+    secrets:
+      cfg:
+        ApiGatewayConnection: Endpoint=http://apigwocelot:80
+        EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  image:
+    pullPolicy: IfNotPresent
+    repository: acrsvr01.azurecr.io/apidemo/serviceorderingapi
+    tag: linux-latest
+  imagePullSecrets: []
+  ingress:
+    enabled: false
+    path: /
+    tls: []
+  nodeSelector: {}
+  probes:
+    enabled: false
+  pullPolicy: Always
+  replicaCount: 1
+  resources: {}
+  secrets:
+    cfg:
+      ApiGatewayConnection: Endpoint=http://apigwocelot:80
+      EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
+  service:
+    port: 80
+    type: ClusterIP
+  tolerations: []
+
+HOOKS:
+MANIFEST:
+---
+# Source: apidemoapp/charts/blazorapp/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: blazorapp-cfg
+data:
+  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3b2NlbG90Ojgw
+  EventBusConnection: SG9zdE5hbWU9cmFiYml0bXE7RGlzcGF0Y2hDb25zdW1lcnNBc3luYz10cnVlO0F1dG9tYXRpY1JlY292ZXJ5RW5hYmxlZD10cnVlO1VzZXJOYW1lPWd1ZXN0O1Bhc3N3b3JkPWd1ZXN0
+---
+# Source: apidemoapp/charts/servicebankingapi/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: servicebankingapi-cfg
+data:
+  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3b2NlbG90Ojgw
+  EventBusConnection: SG9zdE5hbWU9cmFiYml0bXE7RGlzcGF0Y2hDb25zdW1lcnNBc3luYz10cnVlO0F1dG9tYXRpY1JlY292ZXJ5RW5hYmxlZD10cnVlO1VzZXJOYW1lPWd1ZXN0O1Bhc3N3b3JkPWd1ZXN0
+---
+# Source: apidemoapp/charts/servicehelloworldapi/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: servicehelloworldapi-cfg
+data:
+  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3b2NlbG90Ojgw
+  EventBusConnection: SG9zdE5hbWU9cmFiYml0bXE7RGlzcGF0Y2hDb25zdW1lcnNBc3luYz10cnVlO0F1dG9tYXRpY1JlY292ZXJ5RW5hYmxlZD10cnVlO1VzZXJOYW1lPWd1ZXN0O1Bhc3N3b3JkPWd1ZXN0
+---
+# Source: apidemoapp/charts/serviceorderingapi/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: serviceorderingapi-cfg
+data:
+  ApiGatewayConnection: RW5kcG9pbnQ9aHR0cDovL2FwaWd3b2NlbG90Ojgw
+  EventBusConnection: SG9zdE5hbWU9cmFiYml0bXE7RGlzcGF0Y2hDb25zdW1lcnNBc3luYz10cnVlO0F1dG9tYXRpY1JlY292ZXJ5RW5hYmxlZD10cnVlO1VzZXJOYW1lPWd1ZXN0O1Bhc3N3b3JkPWd1ZXN0
+---
+# Source: apidemoapp/charts/apigwocelot/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: apigwocelot
+  labels:
+    app: apigwocelot
+    chart: apigwocelot-0.1.0
+    release: apidemo
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: apigwocelot
+    release: apidemo
+---
+# Source: apidemoapp/charts/blazorapp/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: blazorapp
+  labels:
+    app: blazorapp
+    chart: blazorapp-0.1.0
+    release: apidemo
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: blazorapp
+    release: apidemo
+---
+# Source: apidemoapp/charts/rabbitmq/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-0.1.0
+    release: apidemo
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5672
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: rabbitmq
+    release: apidemo
+---
+# Source: apidemoapp/charts/servicebankingapi/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicebankingapi
+  labels:
+    app: servicebankingapi
+    chart: servicebankingapi-0.1.0
+    release: apidemo
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: servicebankingapi
+    release: apidemo
+---
+# Source: apidemoapp/charts/servicehelloworldapi/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicehelloworldapi
+  labels:
+    app: servicehelloworldapi
+    chart: servicehelloworldapi-0.1.0
+    release: apidemo
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: servicehelloworldapi
+    release: apidemo
+---
+# Source: apidemoapp/charts/serviceorderingapi/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: serviceorderingapi
+  labels:
+    app: serviceorderingapi
+    chart: serviceorderingapi-0.1.0
+    release: apidemo
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: serviceorderingapi
+    release: apidemo
+---
+# Source: apidemoapp/charts/apigwocelot/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apigwocelot
+  labels:
+    app: apigwocelot
+    chart: apigwocelot-0.1.0
+    draft: draft-app
+    release: apidemo
+    heritage: Helm
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apigwocelot
+      release: apidemo
+  template:
+    metadata:
+      labels:
+        app: apigwocelot
+        draft: draft-app
+        release: apidemo
+      annotations:
+        buildID: ""
+    spec:
+      containers:
+        - name: apigwocelot
+          image: "acrsvr01.azurecr.io/apidemo/apigwocelot:linux-latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+          resources:
+            {}
+---
+# Source: apidemoapp/charts/blazorapp/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blazorapp
+  labels:
+    app: blazorapp
+    chart: blazorapp-0.1.0
+    draft: draft-app
+    release: apidemo
+    heritage: Helm
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blazorapp
+      release: apidemo
+  template:
+    metadata:
+      labels:
+        app: blazorapp
+        draft: draft-app
+        release: apidemo
+      annotations:
+        buildID: ""
+    spec:
+      containers:
+        - name: blazorapp
+          image: "acrsvr01.azurecr.io/apidemo/blazorapp:linux-latest"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: cfg_ApiGatewayConnection
+              valueFrom:
+                secretKeyRef:
+                  name: blazorapp-cfg
+                  key: ApiGatewayConnection
+            - name: cfg_EventBusConnection
+              valueFrom:
+                secretKeyRef:
+                  name: blazorapp-cfg
+                  key: EventBusConnection
+          resources:
+            {}
+---
+# Source: apidemoapp/charts/rabbitmq/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-0.1.0
+    release: apidemo
+    heritage: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+      release: apidemo
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+        release: apidemo
+    spec:
+      containers:
+        - name: rabbitmq
+          image: "rabbitmq:3-management"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 5672
+              protocol: TCP
+          resources:
+            {}
+---
+# Source: apidemoapp/charts/servicebankingapi/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicebankingapi
+  labels:
+    app: servicebankingapi
+    chart: servicebankingapi-0.1.0
+    draft: draft-app
+    release: apidemo
+    heritage: Helm
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servicebankingapi
+      release: apidemo
+  template:
+    metadata:
+      labels:
+        app: servicebankingapi
+        draft: draft-app
+        release: apidemo
+      annotations:
+        buildID: ""
+    spec:
+      containers:
+        - name: servicebankingapi
+          image: "acrsvr01.azurecr.io/apidemo/servicebankingapi:linux-latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: cfg_ApiGatewayConnection
+              valueFrom:
+                secretKeyRef:
+                  name: servicebankingapi-cfg
+                  key: ApiGatewayConnection
+            - name: cfg_EventBusConnection
+              valueFrom:
+                secretKeyRef:
+                  name: servicebankingapi-cfg
+                  key: EventBusConnection
+          resources:
+            {}
+---
+# Source: apidemoapp/charts/servicehelloworldapi/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicehelloworldapi
+  labels:
+    app: servicehelloworldapi
+    chart: servicehelloworldapi-0.1.0
+    draft: draft-app
+    release: apidemo
+    heritage: Helm
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: servicehelloworldapi
+      release: apidemo
+  template:
+    metadata:
+      labels:
+        app: servicehelloworldapi
+        draft: draft-app
+        release: apidemo
+      annotations:
+        buildID: ""
+    spec:
+      containers:
+        - name: servicehelloworldapi
+          image: "acrsvr01.azurecr.io/apidemo/servicehelloworldapi:linux-latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: cfg_ApiGatewayConnection
+              valueFrom:
+                secretKeyRef:
+                  name: servicehelloworldapi-cfg
+                  key: ApiGatewayConnection
+            - name: cfg_EventBusConnection
+              valueFrom:
+                secretKeyRef:
+                  name: servicehelloworldapi-cfg
+                  key: EventBusConnection
+          resources:
+            {}
+---
+# Source: apidemoapp/charts/serviceorderingapi/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: serviceorderingapi
+  labels:
+    app: serviceorderingapi
+    chart: serviceorderingapi-0.1.0
+    draft: draft-app
+    release: apidemo
+    heritage: Helm
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: serviceorderingapi
+      release: apidemo
+  template:
+    metadata:
+      labels:
+        app: serviceorderingapi
+        draft: draft-app
+        release: apidemo
+      annotations:
+        buildID: ""
+    spec:
+      containers:
+        - name: serviceorderingapi
+          image: "acrsvr01.azurecr.io/apidemo/serviceorderingapi:linux-latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: cfg_ApiGatewayConnection
+              valueFrom:
+                secretKeyRef:
+                  name: serviceorderingapi-cfg
+                  key: ApiGatewayConnection
+            - name: cfg_EventBusConnection
+              valueFrom:
+                secretKeyRef:
+                  name: serviceorderingapi-cfg
+                  key: EventBusConnection
+          resources:
+            {}
+---
+# Source: apidemoapp/charts/blazorapp/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: blazorapp
+  labels:
+    app: blazorapp
+    chart: blazorapp-0.1.0
+    release: apidemo
+    heritage: Helm
+  annotations:
+    kubernetes.io/ingress.class: traefik-azds
+spec:
+  rules:
+    - host: dev.blazorapp.r9qhhrc999.sea.azds.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: blazorapp
+              servicePort: http
+

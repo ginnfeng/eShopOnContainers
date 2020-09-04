@@ -17,6 +17,7 @@ using Microsoft.OpenApi;
 using EventBus.RabbitMQ;
 using Service.Ordering.ApiImp;
 using Service.Ordering.Contract.Servic;
+using Common.Support.ErrorHandling;
 
 namespace Service.Ordering.Api
 {
@@ -67,11 +68,16 @@ namespace Service.Ordering.Api
         // ****STD***
         private void ConfigureEventBus(IApplicationBuilder app)
         {
+
             //var svcHandler = new QuListener("rabbitmq");
             //var qSvc = new PaymentCallbackService();
-            var svcHandler = app.ApplicationServices.GetRequiredService<QuListener>();            
-            var qSvc = app.ApplicationServices.GetRequiredService<IPaymentCallbackService>();
-            svcHandler.Subscribe<IPaymentCallbackService>(qSvc);
+            Action subscribeAct = () =>
+            {
+                var svcHandler = app.ApplicationServices.GetRequiredService<QuListener>();
+                var qSvc = app.ApplicationServices.GetRequiredService<IPaymentCallbackService>();
+                svcHandler.Subscribe<IPaymentCallbackService>(qSvc);
+            };
+            RetryHelper.AutoRetry(subscribeAct, 3);
         }
     }
 }

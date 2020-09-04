@@ -6,14 +6,21 @@ ENV DOTNET_USE_POLLING_FILE_WATCHER=true
 EXPOSE 80
 
 WORKDIR /src
+COPY ["BuildingBlocks/ApiGw/ApiGw.ClientProxy/ApiGw.ClientProxy.csproj", "BuildingBlocks/ApiGw/ApiGw.ClientProxy/"]
 COPY ["BuildingBlocks/Common/Common.Contract/Common.Contract.csproj", "BuildingBlocks/Common/Common.Contract/"]
-COPY ["BuildingBlocks/Common/Common.Support/Common.Support.csproj", "BuildingBlocks/Common/Common.Support/"]
+COPY ["BuildingBlocks/Common/Common.Policy/Common.Policy.csproj", "BuildingBlocks/Common/Common.Policy/"]
+COPY ["BuildingBlocks/Common/Common/Common.csproj", "BuildingBlocks/Common/Common/"]
 COPY ["BuildingBlocks/EventBus/EventBus.Domain/EventBus.Domain.csproj", "BuildingBlocks/EventBus/EventBus.Domain/"]
+COPY ["BuildingBlocks/EventBus/EventBus.RabbitMQ/EventBus.RabbitMQ.csproj", "BuildingBlocks/EventBus/EventBus.RabbitMQ/"]
+COPY ["BuildingBlocks/IoC/IoC.DI.Ordering/IoC.DI.Ordering.csproj", "BuildingBlocks/IoC/IoC.DI.Ordering/"]
+COPY ["BuildingBlocks/IoC/IoC.DI/IoC.DI.csproj", "BuildingBlocks/IoC/IoC.DI/"]
+COPY ["Service/Banking/Service.Banking.Application/Service.Banking.Application.csproj", "Service/Banking/Service.Banking.Application/"]
 COPY ["Service/Banking/Service.Banking.Contract/Service.Banking.Contract.csproj", "Service/Banking/Service.Banking.Contract/"]
 COPY ["Service/Ordering/Service.Ordering.Api/Service.Ordering.Api.csproj", "Service/Ordering/Service.Ordering.Api/"]
 COPY ["Service/Ordering/Service.Ordering.ApiImp/Service.Ordering.ApiImp.csproj", "Service/Ordering/Service.Ordering.ApiImp/"]
 COPY ["Service/Ordering/Service.Ordering.Application/Service.Ordering.Application.csproj", "Service/Ordering/Service.Ordering.Application/"]
 COPY ["Service/Ordering/Service.Ordering.Contract/Service.Ordering.Contract.csproj", "Service/Ordering/Service.Ordering.Contract/"]
+COPY ["Sid/Sid.Bss/Sid.Bss.csproj", "Sid/Sid.Bss/"]
 
 RUN dotnet restore "Service/Ordering/Service.Ordering.Api/Service.Ordering.Api.csproj"
 COPY . .

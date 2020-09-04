@@ -27,19 +27,19 @@
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
     },
-    "Docker": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
-      "publishAllPorts": true,
-      "useSSL": true
-    },
-    "Azure Dev Spaces": {
+    "Container in Kubernetes": {
       "commandName": "AzureDevSpaces",
       "launchBrowser": true,
       "resourceGroup": "AKSRG",
       "aksName": "aksDev01",
       "subscriptionId": "9ea26943-bc64-4351-9019-829dfd289fc2"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "publishAllPorts": true,
+      "useSSL": true
     }
   }
 }

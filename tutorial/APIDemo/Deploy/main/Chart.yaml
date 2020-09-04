@@ -1,7 +1,7 @@
 apiVersion: v1
 appVersion: "1.0"
-description: The master chart for BikeSharing sample app
-name: bikesharingsampleapp
+description: The master chart for ApiDemo sample app
+name: apidemoapp
 version: 0.1.0
 dependencies:  
   - name: blazorapp
@@ -11,8 +11,10 @@ dependencies:
     version: 0.1.0
     repository: "file://../charts/apigwocelot"
   - name: rabbitmq
-    version: 6.18.2
-    repository: "@stable"
+    #version: 6.18.2
+    #repository: "@stable"
+    version:  0.1.0
+    repository: "file://../charts/rabbitmq"
   - name: servicehelloworldapi
     version: 0.1.0
     repository: "file://../charts/servicehelloworldapi"

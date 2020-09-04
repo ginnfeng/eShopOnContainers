@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Common.Policy;
+using Common.Support.ErrorHandling;
 using EventBus.RabbitMQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -64,9 +65,13 @@ namespace Service.Banking.Api
         {
             //var svcHandler = new QuListener("rabbitmq");
             //var qSvc = new PaymentService();
-            var svcHandler = app.ApplicationServices.GetRequiredService<QuListener>();            
-            var qSvc = app.ApplicationServices.GetRequiredService<IPaymentService>();
-            svcHandler.Subscribe<IPaymentService>(qSvc);
+            Action subscribeAct = () =>
+            {
+                var svcHandler = app.ApplicationServices.GetRequiredService<QuListener>();
+                var qSvc = app.ApplicationServices.GetRequiredService<IPaymentService>();
+                svcHandler.Subscribe<IPaymentService>(qSvc);
+            };
+            RetryHelper.AutoRetry(subscribeAct, 3);
         }
     }
 }

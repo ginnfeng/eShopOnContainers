@@ -6,6 +6,7 @@ blazorapp:
   image:
       repository: acrsvr01.azurecr.io/apidemo/blazorapp
       tag: linux-latest 
+      pullPolicy: Always
   ingress:
     enabled: true 
     annotations:
@@ -15,25 +16,32 @@ blazorapp:
     
 rabbitmq:
     fullnameOverride: rabbitmq # Values.fullnameOverride 
+    #username: guest
+    #password: guest
+    
       
 apigwocelot:
     fullnameOverride: apigwocelot
+    pullPolicy: Always
     image:
       repository: acrsvr01.azurecr.io/apidemo/apigwocelot
       tag: linux-latest 
 
 servicehelloworldapi:
     fullnameOverride: servicehelloworldapi
+    pullPolicy: Always
     image:
       repository: acrsvr01.azurecr.io/apidemo/servicehelloworldapi
       tag: linux-latest 
 servicebankingapi:
     fullnameOverride: servicebankingapi
+    pullPolicy: Always
     image:
       repository: acrsvr01.azurecr.io/apidemo/servicebankingapi
       tag: linux-latest 
 serviceorderingapi:
     fullnameOverride: serviceorderingapi
+    pullPolicy: Always
     image:
       repository: acrsvr01.azurecr.io/apidemo/serviceorderingapi
       tag: linux-latest 

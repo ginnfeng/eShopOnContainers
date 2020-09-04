@@ -1,0 +1,72 @@
+NAME: eshop-locations-api
+LAST DEPLOYED: Fri Sep  4 09:58:12 2020
+NAMESPACE: dev
+STATUS: pending-install
+REVISION: 1
+TEST SUITE: None
+HOOKS:
+MANIFEST:
+---
+# Source: rabbitmq/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-0.1.0
+    release: eshop-locations-api
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5672
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: rabbitmq
+    release: eshop-locations-api
+---
+# Source: rabbitmq/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eshop-locations-api-rabbitmq
+  labels:
+    app: rabbitmq
+    chart: rabbitmq-0.1.0
+    release: eshop-locations-api
+    heritage: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+      release: eshop-locations-api
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+        release: eshop-locations-api
+    spec:
+      containers:
+        - name: rabbitmq
+          image: "rabbitmq:latest"
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 5672
+              protocol: TCP
+          resources:
+            {}
+
+NOTES:
+eShop rabbitmq installed
+-------------------------
+
+rabbitmq is not directly exposed outside cluster. If need to access it from outside use:
+
+export POD_NAME=$(kubectl get pods --namespace dev -l "app=rabbitmq,release=eshop-locations-api" -o jsonpath="{.items[0].metadata.name}")
+echo "Visit http://127.0.0.1:8080 to use your application"
+kubectl port-forward $POD_NAME 8080:80

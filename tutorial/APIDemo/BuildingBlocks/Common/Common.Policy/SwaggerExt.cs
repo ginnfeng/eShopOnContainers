@@ -89,7 +89,7 @@ namespace Common.Policy
         {
             var match = regex.Match(moduleName);
             var svcName= (match.Success)?match.Groups[1].ToString(): moduleName.Replace(".", "");
-            return svcName;//.ToLower();
+            return $"service{svcName.ToLower()}api";//svcName;//.ToLower();
         }
         static readonly Regex regex = new Regex("\\.([^\\.]{1,})\\.");
         static readonly string swaggerRoutePrefix = "swagger";

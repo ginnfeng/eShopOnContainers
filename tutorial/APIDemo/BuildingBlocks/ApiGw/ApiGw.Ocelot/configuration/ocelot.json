@@ -9,14 +9,14 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/Ordering/api/{everything}",
+      "UpstreamPathTemplate": "/serviceorderingapi/api/{everything}",
       "UpstreamHttpMethod": [
         "POST",
         "PUT",
         "GET",
         "DELETE"
       ],
-      "SwaggerKey": "Ordering"
+      "SwaggerKey": "serviceorderingapi"
     },
     {
       "DownstreamPathTemplate": "/api/{everything}",
@@ -27,14 +27,14 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/Banking/api/{everything}",
+      "UpstreamPathTemplate": "/servicebankingapi/api/{everything}",
       "UpstreamHttpMethod": [
         "POST",
         "PUT",
         "GET",
         "DELETE"
       ],
-      "SwaggerKey": "Banking"
+      "SwaggerKey": "servicebankingapi"
     },
     {
       "DownstreamPathTemplate": "/api/{everything}",
@@ -45,44 +45,44 @@
           "Port": 80
         }
       ],
-      "UpstreamPathTemplate": "/HelloWorld/api/{everything}",
+      "UpstreamPathTemplate": "/servicehelloworldapi/api/{everything}",
       "UpstreamHttpMethod": [
         "POST",
         "PUT",
         "GET",
         "DELETE"
       ],
-      "SwaggerKey": "HelloWorld"
+      "SwaggerKey": "servicehelloworldapi"
     }
   ],
   "SwaggerEndPoints": [
     {
-      "Key": "Ordering",
+      "Key": "serviceorderingapi",
       "Config": [
         {
-          "Name": "Ordering",
+          "Name": "serviceorderingapi",
           "Version": "v1",
-          "Url": "http://Service.Ordering.Api/swagger/v1/swagger.json"
+          "Url": "http://serviceorderingapi/swagger/v1/swagger.json"
         }
       ]
     },
     {
-      "Key": "Banking",
+      "Key": "servicebankingapi",
       "Config": [
         {
-          "Name": "Banking",
+          "Name": "servicebankingapi",
           "Version": "v1",
-          "Url": "http://Service.Banking.Api/swagger/v1/swagger.json"
+          "Url": "http://servicebankingapi/swagger/v1/swagger.json"
         }
       ]
     },
     {
-      "Key": "HelloWorld",
+      "Key": "servicehelloworldapi",
       "Config": [
         {
-          "Name": "HelloWorld",
+          "Name": "servicehelloworldapi",
           "Version": "v1",
-          "Url": "http://Service.HelloWorld.Api/swagger/v1/swagger.json"
+          "Url": "http://servicehelloworldapi/swagger/v1/swagger.json"
         }
       ]
     }

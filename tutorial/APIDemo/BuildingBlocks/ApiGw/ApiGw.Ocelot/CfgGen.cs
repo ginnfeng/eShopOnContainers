@@ -56,7 +56,7 @@ namespace ApiGw.Ocelot
             var swaggerendpoints = new List<Swaggerendpoint>();
             foreach (var svcDef in svcDefs)
             {
-                var svcAliasName = SwaggerExt.ResolveServiceName(svcDef.Host);
+                var svcAliasName = svcDef.Host.ToLower();//SwaggerExt.ResolveServiceName(svcDef.Host);
                 var everything = "{everything}";
                 var host = svcDef.Host.Replace(".", "").ToLower();//因K8S service name限制
                 var route = new Reroute()

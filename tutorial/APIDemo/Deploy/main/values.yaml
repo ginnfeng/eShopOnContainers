@@ -21,28 +21,28 @@ rabbitmq:
     
       
 apigwocelot:
-    fullnameOverride: apigwocelot
-    pullPolicy: Always
+    fullnameOverride: apigwocelot    
     image:
       repository: acrsvr01.azurecr.io/apidemo/apigwocelot
       tag: linux-latest 
+      pullPolicy: Always
 
 servicehelloworldapi:
-    fullnameOverride: servicehelloworldapi
-    pullPolicy: Always
+    fullnameOverride: servicehelloworldapi    
     image:
       repository: acrsvr01.azurecr.io/apidemo/servicehelloworldapi
-      tag: linux-latest 
+      tag: linux-latest
+      pullPolicy: Always      
 servicebankingapi:
-    fullnameOverride: servicebankingapi
-    pullPolicy: Always
+    fullnameOverride: servicebankingapi    
     image:
       repository: acrsvr01.azurecr.io/apidemo/servicebankingapi
       tag: linux-latest 
+      pullPolicy: Always
 serviceorderingapi:
-    fullnameOverride: serviceorderingapi
-    pullPolicy: Always
+    fullnameOverride: serviceorderingapi    
     image:
       repository: acrsvr01.azurecr.io/apidemo/serviceorderingapi
       tag: linux-latest 
+      pullPolicy: Always
 

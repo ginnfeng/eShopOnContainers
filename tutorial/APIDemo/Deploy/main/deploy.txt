@@ -1,5 +1,5 @@
 NAME: apidemo
-LAST DEPLOYED: Fri Sep  4 10:58:29 2020
+LAST DEPLOYED: Fri Sep  4 11:30:16 2020
 NAMESPACE: dev
 STATUS: pending-install
 REVISION: 1
@@ -43,7 +43,7 @@ apigwocelot:
         ApiGatewayConnection: Endpoint=http://apigwocelot:80
         EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
   image:
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     repository: acrsvr01.azurecr.io/apidemo/apigwocelot
     tag: linux-latest
   imagePullSecrets: []
@@ -55,7 +55,6 @@ apigwocelot:
   nodeSelector: {}
   probes:
     enabled: false
-  pullPolicy: Always
   replicaCount: 1
   resources: {}
   secrets: {}
@@ -132,7 +131,7 @@ servicebankingapi:
         ApiGatewayConnection: Endpoint=http://apigwocelot:80
         EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
   image:
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     repository: acrsvr01.azurecr.io/apidemo/servicebankingapi
     tag: linux-latest
   imagePullSecrets: []
@@ -143,7 +142,6 @@ servicebankingapi:
   nodeSelector: {}
   probes:
     enabled: false
-  pullPolicy: Always
   replicaCount: 1
   resources: {}
   secrets:
@@ -165,7 +163,7 @@ servicehelloworldapi:
         ApiGatewayConnection: Endpoint=http://apigwocelot:80
         EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
   image:
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     repository: acrsvr01.azurecr.io/apidemo/servicehelloworldapi
     tag: linux-latest
   imagePullSecrets: []
@@ -177,7 +175,6 @@ servicehelloworldapi:
   nodeSelector: {}
   probes:
     enabled: false
-  pullPolicy: Always
   replicaCount: 1
   resources: {}
   secrets:
@@ -197,7 +194,7 @@ serviceorderingapi:
         ApiGatewayConnection: Endpoint=http://apigwocelot:80
         EventBusConnection: HostName=rabbitmq;DispatchConsumersAsync=true;AutomaticRecoveryEnabled=true;UserName=guest;Password=guest
   image:
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     repository: acrsvr01.azurecr.io/apidemo/serviceorderingapi
     tag: linux-latest
   imagePullSecrets: []
@@ -208,7 +205,6 @@ serviceorderingapi:
   nodeSelector: {}
   probes:
     enabled: false
-  pullPolicy: Always
   replicaCount: 1
   resources: {}
   secrets:
@@ -415,7 +411,7 @@ spec:
       containers:
         - name: apigwocelot
           image: "acrsvr01.azurecr.io/apidemo/apigwocelot:linux-latest"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 80
@@ -536,7 +532,7 @@ spec:
       containers:
         - name: servicebankingapi
           image: "acrsvr01.azurecr.io/apidemo/servicebankingapi:linux-latest"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 80
@@ -585,7 +581,7 @@ spec:
       containers:
         - name: servicehelloworldapi
           image: "acrsvr01.azurecr.io/apidemo/servicehelloworldapi:linux-latest"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 80
@@ -634,7 +630,7 @@ spec:
       containers:
         - name: serviceorderingapi
           image: "acrsvr01.azurecr.io/apidemo/serviceorderingapi:linux-latest"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 80

@@ -62,8 +62,7 @@ namespace Service.Banking.Api
         }
 
         private void ConfigureEventBus(IApplicationBuilder app)
-        {
-            return;
+        {            
             //var svcHandler = new QuListener("rabbitmq");
             //var qSvc = new PaymentService();
             Action subscribeAct = () =>

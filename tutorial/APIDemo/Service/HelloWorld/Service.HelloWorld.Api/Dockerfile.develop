@@ -8,7 +8,7 @@ EXPOSE 80
 WORKDIR /src
 COPY ["BuildingBlocks/Common/Common.Contract/Common.Contract.csproj", "BuildingBlocks/Common/Common.Contract/"]
 COPY ["BuildingBlocks/Common/Common.Policy/Common.Policy.csproj", "BuildingBlocks/Common/Common.Policy/"]
-COPY ["BuildingBlocks/Common/Common.Support/Common.Support.csproj", "BuildingBlocks/Common/Common.Support/"]
+COPY ["BuildingBlocks/Common/Common/Common.csproj", "BuildingBlocks/Common/Common/"]
 COPY ["Service/HelloWorld/Service.HelloWorld.Api/Service.HelloWorld.Api.csproj", "Service/HelloWorld/Service.HelloWorld.Api/"]
 COPY ["Service/HelloWorld/Service.HelloWorld.ApiImp/Service.HelloWorld.ApiImp.csproj", "Service/HelloWorld/Service.HelloWorld.ApiImp/"]
 COPY ["Service/HelloWorld/Service.HelloWorld.Contract/Service.HelloWorld.Contract.csproj", "Service/HelloWorld/Service.HelloWorld.Contract/"]

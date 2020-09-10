@@ -1,0 +1,47 @@
+# This helm values file defines all infrastructure used by eShopOnContainers.
+# It is used on all charts, so ** MUST BE INCLUDED ** on every deployment
+blazorapp:
+    secrets:
+        {        
+            "cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等
+              "EventBusConnection": $(EventBusConnection),            
+              "ApiGatewayConnection": $(ApiGatewayConnection)
+            }
+        }
+
+servicehelloworldapi:
+    secrets:
+        {        
+            "cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等
+              "EventBusConnection": $(EventBusConnection),            
+              "ApiGatewayConnection": $(ApiGatewayConnection)
+            }
+        }
+serviceorderingapi:
+    secrets:
+        {        
+            "cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等
+              "EventBusConnection": $(EventBusConnection),            
+              "ApiGatewayConnection": $(ApiGatewayConnection)
+            }
+        }
+        
+servicebankingapi:
+    secrets:
+        {        
+            "cfg":{ # 在.net core中，環境變數都要前置cfg_ (如 cfg_EventBusConnection 、ApiGatewayConnection等
+              "EventBusConnection": $(EventBusConnection),            
+              "ApiGatewayConnection": $(ApiGatewayConnection)
+            }
+        }    
+
+global: # 目前尚未用到
+ 
+  secrets:
+    {        
+        "cfg":{
+              "EventBusConnection": $(EventBusConnection),            
+              "ApiGatewayConnection": $(ApiGatewayConnection)
+        }
+    }
+  

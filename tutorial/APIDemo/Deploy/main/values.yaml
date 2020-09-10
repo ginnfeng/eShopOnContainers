@@ -12,7 +12,7 @@ blazorapp:
     annotations:
       kubernetes.io/ingress.class: traefik-azds  # Dev Spaces-specific
     hosts:
-      - dev.blazorapp.r9qhhrc999.sea.azds.io  # Assumes deployment to the 'dev' space， azds show-context
+      - dev.blazorapp.2nwgskh2pp.sea.azds.io  # Assumes deployment to the 'dev' space， azds show-context
     
 rabbitmq:
     fullnameOverride: rabbitmq # Values.fullnameOverride 

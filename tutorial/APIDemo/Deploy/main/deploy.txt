@@ -1,5 +1,5 @@
 NAME: apidemo
-LAST DEPLOYED: Fri Sep  4 13:39:33 2020
+LAST DEPLOYED: Wed Sep  9 09:49:30 2020
 NAMESPACE: dev
 STATUS: pending-install
 REVISION: 1
@@ -82,7 +82,7 @@ blazorapp:
       kubernetes.io/ingress.class: traefik-azds
     enabled: true
     hosts:
-    - dev.blazorapp.r9qhhrc999.sea.azds.io
+    - dev.blazorapp.2nwgskh2pp.sea.azds.io
     path: /
     tls: []
   nodeSelector: {}
@@ -663,7 +663,7 @@ metadata:
     kubernetes.io/ingress.class: traefik-azds
 spec:
   rules:
-    - host: dev.blazorapp.r9qhhrc999.sea.azds.io
+    - host: dev.blazorapp.2nwgskh2pp.sea.azds.io
       http:
         paths:
           - path: /

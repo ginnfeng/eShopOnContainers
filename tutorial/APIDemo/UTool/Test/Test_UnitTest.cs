@@ -10,6 +10,9 @@ using System;
 using System.Linq;
 using Testing.MockSvc;
 using UTDll;
+using Common.Open.Serializer;
+using System.Collections.Generic;
+using Sid.Bss.Spec;
 namespace UTool.Test
 {
     enum TestEnv
@@ -62,5 +65,18 @@ namespace UTool.Test
             assert(weathers.Count() >100);
             //....
         }
+         
+        [UMethod]
+        public void T_SaveTestData()
+        {// TODO: Add Testing logic here
+            var ts = new JsonNetTransfer();
+            var data = new SvcInstance();
+            data.SpecId = "SPIP";
+            data.Characteristics.Add(new SvcCharacteristic("id_1", "case_001"));
+            data.Characteristics.Add(new SvcCharacteristic("id_2", "受理"));
+            data.Characteristics.Add(new SvcCharacteristic("id_3", "訂單"));
+            ts.Save(data,@"d:\a.json");
+        }
+
     }
 }

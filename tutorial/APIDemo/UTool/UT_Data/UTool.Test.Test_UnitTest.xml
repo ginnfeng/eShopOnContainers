@@ -6,5 +6,7 @@
     </T_MyMvcModel_GetCustomerInfo>
     <T_MyMvcModel_QueryWeather>
     </T_MyMvcModel_QueryWeather>
+    <T_SaveTestData>
+    </T_SaveTestData>
   </TestCase>
 </UTest>

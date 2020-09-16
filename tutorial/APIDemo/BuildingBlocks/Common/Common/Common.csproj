@@ -44,12 +44,14 @@
     <Compile Include="Support\.Net\Logger\LogMessage.cs" />
     <Compile Include="Support\.Net\Proxy\DisposableAdapter.cs" />
     <Compile Include="Support\.Net\Proxy\DynamicProperty.cs" />
+    <Compile Include="Support\.Net\Proxy\DynamicClassFactory.cs" />
     <Compile Include="Support\.Net\Proxy\DynamicTypeFactory.cs" />
     <Compile Include="Support\.Net\Proxy\DynamicXml.cs" />
     <Compile Include="Support\.Net\Proxy\DynamicXmlAttribute.cs" />
     <Compile Include="Support\.Net\Proxy\DynamicXmlBase.cs" />
     <Compile Include="Support\.Net\Proxy\IRealProxy.cs" />
     <Compile Include="Support\.Net\Proxy\RealProxy.cs" />
+    <Compile Include="Support\.Net\Proxy\RealProxyBase2.cs" />
     <Compile Include="Support\.Net\Proxy\RealProxyBase.cs" />
     <Compile Include="Support\.Net\Proxy\RealProxyGen.cs" />
     <Compile Include="Support\.Net\Security\AccountHelper.cs" />
